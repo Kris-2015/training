@@ -73,3 +73,16 @@ Route::post('dologin', ['as' => 'dologin', 'uses' => 'LoginController@dologin'])
 Route::get('bio',
     ['as'=>'bio',
     'uses'=>'BioController@people']);
+//----------------------------------------------
+Route::get('users', function(){
+    $users = App\Employee::find(1);
+    echo $users;
+    //print_r($users);
+});
+
+Route::get('gadget', function(){
+    $gadget = App\Gadget::find(2);
+
+    echo $gadget->gadget_name;
+    //print_r($gadget);
+});

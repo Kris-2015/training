@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Employee;
+use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 
 class LoginController extends Controller
 {
@@ -22,15 +24,23 @@ class LoginController extends Controller
     */
     public function dologin(Request $request)
     {
-       $message['email_id.required'] = 'Email id required';
-       $message['password.required'] = 'Give your password';
+        $message['email_id.required'] = 'Email id required';
+        $message['password.required'] = 'Give your password';
 
-       $this->validate($request, [
+        $this->validate($request, [
             'email_id' => 'required',
             'password' => 'required'
         ], $message);
 
-       echo $request->email_id;
-        print_r($request->only('email_id','password'));
+        $email = $request->email_id;
+        $password = $request->password;
+
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
+            //if the condition is true, redirect to home page
+            return redirect('/dashboard');  
+        }
+        else {
+            return "Login Failed";
+        }
     }
 }
