@@ -58,7 +58,7 @@ class RegistrationController extends Controller
 
 //'homestreet' => 'required|alpha_num',
 		$this->validate($request, [
-            	'firstname' => 'required|min:10',
+            	'firstname' => 'required|min:10',    
             	'middlename' => 'min:5|alpha',
             	'lastname' => 'required|min:5',
             	'prefix'=>'required',
