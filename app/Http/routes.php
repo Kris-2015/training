@@ -15,74 +15,37 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/profile', ['as' => 'profile', function () {
-    return 'hello';
-}]);
+Route::get('register', [
+    'as' => 'register',
+    'uses' => 'AuthController@register'
+]);
 
-Route::get('profile/{name}', function ($name) {
-	return 'Hello ' . $name;
-})->where('name', '[A-Za-z]+');
+Route::post('do-register', [
+    'as' => 'do-register', 
+    'uses' => 'AuthController@doRegister'
+]);
 
-/*Route::get('profile/{name?}’, function ($name = ‘Scott’) {
-    		return 'Hello ' . $name;
-       })->where('name', '[A-Za-z]+');*/
+Route::get('login', [
+    'as' => 'login',
+    'uses'=>'AuthController@login'
+]);
 
-/*Route::group(['prefix' => 'admin'], function () {
-    Route::get('users', function ()    {
-        // Matches The "/admin/users" URL
-        return 'hii neo';ame
-    });*/
-Route::get('calculator/add/{id}/{id2}', function ($id, $id2) {
-    return "Add " . ($id + $id2);
-})
-->where(['id' => '[0-9./-]+', 'id2' => '[0-9./-]+']);
+Route::post('dologin', [
+    'as' => 'dologin', 
+    'uses' => 'AuthController@dologin'
+]);
 
-Route::get('calculator/sub/{id}/{id2}', function ($id, $id2) {
-    return "Subtraction " . ($id - $id2);
-})
-->where(['id' => '[0-9./-]+', 'id2' => '[0-9./-]+']);
+Route::get('activation/{token}', 'AuthController@activateUser');
 
-Route::get('calculator/multi/{id}/{id2}', function ($id, $id2) {
-    return "Multiplication " . ($id * $id2);
-})
-->where(['id' => '[0-9./-]+', 'id2' => '[0-9./-]+']);
+Route::get('/dashboard',function()
+{
+    return view('/dashboard');
+});
 
-Route::get('calculator/div/{id}/{id2}', function ($id, $id2) {
-    return "Division " . ($id / $id2);
-})
-->where(['id' => '[0-9./-]+', 'id2' => '[0-9./-]+']);
+Route::get('logout', 'AuthController@logout');
 
-Route::get('calculator/mod/{id}/{id2}', function ($id, $id2) {
-    return "Modulus Operation " . ($id % $id2);
-})
-->where(['id' => '[0-9./-]+', 'id2' => '[0-9./-]+']);
+Route::get('list', 'HomeController@getlist');
 
-Route::get('register', 
-    ['as' => 'register',
-     'uses' => 'RegistrationController@register']);
-
-Route::post('do-register', ['as' => 'do-register', 'uses' => 'RegistrationController@doRegister']);
-
-Route::get('login', 
-    ['as' => 'login',
-     'uses'=>'LoginController@login']);
-
-Route::post('dologin', ['as' => 'dologin', 'uses' => 'LoginController@dologin']);
-
-//Route::get('bio','BioController@people');
 Route::get('bio',
     ['as'=>'bio',
     'uses'=>'BioController@people']);
-//----------------------------------------------
-Route::get('users', function(){
-    $users = App\Employee::find(1);
-    echo $users;
-    //print_r($users);
-});
-
-Route::get('gadget', function(){
-    $gadget = App\Gadget::find(2);
-
-    echo $gadget->gadget_name;
-    //print_r($gadget);
-});
