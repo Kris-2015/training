@@ -3,7 +3,7 @@
 @section('title', 'Login')
 
 @section('page')
-<a href="/register"><span class="glyphicon glyphicon-user"></span>Registration</a>
+<a href="{{ url('/register') }}"><span class="glyphicon glyphicon-user"></span>Registration</a>
 @endsection
 
 @section('content')
@@ -18,21 +18,31 @@
                     <!-- Display Validation Errors -->
                     @include('common.errors')
 
+                    @if(session('status'))
+                        <div class="alert alert-success">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    @if(session('warning'))
+                        <div class="alert alert-warning">
+                            {{ session('warning') }}
+                        </div>
+                    @endif
                     <!-- New Task Form -->
                      {!! Form::open(array('url' => route('dologin'), 'method' => 'POST', 'class' => 'form-horizontal','id'=>'login')) !!}
 
                         <!-- Task Name -->
                         <div class="form-group">
-                            <label for="email_id" class="col-sm-3 control-label">Email</label>
+                            <label for="email" class="col-sm-3 control-label">Email</label>
                             <div class="col-sm-6">
-                                <input type="text" name="email_id" id="email_id" class="form-control" value="{{ old('name') }}">
+                                {{ Form::email('email', null, array('class'=>'form-control')) }}
                             </div>
                         </div>  
                         <!-- Password -->
                         <div class="form-group">
                             <label for="password" class="col-sm-3 control-label">Password</label>
                             <div class="col-sm-6">
-                                <input type="password" name="password" id="password" class="form-control" value="{{ old('email') }}">
+                                {{ Form::password('password', array('class'=>'form-control', 'id'=>'Password')) }}
                             </div>
                         </div>
 
@@ -46,7 +56,6 @@
                         </div>
 
                         {!! Form::close() !!}
-                    </form>
                 </div>
             </div>
         </div>
