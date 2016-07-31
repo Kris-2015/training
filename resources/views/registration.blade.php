@@ -3,7 +3,7 @@
 @section('title', 'Registration')
 
 @section('page')
-<a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+<a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
 @endsection
 
 @section('content')
