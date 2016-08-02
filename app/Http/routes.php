@@ -49,3 +49,9 @@ Route::get('list', 'HomeController@getlist');
 Route::get('bio',
     ['as'=>'bio',
     'uses'=>'BioController@people']);
+
+Route::controller('datatables', 'UserController');
+
+Route::get('register/{id}', 'HomeController@Data');
+
+Route::post('delete','HomeController@delete');
