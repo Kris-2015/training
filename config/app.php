@@ -157,8 +157,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
-
-
+        Ixudra\Curl\CurlServiceProvider::class,
     ],
 
     /*
@@ -207,6 +206,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        'Curl'          => Ixudra\Curl\Facades\Curl::class,
+
     ],
 
 ];
