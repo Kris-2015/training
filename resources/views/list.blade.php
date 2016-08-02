@@ -20,8 +20,8 @@
             		  <th>Image</th>
             		  <th>City</th>
             		  <th>State</th>
-                      <th>Official State</th>
-                      <th>Official City</th>
+                  <th>Official State</th>
+                  <th>Official City</th>
             		  <th>Communication</th>
             		</tr>
             	</thead>
