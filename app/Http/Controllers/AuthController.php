@@ -105,21 +105,21 @@ class AuthController extends Controller
         	'employer'=>'required|alpha_spaces',
         	'email'=> 'required',//|unique:users,email
         	'password' =>'required',
-        	'image' => 'required|mimes:jpeg,bmp,png|max:6144',
-        	'homestreet' => 'required|alpha_spaces',								
-        	'homecity' => 'required|alpha',
-        	'homestate' => 'required',
-        	'homezip' => 'required|numeric',
-        	'homemobile' => 'required|numeric|phone_number',
-        	'homelandline' => 'required|numeric',
-        	'homefax' => 'required|numeric',
-        	'officestreet' => 'required|alpha_spaces',
-        	'officecity' => 'required|alpha',
-        	'officestate' => 'required',
-        	'officezip' => 'required|numeric',
-        	'officemobile' => 'required|numeric|phone_number',
-        	'officelandline' => 'required|numeric',
-        	'officefax' => 'required|numeric',
+        	'image' => 'mimes:jpeg,bmp,png|max:6144',
+        	'homestreet' => 'alpha_spaces',								
+        	'homecity' => 'alpha',
+        	//'homestate' => 'required',
+        	'homezip' => 'numeric',
+        	'homemobile' => 'numeric|phone_number',
+        	'homelandline' => 'numeric',
+        	'homefax' => 'numeric',
+        	'officestreet' => 'alpha_spaces',
+        	'officecity' => 'alpha',
+        	//'officestate' => 'required',
+        	'officezip' => 'numeric',
+        	'officemobile' => 'numeric|phone_number',
+        	'officelandline' => 'numeric',
+        	'officefax' => 'numeric',
         	'communication' => 'required'     	
     	], $messages);
 	}
@@ -208,6 +208,7 @@ class AuthController extends Controller
     */
     public function logout(Request $request)
     {
+        
         return view('/login');
     }
 
