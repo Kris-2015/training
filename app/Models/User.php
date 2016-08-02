@@ -11,12 +11,13 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
 
      use Authenticatable, CanResetPassword;
-
+     use SoftDeletes;
     protected $fillable = ['id', 'first_name'];
 	/*
 	 * store the information in users table
@@ -82,7 +83,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
          	DB::rollBack();
             return 0;
         } 
-
         return 1;
    }
 }
