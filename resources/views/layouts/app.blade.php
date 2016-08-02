@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <title>Laravel Training - @yield('title')</title>
 
     <!-- Fonts -->
@@ -14,6 +15,9 @@
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" type="text/css" href="{{ url('/css/cover.css') }}">
+
+    @yield('css')
     <style>
         body {
             font-family: 'Lato';
@@ -56,9 +60,14 @@
 
     @yield('content')
 
+    @yield('modal')
+    @yield('github-modal')
+    @yield('delete-modal')
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   <!--  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script> -->
     @yield('js-css')
+    @stack('scripts')
 </body>
 </html>
