@@ -8,10 +8,24 @@ use App\Models\Address;
 use App\Models\Communication;
 use App\Http\Requests;
 use DB;
+use Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HomeController extends Controller
 {
+    public function dashboard(Request $request)
+    {
+        if(Auth::check())
+        {
+            return view('dashboard');    
+        }
+        else
+        {
+            return redirect('login');
+        }
+        
+    }
+
     public function getlist()
     {
     	$get_user = User::join('addresses', 'users.id', '=', 'addresses.user_id')
