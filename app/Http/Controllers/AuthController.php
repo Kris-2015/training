@@ -206,20 +206,13 @@ class AuthController extends Controller
         $email = $request->email;
         $password = $request->password;
 
-        /*$role = DB::table('users')->select('role_id')->where('email',$email)->get();
-        
-        dd();exit;*/
-
         if (Auth::attempt(['email' => $email, 'password' => $password, 'activated'=>'1'])) 
         {
-           // $role_id = Auth::user()->role_id;
-
-            //if the condition is true, redirect to home page
-            return redirect('/dashboard'); //->with('user',$user)  
+            return redirect('/dashboard');  
         }
         else 
         {
-            return redirect('/login')->with('status', 'Invalid email id or password');;
+            return redirect('/login')->with('status', 'Invalid email id or password');
         }
     }
 
