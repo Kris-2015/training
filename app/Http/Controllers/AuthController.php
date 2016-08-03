@@ -8,11 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\User_activation;
+use App\Model\Role;
+use Session;
+use DB;
 use Mail;
 use Auth;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+
+
+/**
+ * Manage Login and registration request
+ * @access public
+ * @package App\Http\Controllers
+ * @subpackage void
+ * @category void
+ * @author mfsi-krishnadev
+ * @link void
+ */
 
 class AuthController extends Controller
 {
@@ -27,7 +41,7 @@ class AuthController extends Controller
 		return view('registration', ['state_list' => $state_list]);
 	}
 
-	/*
+	/**
 	* processing the form data
 	*
 	* @param Request $request
@@ -55,7 +69,7 @@ class AuthController extends Controller
         }
 	}
 
-	/*
+	/**
      * Validating the form
      *
      * @param Request 
@@ -124,7 +138,7 @@ class AuthController extends Controller
     	], $messages);
 	}
 
-    /*
+    /**
      * Function to upload the image
      *
      * @param Request
@@ -143,7 +157,7 @@ class AuthController extends Controller
 		return $name; 
 	}
 
-    /*
+    /**
      * Function to send message
      *
      * @param: activation key
@@ -164,7 +178,7 @@ class AuthController extends Controller
      	});
      }
 
-   /*
+   /**
 	* Show the login page
 	*
 	* @param  Request  $request
@@ -174,7 +188,7 @@ class AuthController extends Controller
     	return view('login');
     }
 
-    /*
+    /**
     * Processing the login page data
     *
     *  @param  Request  $request
@@ -192,27 +206,38 @@ class AuthController extends Controller
         $email = $request->email;
         $password = $request->password;
 
-        if (Auth::attempt(['email' => $email, 'password' => $password])) 
+        /*$role = DB::table('users')->select('role_id')->where('email',$email)->get();
+        
+        dd();exit;*/
+
+        if (Auth::attempt(['email' => $email, 'password' => $password, 'activated'=>'1'])) 
         {
+           // $role_id = Auth::user()->role_id;
+
             //if the condition is true, redirect to home page
-            return redirect('/dashboard');  
+            return redirect('/dashboard'); //->with('user',$user)  
         }
         else 
         {
-            return "Login Failed";
+            return redirect('/login')->with('status', 'Invalid email id or password');;
         }
     }
 
-    /*
+    /**
      * Function to perform logout
+     *
+     * @param Request
+     * @return redirect
     */
     public function logout(Request $request)
     {
-        
-        return view('/login');
+       // Auth::logout();
+        // $request->session()->flush();
+        Session::flush();
+        return redirect('/login');
     }
 
-    /*
+    /**
 	 * Generate key 
      * @param: none
      *
@@ -234,7 +259,7 @@ class AuthController extends Controller
         return $key;
     }
 
-    /*
+    /**
      * Function to activate the users account
      *
      * @param: token number
