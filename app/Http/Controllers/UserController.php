@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Datatables;
 use App\Models\User;
+use App\Models\RoleResourcePermission;
 use App\Http\Requests;
 use DB;
+use Auth;
 
 class UserController extends Controller
 {
@@ -18,6 +20,9 @@ class UserController extends Controller
 	*/
     public function getIndex()
     {
+        //$permission = RoleResourcePermission::getPermission(Auth::user()->role_id,'datatables');
+        //dd($permission->name);
+        //$perm = is_array($permission)? $permisiion : array($permission);dd($permission);
     	return view('datatables.index');
     }
 
@@ -28,31 +33,68 @@ class UserController extends Controller
     */
     public function anyData()
     {   
+        $permission = RoleResourcePermission::getPermission(Auth::user()->role_id,'datatables');
+        $perm = $permission->name;
+        //dd($perm[0]->name);
+
         $users = User::select(['id', 'first_name', 'email', 'dob', 'github_id', 'created_at', 'updated_at', 'isActive']);
         $stat = [
             '0'=>'primary',
             '1'=>'danger',
             '2'=>'warning'
         ];
+        $status = [
+            '0'=>'Active',
+            '1'=>'Delete',
+            '2'=>'Suspended'
+        ];
+
+        /*if(in_array('all', $perm))
+        {
+            
+        }*/
 
         return Datatables::of($users,$stat)
-        ->addColumn('action', function($users){
-            return '
-            <div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Action<span class="caret"></span></button>
-              <ul class="dropdown-menu" role="menu">
-                <li><a class="pro" data-id="'.$users->id.'" href="#">Profile</a></li>
-                <li><a class="git" data-github="'.$users->github_id.'" href="#">Github Profile</a></li>
-                <li><a href="register/'.$users->id.'">Edit</a></li>
-                <li><a href="#" class="delete" data-id="'.$users->id.'">Delete</a></li>
-              </ul>
-            </div>';
-        })
-        ->addColumn('status', function($users){
-            return '
-            <button type="button" class="btn btn-info btn-lg">'.$users->isActive.'</button>';
-        })
-        ->make(true);
+                ->addColumn('action', function($users) use($perm){
+                    $edit = '';
+                    $delete = '';
+                    $result='';
+                if($perm == 'all' )
+                {
+                    $edit = '<li><a href="register/'.$users->id.'">Edit</a></li>'; 
+                    $delete = '<li><a href="#" class="delete" data-id="'.$users->id.'">Delete</a></li>';
+                }
+                else
+                    if($perm == 'delete')
+                    {
+                        $delete = '<li><a href="#" class="delete" data-id="'.$users->id.'">Delete</a></li>';
+                    }
+                else
+                    if($perm == 'edit')
+                    {
+                        $edit = '<li><a href="register/'.$users->id.'">Edit</a></li>'; 
+                    }
+
+                if($edit != '' || $delete != '' || $perm == 'view')
+                {
+                    $result = '
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Action<span class="caret"></span></button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a class="pro" data-id="'.$users->id.'" href="#">Profile</a></li>
+                        <li><a class="git" data-github="'.$users->github_id.'" href="#">Github Profile</a></li>
+                        '.$edit.'
+                        '.$delete.'  
+                      </ul>
+                    </div>';
+                }
+                return $result;
+            })
+            ->addColumn('status', function($users) use($stat,$status){
+                return '
+                <button type="button" class="btn btn-'.$stat[$users->isActive].'" btn-lg">'.$status[$users->isActive].'</button>';
+            })
+            ->make(true);
     }
 
     public function postUser(Request $request)
@@ -110,7 +152,7 @@ class UserController extends Controller
           exit;
         } 
         header('Content-Type: application/json;charset=utf-8');
-        //echo $response; 
+        echo $response; 
         exit;
     }
 }
