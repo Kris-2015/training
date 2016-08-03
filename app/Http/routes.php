@@ -12,7 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if(Auth::check())
+    {
+        return redirect('dashboard');
+    }
+    else
+    {
+        return view('login');
+    }
 });
 
 Route::get('register', [
@@ -37,21 +44,34 @@ Route::post('dologin', [
 
 Route::get('activation/{token}', 'AuthController@activateUser');
 
-Route::get('/dashboard',function()
-{
-    return view('/dashboard');
+Route::get('/logout',['as' => 'logout', function () {
+    Auth::logout();
+    Session::flush();
+    return redirect()->route('login');
+}]);
+
+
+
+
+/**
+ * Group routes to check the user authentication
+*/
+Route::group(['middleware'=>'auth'], function(){
+
+    Route::get('list', [
+        'middleware'=>'auth',
+        'uses'=> 'HomeController@getlist'
+    ]);
+
+    Route::controller('datatables', 'UserController');
+
+    Route::get('register/{id}', 'HomeController@Data');
+
+    Route::post('delete','HomeController@delete');
+
+    Route::get('/dashboard',[
+        'middleware'=>'auth',
+        'uses' => 'HomeController@dashboard'
+    ]);
+
 });
-
-Route::get('logout', 'AuthController@logout');
-
-Route::get('list', 'HomeController@getlist');
-
-Route::get('bio',
-    ['as'=>'bio',
-    'uses'=>'BioController@people']);
-
-Route::controller('datatables', 'UserController');
-
-Route::get('register/{id}', 'HomeController@Data');
-
-Route::post('delete','HomeController@delete');
