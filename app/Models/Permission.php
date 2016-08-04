@@ -11,5 +11,5 @@ class Permission extends Model
 	*
 	* @var String
 	*/
-    $protected $table = 'permissions';
+    protected $table = 'permissions';
 }
