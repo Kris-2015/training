@@ -15,7 +15,7 @@ class HomeController extends Controller
 {
     public function dashboard(Request $request)
     {
-        if(Auth::check())
+        if (Auth::check())
         {
             return view('dashboard');    
         }
@@ -49,10 +49,14 @@ class HomeController extends Controller
                     ->get()->toArray();
         
         $information = array();
-        foreach($information_residence as $key=>$val){ // Loop though one array
+
+        foreach ($information_residence as $key => $val)
+        {
+            // Loop though one array
             $val2 = $information_office[$key]; // Get the values from the other array
             $information[$key] = $val + $val2; // combine 'em
         }
+
         return view('list',compact('information'));
     }
 
@@ -87,10 +91,14 @@ class HomeController extends Controller
                     ->get()->toArray();
         
         $information = array();
-        foreach($information_residence as $key=>$val){ // Loop though one array
+
+        foreach($information_residence as $key=>$val)
+        { 
+            // Loop though one array
             $val2 = $information_office[$key]; // Get the values from the other array
             $information[$key] = $val + $val2; // combine 'em
         }
+        
         //dd($information);
         /*return view("registration",['information' => $information,'state_list' => $state_list ]);*/
         return view("registration",compact('information','state_list'));
@@ -106,12 +114,20 @@ class HomeController extends Controller
 
     public function delete(Request $request)
     {
-        $id = $request['id'];
+        try
+        {
+            $id = $request['id'];
 
-        $user = User::find($id);
+            $user = User::find($id);
+            
+            $user->isActive = '0';//when user wishes to delete, mark 0 in the isActive column
 
-        $user->isActive = '0';//when user wishes to delete, mark 0 in the isActive column
-
-        $user->save();
+            $user->save();
+            print_r($user->save());
+        }
+        catch(Exception $e)
+        {
+            print_r("failed") ;
+        }
     }
 }
