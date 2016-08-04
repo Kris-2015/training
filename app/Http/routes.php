@@ -50,9 +50,22 @@ Route::get('/logout',['as' => 'logout', function () {
     return redirect()->route('login');
 }]);
 
+Route::get('/resetPassword',[
+    'as' => 'sendLink',
+    'uses' => 'ResetPasswordController@sendLink'
+]);
 
+Route::post('resetPassword', [
+    'as' => 'resetPassword', 
+    'uses' => 'ResetPasswordController@reset'
+]);
 
+Route::get('reset/{token}', 'ResetPasswordController@PasswordPage');
 
+Route::post('updatepassword', [
+    'as' => 'updatepassword',
+    'uses'=>'ResetPasswordController@updatepassword'
+]);
 /**
  * Group routes to check the user authentication
 */
@@ -67,7 +80,7 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::get('register/{id}', 'HomeController@Data');
 
-    Route::post('delete','HomeController@delete');
+    Route::get('delete','HomeController@delete');
 
     Route::get('/dashboard',[
         'middleware'=>'auth',
