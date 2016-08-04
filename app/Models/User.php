@@ -16,9 +16,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
 
-     use Authenticatable, CanResetPassword;
-     use SoftDeletes;
+    use Authenticatable, CanResetPassword;
+    use SoftDeletes;
     protected $fillable = ['id', 'first_name'];
+
 	/*
 	 * store the information in users table
 	 * @param Request
@@ -32,7 +33,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         {
         	DB::beginTransaction();
             $user = new User;
-           $password = bcrypt($data['password']);
+            $password = bcrypt($data['password']);
 
             $user->first_name = $data['firstname'];
             $user->middle_name = $data['middlename'];
