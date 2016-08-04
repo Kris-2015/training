@@ -20,9 +20,6 @@ class UserController extends Controller
 	*/
     public function getIndex()
     {
-        //$permission = RoleResourcePermission::getPermission(Auth::user()->role_id,'datatables');
-        //dd($permission->name);
-        //$perm = is_array($permission)? $permisiion : array($permission);dd($permission);
     	return view('datatables.index');
     }
 
@@ -35,7 +32,6 @@ class UserController extends Controller
     {   
         $permission = RoleResourcePermission::getPermission(Auth::user()->role_id,'datatables');
         $perm = $permission->name;
-        //dd($perm[0]->name);
 
         $users = User::select(['id', 'first_name', 'email', 'dob', 'github_id', 'created_at', 'updated_at', 'isActive']);
         $stat = [
@@ -48,11 +44,6 @@ class UserController extends Controller
             '1'=>'Delete',
             '2'=>'Suspended'
         ];
-
-        /*if(in_array('all', $perm))
-        {
-            
-        }*/
 
         return Datatables::of($users,$stat)
                 ->addColumn('action', function($users) use($perm){
