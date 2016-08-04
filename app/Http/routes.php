@@ -86,5 +86,11 @@ Route::group(['middleware'=>'auth'], function(){
         'middleware'=>'auth',
         'uses' => 'HomeController@dashboard'
     ]);
+    Route::get('panel', 'AccessController@showPanel');
 
+    Route::post('panel/getrrp','AccessController@getrrp');
+
+    Route::post('panel/perm','AccessController@getPerm');
+
+    Route::post('panel/setpermission', 'AccessController@setPermission');
 });
