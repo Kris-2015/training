@@ -34,9 +34,13 @@
             <div class="navbar-header">
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel Training
-                </a>
+                @if(Auth::guest())
+                <a class="navbar-brand" href="{{ url('/') }}">Laravel Training</a>
+                @else
+                <a class="navbar-brand" href="{{ url('/dashboard') }}">Laravel Training</a>
+                @endif
+
+
             </div>
             <!-- Right side of navbar -->
             <ul class="nav navbar-nav navbar-right">
@@ -49,8 +53,15 @@
                         {{ Auth::user()->first_name }} <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                        <li><a href="{{ url('/list') }}"><i class="fa fa-btn fa-sign-out"></i>Users</a></li>
+                    @if(Auth::user()->id == 1)
+                       <li><a href="{{ url('/list') }}"><i class="fa fa-btn fa-btn fa-smile-o "></i>Users</a></li>
+                       <li><a href="{{ url('/datatables') }}"><i class="fa fa-btn fa-arrow-circle-up"></i>Users Status</a></li>
+                       <li><a href="{{ url('/register') }}"><i class="fa fa-btn fa-plus-square"></i> Add New User</a></li>
+                    @else
+                       <li><a href="{{ url('/list') }}"><i class="fa fa-btn fa-btn fa-smile-o "></i>Users</a></li>
+                       <li><a href="{{ url('/datatables') }}"><i class="fa fa-btn fa-arrow-circle-up"></i>Users Status</a></li>
+                    @endif
+                       <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                     </ul>
                 </li>
             @endif
