@@ -30,7 +30,7 @@
                     @endif
                     <!-- New Task Form -->
                      {!! Form::open(array('url' => route('dologin'), 'method' => 'POST', 'class' => 'form-horizontal','id'=>'login')) !!}
-
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <!-- Task Name -->
                         <div class="form-group">
                             <label for="email" class="col-sm-3 control-label">Email</label>
