@@ -22,6 +22,7 @@
                      {!! Form::open(array('url' => route('do-register'), 'method' => 'POST', 'class' => 'form-horizontal','id'=>'registration', 'files' => 'true')) !!}
 
                             {{ csrf_field() }}
+                            
                         <!-- Task Name -->
                         <div class="form-group">
                             {{ Form::label('firstname', 'First Name', array('class' => 'control-label col-sm-3')) }}
