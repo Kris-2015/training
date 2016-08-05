@@ -90,7 +90,7 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::post('panel/getrrp','AccessController@getrrp');
 
-    Route::post('panel/perm','AccessController@getPerm');
+    Route::post('panel/permission','AccessController@getPermission');
 
     Route::post('panel/setpermission', 'AccessController@setPermission');
 });
