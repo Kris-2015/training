@@ -30,7 +30,7 @@ class UserController extends Controller
     */
     public function anyData()
     {   
-        $permission = RoleResourcePermission::getPermission(Auth::user()->role_id,'datatables');
+        $permission = RoleResourcePermission::datatablePermission(Auth::user()->role_id,'datatables');
         $perm = $permission->name;
 
         $users = User::select(['id', 'first_name', 'email', 'dob', 'github_id', 'created_at', 'updated_at', 'isActive']);
