@@ -15,17 +15,17 @@
             @endif
             <ol>
                @if(Auth::user()->role_id == 1)
-               <li><a class="btn btn-primary" href="{{ url('datatables') }}">User Status</a></li>
+               <li><a class="btn btn-primary col-xs-4" href="{{ url('datatables') }}">User Status</a></li>
                <br>
-               <li><a class="btn btn-info" href="{{ url('list') }}">User</a></li>
+               <li><a class="btn btn-info col-xs-4" href="{{ url('list') }}">User</a></li>
                <br>
-               <li><a class="btn btn-danger" href="{{ url('register') }}">Add New User</a></li>
+               <li><a class="btn btn-danger col-xs-4" href="{{ url('register') }}">Add New User</a></li>
                <br>
-               <li><a class="btn btn-success" href="{{ url('panel') }}">Admin Panel</a></li>
+               <li><a class="btn btn-success col-xs-4" href="{{ url('panel') }}">Admin Panel</a></li>
                @else
-               <li><a class="btn btn-primary" href="{{ url('datatables') }}">User Status</a></li>
+               <li><a class="btn btn-primary col-xs-4" href="{{ url('datatables') }}">User Status</a></li>
                <br>
-               <li><a class="btn btn-info" href="{{ url('list') }}">User</a></li>
+               <li><a class="btn btn-info col-xs-4" href="{{ url('list') }}">User</a></li>
                <br>
                @endif
             </ol>
