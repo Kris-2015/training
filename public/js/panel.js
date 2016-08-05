@@ -3,8 +3,7 @@ $(document).ready(function(){
     /*
      *Send the request to get the privilege
     */
-   $(document).on('change', '.role, .resource', function()
-   {
+   $(document).on('change', '.role, .resource', function() {
       var get_role = $('.role').val();
       var get_resource = $('.resource').val();
       sendrrp(get_role,get_resource);
@@ -12,8 +11,7 @@ $(document).ready(function(){
    /*
     *Set the permission for the resource
    */
-   $(document).on('change', '.privilege input[type="checkbox"]', function()
-   {
+   $(document).on('change', '.privilege input[type="checkbox"]', function() {
       var set_role = $('.role').val();
       var set_resource = $('.resource').val();
       var set_privilege = $(this).val(); //= $(this).val();
@@ -90,7 +88,7 @@ function display()
 function sendrrp(get_role,get_resource)
 {
    $.ajax({
-      url: 'panel/perm',
+      url: 'panel/permission',
       type: 'POST',
       dataType: 'json',
       data: {
