@@ -8,17 +8,14 @@ use DB;
 
 class RoleResourcePermission extends Model
 {
-    /**
-	* table is assosciated with models
-	*
-	* @var String
-	*/
-    //$protected $table = 'role_resource_permission';
 
     /**
-	 * Function to get all permission
+	 * Function to get permission of edit and delete
+     *
+     * @param role id and resource
+     * @return array
     */
-    public static function getPermission($id,$res)
+    public static function datatablePermission($id,$res)
     {
     	$rrp = new RoleResourcePermission();
         
@@ -52,11 +49,11 @@ class RoleResourcePermission extends Model
 
         $adminPermission = Permission::where('name', 'all')->first()->permission_id;
 
-        $userAccess = RoleResourcePermission::where('role_id', $roleId)
+        $userAccess = $rrp->where('role_id', $roleId)
             ->where('resource_id',$resourceId)
             ->where('permission_id', $permissionId)
             ->first();
-        $adminAccess = RoleResourcePermission::where('role_id', $roleId)
+        $adminAccess = $rrp->where('role_id', $roleId)
             ->where('resource_id',$resourceId)->where('permission_id', $adminPermission)
             ->first();
 
@@ -67,9 +64,37 @@ class RoleResourcePermission extends Model
         return 0;
     }
 
-    public static function AddPermission($role, $resource, $permission,$action)
+    public static function addPermission($role, $resource, $permission,$action)
     {
+        $rrp_obj = new RoleResourcePermission();
+        if($action == 'add')
+        {
+            //checking whether the requested permission for the role and resource exists or not
+            $check_request = $rrp_obj->where('role_id', $role)
+                ->where('resource_id', $resource)
+                ->where('permission_id', $permission)
+                ->first();
+                
+            if($check_request == NULL)
+            {
+               
+                $rrp_obj ->role_id = $role;
+                $rrp_obj ->resource_id = $resource;
+                $rrp_obj ->permission_id = $permission;
+                $added_permission = $rrp_obj ->save();
 
+                return 1;
+            }
+
+        }
+        else if($action == 'delete')
+        {
+            $delete_permission = $rrp_obj->where('role_id', $role)
+                ->where('resource_id', $resource)
+                ->where('permission_id', $permission)
+                ->delete();
+            
+        }
     }
     
 }
