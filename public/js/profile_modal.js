@@ -87,21 +87,65 @@ $(document).ready(function(){
         var del = $(this).data("accept");
         var user_id = $(this).attr("data-id");
 
-        $.ajax({
-            url:'delete',
-            type: 'POST',
-            dataType: 'json',
-            data:{
-                id:user_id,
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
-            success:function(response)
-            {
-              
-            }
-        });
+        deleteUser( user_id );
     });
 
 });
+
+
+function changeActivationStatus ( btn ) {
+    var btnObj = $( btn );
+
+    var activate = btnObj.attr('data-activate');
+    var id = btnObj.attr('data-id');
+    
+    if( activate === '0' )
+    {
+        $(".del").attr("data-id", id);
+        $("#delete").modal({
+            backdrop: 'static',
+            keyboard: 'false'
+        }, 'show');
+    }
+    else
+    {
+        // Make AJAX call to activate the user
+        $.ajax({
+        url:'activate',
+        type: 'POST',
+        dataType: 'json',
+        data:{
+            id:id,
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        },
+        success:function(response)
+        {
+            //console.log('hill');
+            //$('#delete').modal('hide');
+            $('#users-table').DataTable().ajax.reload();
+        }
+    });
+    }
+}
+
+function deleteUser (user_id) {
+    $.ajax({
+        url:'delete',
+        type: 'POST',
+        dataType: 'json',
+        data:{
+            id:user_id,
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        },
+        success:function(response)
+        {
+            console.log(response);
+            $('#delete').modal('hide');
+            $('#users-table').DataTable().ajax.reload();
+        }
+    });
+}
