@@ -110,11 +110,9 @@ function sendrrp(get_role, get_resource) {
          var getrole_id = $('.role').val();
 
          $('.privilege input[type="checkbox"]').each(function(i, obj) {
-
             var checkbox_obj = $(this);
-            $.each(checkbox_obj, function() {
-               $(this).prop('checked', false);
-            });
+            $(this).prop('checked', false);
+            
 
             $.each(response, function(resp_key, resp_data) {
                if (checkbox_obj.val() === resp_data.permission_id) {
