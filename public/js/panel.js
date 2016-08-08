@@ -47,10 +47,6 @@ function display() {
    $.ajax({
       url: 'panel/getrrp',
       type: 'POST',
-      dataType: 'json',
-      data: {
-         start: 1,
-      },
       headers: {
          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
       },
@@ -98,7 +94,6 @@ function sendrrp(get_role, get_resource) {
       data: {
          role: get_role,
          resource: get_resource,
-         start: 2,
       },
       headers: {
          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -140,7 +135,6 @@ function setrrp(get_role, get_resource, get_privilege, action) {
          resource: get_resource,
          permission: get_privilege,
          action: action,
-         start: 3,
       },
       headers: {
          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
