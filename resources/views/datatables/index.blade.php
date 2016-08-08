@@ -46,26 +46,6 @@
                     </div>
                     <div class="col-xs-3 profile_pic"></div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-6">
-                        <h4><u>RESIDENCE ADDRESS</u></h4>
-                        <p id="residence_street"></p>
-                        <p id="residence_city"><strong>City:</strong> Ranchi</p>
-                        <p id="residence_state"></p>
-                        <p id="residence_mobile"></p>
-                        <p id="residence_landline"></p>
-                        <p id="residence_zip"></p>
-                    </div>
-                    <div class="col-xs-6">
-                        <h4><u>OFFICE ADDRESS</u></h4>
-                        <p id="office_street"></p>
-                        <p id="office_city"><strong>City:</strong> Bhubaneswar</p>
-                        <p id="office_state"></p>
-                        <p id="office_mobile"></p>
-                        <p id="office_landline"></p>
-                        <p id="office_zip"></p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -140,5 +120,4 @@ $('#users-table').DataTable({
 @section('js-css')
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 <script src="{{ url('/js/profile_modal.js') }}"></script>
-<script src="{{ url('/js/datatable_list.js') }}"></script>
 @endsection
