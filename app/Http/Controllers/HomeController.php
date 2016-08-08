@@ -11,10 +11,29 @@ use DB;
 use Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
+/**
+ * Manage request dashboard and list
+ * @access public
+ * @package App\Http\Controllers
+ * @subpackage void
+ * @category void
+ * @author mfsi-krishnadev
+ * @link void
+ */
+
 class HomeController extends Controller
 {
+
+   /**
+    * Function to return dashboard view
+    *
+    * @param Request
+    * @return mixed
+    */
     public function dashboard(Request $request)
     {
+        //checking if user is logged in
         if (Auth::check())
         {
             return view('dashboard');    
@@ -26,14 +45,20 @@ class HomeController extends Controller
         
     }
 
+    /**
+      * Function to get information of user
+      *
+      * @param void
+      * @return mixed
+    */
     public function getlist()
     {
-    	$get_user = User::join('addresses', 'users.id', '=', 'addresses.user_id')
+        $get_user = User::join('addresses', 'users.id', '=', 'addresses.user_id')
                     ->join('communications','users.id', '=', 'communications.user_id')
                     ->groupBy('users.id');
             
-    	
-       	$information_residence = $get_user->where('addresses.type', 'residence')
+        
+        $information_residence = $get_user->where('addresses.type', 'residence')
                     ->get()->toArray();
 
         $information_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
@@ -50,21 +75,21 @@ class HomeController extends Controller
         
         $information = array();
 
-        foreach ($information_residence as $key => $val)
+        foreach ($information_residence as $key => $residence)
         {
-            // Loop though one array
-            $val2 = $information_office[$key]; // Get the values from the other array
-            $information[$key] = $val + $val2; // combine 'em
+            
+            $office = $information_office[$key];
+            $information[$key] = $residence + $office;
         }
 
         return view('list',compact('information'));
     }
 
-    /*
+    /**
      * Function to get all the data by user id
      *
      * @param: integer
-     * @return: none
+     * @return: void
     */
     public function Data($id)
     {
@@ -72,7 +97,6 @@ class HomeController extends Controller
         
         $get_user = User::join('addresses', 'users.id', '=', 'addresses.user_id')
                     ->join('communications','users.id', '=', 'communications.user_id')
-                    //->groupBy('users.id');
                     ->where('users.id',$id);
         
         $information_residence = $get_user->where('addresses.type', 'residence')
@@ -105,29 +129,25 @@ class HomeController extends Controller
         
     }
 
-    /*
+   /**
      * Function to delete the user
      *
      * @param: id
      * @return redirect
     */
-
     public function delete(Request $request)
     {
         try
         {
-            $id = $request['id'];
-
-            $user = User::find($id);
             
-            $user->isActive = '0';//when user wishes to delete, mark 0 in the isActive column
+            $id = $request['id'];
+            User::destroy($id);
 
-            $user->save();
-            print_r($user->save());
+            return 1;
         }
         catch(Exception $e)
         {
-            print_r("failed") ;
+            return 0;
         }
     }
 }
