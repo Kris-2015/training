@@ -19,6 +19,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     use Authenticatable, CanResetPassword;
     use SoftDeletes;
     protected $fillable = ['id', 'first_name'];
+    protected $dates = ['deleted_at'];
 
 	/*
 	 * store the information in users table
@@ -46,7 +47,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $user->employer = $data['employer'];
             $user->email = $data['email'];
             $user->github_id = $data['githubid'];
-            $user->password = $password;
+            $user->password = $password; 
             $user->image = $data['uploaded_image'];
             $success = $user->save();
             $data['user_id'] = $user->id;
@@ -85,5 +86,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return 0;
         } 
         return 1;
+   }
+
+   public static function changeStatus($id)
+   {
+       try
+       {
+            $user = User::withTrashed()->find($id);
+            $user->deleted_at = null;
+            $user->save();
+
+            return 1;
+       }
+       catch(Exception $e)
+       {
+            return 0;
+       }
    }
 }
