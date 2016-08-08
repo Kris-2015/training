@@ -7,83 +7,95 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Resource;
-use App\Models\Permissions;
+use App\Models\Permission;
 use App\Models\RoleResourcePermission;
 use Auth;
 use DB;
 
+/**
+ * Manage the role, resource and permission
+ * @access public
+ * @package App\Http\Controllers
+ * @subpackage void
+ * @category void
+ * @author mfsi-krishnadev
+ * @link void
+ */
+
 class AccessController extends Controller
 {
-   /*
+  /**
    * Display admin panel front end view
    *
    * @return \Illuminate\View\View
   */
    public function showPanel()
    {
-      return view('panel');
+        return view('panel');
    }
 
-   /*
+  /**
    * Function to get role, resource and permission
    *
-   * @param handle request
-   * @return \Illuminate\Http\JsonResponse
-    */
+   * @param handle incoming request
+   * @return json
+   */
    public function getrrp(Request $request)
    {
-     //flag variable for getting role resource and permission
-     $start = $request->all()['start']; 
-     if($start == 1)
-     {
-      $data = [];
-      $data['role'] = DB::table('roles')->get();   
-      $data['resource'] = DB::table('resources')->get();
-      $data['permission'] = DB::table('permissions')->get();
 
-        echo json_encode($data);
-     }
+        //empty array to store role, resource and permisson in an array            
+        $data = [];
+        $data['role'] = Role::all();   
+        $data['resource'] = Resource::all();
+        $data['permission'] = Permission::all();
+
+        //returning the role, resource and permission in json
+        return response()->json($data);
+
    }
 
-   /*
+  /**
    * Function to get permission based on roles
    *
-   * @param handle request
-   * @return \Illuminate\Http\JsonResponse
-    */
+   * @param handle incoming request
+   * @return json
+   */
    public function getPermission(Request $request)
    {
-    
-        $req = $request->all();
-        $flag2 = $req['start'];
-        $role = $req['role'];
-        $resource = $req['resource'];
+        //fetching the role and resource id from request variable
+        $flag = $request->all();
+        $role = $flag['role'];
+        $resource = $flag['resource'];
+      
+        //getting the permission of resources based on role
+        $resource_permission = RoleResourcePermission::where('role_id',$role)
+                    ->where('resource_id',$resource)->get();
 
-         if($flag2 == 2)
-         {
-            $getrrp = new RoleResourcePermission();
-            $data = array();
-            $resource_permission = DB::table('role_resource_permissions')
-                        ->where('role_id',$role)
-                        ->where('resource_id',$resource)->get();
-
-            echo json_encode($resource_permission);      
-        }
+        //returning the permission of resource in json 
+        return response()->json($resource_permission);    
+              
    }
 
+   /**
+    * Function to set the permission of user
+    *
+    * @param handle incoming request
+    * @return void
+    */
    public function setPermission(Request $request)
    {
-
+        //fetching the role id, resource id and permission id from request variable
         $get = $request->all();
-        $temp = $get['start'];
         $role = $get['role'];
         $resource = $get['resource'];
         $permission = $get['permission'];
+
+        //action variable determines the permission of resources and role of user
+        // example: add and delete
         $action = $get['action'];
         
-        if($temp == 3)
-        {
-            $setrrp = RoleResourcePermission::addPermission($role, $resource, $permission, $action); 
-        }
+        //setting the permision of resource of role 
+        $setrrp = RoleResourcePermission::addPermission($role, $resource, $permission, $action); 
+
    }
 }
