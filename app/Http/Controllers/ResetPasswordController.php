@@ -9,6 +9,17 @@ use DB;
 use Mail;
 use App\Http\Requests;
 
+
+/**
+ * Manage request for resetting password
+ * @access public
+ * @package App\Http\Controllers
+ * @subpackage void
+ * @category void
+ * @author mfsi-krishnadev
+ * @link void
+ */
+
 class ResetPasswordController extends Controller
 {
     public function sendLink(Request $request)
@@ -25,9 +36,11 @@ class ResetPasswordController extends Controller
         
         if($email == $user[0]['email'])
         {
+
             $id= $user[0]['id'];
-            $key = $this->RandomKey($id);
-            $this->Email($key); 
+            $newkey = AuthController::GenerateKey($id);
+            $this->PasswordResetMail($newkey);
+
             return redirect('/login')->with('status', 'We sent you an reset password link. Check your email.');
         }
     }
@@ -36,9 +49,9 @@ class ResetPasswordController extends Controller
      * Function to send message
      *
      * @param: password reset link
-     * @return: none
+     * @return: void
     */
-	public function Email($key)
+	public function PasswordResetMail($key)
      {
      	$user = [
      	'name' => 'kris',
@@ -52,22 +65,6 @@ class ResetPasswordController extends Controller
      		$m->to($user['email'], $user['name'])->subject('Reset Password');
      	});
      }
-
-     /**
-	 * Generate key 
-     * @param: none
-     *
-     * @return: hash 
-    */
-    public function RandomKey($id)
-    {
-        $key = md5($id);
-
-        $data = array('user_id'=>$id, 'token'=>$key);
-        $insert_code = User_activation::insertActivation($data);
-
-        return $key;
-    }
 
     /**
      * Function to activate the users account
@@ -98,6 +95,7 @@ class ResetPasswordController extends Controller
             $cpassword = $credential['cpassword'];
             if($password == $cpassword)
             {
+                
                 $new_password = bcrypt($password);
                 $user = User::where('email',$email_id)->first();
                 $user->password = $new_password;
