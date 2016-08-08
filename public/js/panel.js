@@ -1,45 +1,49 @@
-$(document).ready(function(){
-	display();
-    /*
-     *Send the request to get the privilege
+$(document).ready(function() {
+   display();
+
+   /*
+    *Send the request to get the privilege
     */
    $(document).on('change', '.role, .resource', function() {
+
       var get_role = $('.role').val();
       var get_resource = $('.resource').val();
-      sendrrp(get_role,get_resource);
+      sendrrp(get_role, get_resource);
+
    });
+
    /*
     *Set the permission for the resource
-   */
+    */
    $(document).on('change', '.privilege input[type="checkbox"]', function() {
+
       var set_role = $('.role').val();
       var set_resource = $('.resource').val();
-      var set_privilege = $(this).val(); //= $(this).val();
+      var set_privilege = $(this).val(); 
       var action;
-      
-     if ( $(this)[0].checked ) 
-      {
-        action = 'add';
-      } 
-      else 
-      {
-        action = 'delete';
+
+      if ($(this)[0].checked) {
+
+         action = 'add';
+
+      } else {
+
+         action = 'delete';
+
       }
-      console.log(set_role);
-      console.log(set_resource);
-      console.log(set_privilege);
-      console.log(action);
-      setrrp(set_role,set_resource,set_privilege,action);
+      
+      setrrp(set_role, set_resource, set_privilege, action);
+
    });
+
 });
 
-/*
-*function for printing the role, resource and privileges
-* @param:none
-* return: none
-*/
-function display() 
-{
+/**
+ * function for printing the role, resource and privileges
+ * @param:void
+ * return: void
+ */
+function display() {
    $.ajax({
       url: 'panel/getrrp',
       type: 'POST',
@@ -48,45 +52,45 @@ function display()
          start: 1,
       },
       headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
       },
       success: function(data) {
 
-        var role = " ";
-        var resource = " ";
-        var privilege = " ";
-        
-        for (var key in data.role) {
+         var role = " ";
+         var resource = " ";
+         var privilege = " ";
+
+         for (var key in data.role) {
             if (data.role.hasOwnProperty(key)) {
-               role += '<option id="'+ data.role[key]['role_name'] +'" value="' +data.role[key]['role_id'] + '">' + data.role[key]['role_name'] + '</option>';
+               role += '<option id="' + data.role[key]['role_name'] + '" value="' + data.role[key]['role_id'] + '">' + data.role[key]['role_name'] + '</option>';
             }
          }
 
          for (var key in data.resource) {
             if (data.resource.hasOwnProperty(key)) {
-               resource += '<option id="'+ data.resource[key]['resource_name'] +'" value="' + data.resource[key]['resource_id'] + '">' + data.resource[key]['resource_name'] + '</option>';
+               resource += '<option id="' + data.resource[key]['resource_name'] + '" value="' + data.resource[key]['resource_id'] + '">' + data.resource[key]['resource_name'] + '</option>';
             }
          }
 
          for (var key in data.permission) {
             if (data.permission.hasOwnProperty(key)) {
-               privilege += '<label class="checkbox-inline"><input type="checkbox" id="'+ data.permission[key]['name'] +'" value="' + data.permission[key]['permission_id'] + '">' + data.permission[key]['name'] + '</label>';
+               privilege += '<label class="checkbox-inline"><input type="checkbox" id="' + data.permission[key]['name'] + '" value="' + data.permission[key]['permission_id'] + '">' + data.permission[key]['name'] + '</label>';
             }
          }
-        
+
          $(".role").html(role);
          $(".resource").html(resource);
          $(".privilege").html(privilege);
       }
    });
 }
-/*
-*function to select the privilege checkbox
-* @param: role_id and resource_id
-* @return: none
-*/
-function sendrrp(get_role,get_resource)
-{
+
+/**
+ *function to select the privilege checkbox
+ * @param: role_id and resource_id
+ * @return: void
+ */
+function sendrrp(get_role, get_resource) {
    $.ajax({
       url: 'panel/permission',
       type: 'POST',
@@ -94,59 +98,57 @@ function sendrrp(get_role,get_resource)
       data: {
          role: get_role,
          resource: get_resource,
-         start:2,
+         start: 2,
       },
       headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
       },
-      success:function(response)
-      {
+      success: function(response) {
+
          var getprivilege_id;
          var getresource_id = $('.resource').val();
          var getrole_id = $('.role').val();
 
-        $('.privilege input[type="checkbox"]').each(function(i,obj){
+         $('.privilege input[type="checkbox"]').each(function(i, obj) {
 
             var checkbox_obj = $(this);
-            $.each(checkbox_obj,function () {
-                    $(this).prop('checked', false);
-                });
-
-            $.each(response, function(resp_key,resp_data)
-            {
-                if (checkbox_obj.val() === resp_data.permission_id) {
-                    checkbox_obj.prop('checked', true);
-            }
-                
+            $.each(checkbox_obj, function() {
+               $(this).prop('checked', false);
             });
-        });
+
+            $.each(response, function(resp_key, resp_data) {
+               if (checkbox_obj.val() === resp_data.permission_id) {
+                  checkbox_obj.prop('checked', true);
+               }
+
+            });
+         });
       }
    });
 }
+
 /*
-*function to set permission
-* @param: role_id,resource_id,privilege_id, action
-* @return: none
-*/
-function setrrp(get_role,get_resource,get_privilege,action)
-{
-  $.ajax({
-    url:'panel/setpermission',
-    type:'POST',
-    dataType:'json',
-    data:{
-        role:get_role,
-        resource:get_resource,
-        permission:get_privilege,
-        action:action,
-        start:3,
-    },
-    headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-    },
-    success:function(response)
-    {
-        display();
-    }
-  });
+ *function to set permission
+ * @param: role_id,resource_id,privilege_id, action
+ * @return: void
+ */
+function setrrp(get_role, get_resource, get_privilege, action) {
+   $.ajax({
+      url: 'panel/setpermission',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+         role: get_role,
+         resource: get_resource,
+         permission: get_privilege,
+         action: action,
+         start: 3,
+      },
+      headers: {
+         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+      },
+      success: function(response) {
+         display();
+      }
+   });
 }
