@@ -42,13 +42,14 @@ Route::post('dologin', [
     'uses' => 'AuthController@dologin'
 ]);
 
-Route::get('activation/{token}', 'AuthController@activateUser');
+Route::get('instagram-register', [
+    'as' => 'instagram-register',
+    'uses' => 'InstagramController@details'
+]);
 
-Route::get('/logout',['as' => 'logout', function () {
-    Auth::logout();
-    Session::flush();
-    return redirect()->route('login');
-}]);
+Route::get('activation/{token}', 'AuthController@activateAccount');
+
+Route::get('logout','AuthController@logout');
 
 Route::get('/resetPassword',[
     'as' => 'sendLink',
@@ -62,10 +63,25 @@ Route::post('resetPassword', [
 
 Route::get('reset/{token}', 'ResetPasswordController@PasswordPage');
 
+Route::get('/dashboard','HomeController@dashboard');
+
 Route::post('updatepassword', [
     'as' => 'updatepassword',
     'uses'=>'ResetPasswordController@updatepassword'
 ]);
+
+Route::get('new_user',[
+   'as' => 'new_user',
+   'uses' => 'AddUserController@newUser'
+]);
+
+Route::post('add_user',[
+   'as' => 'add_user',
+   'uses' => 'AddUserController@add_user'
+]);
+
+Route::post('activate', 'ActivateUserController@activateUser');
+
 /**
  * Group routes to check the user authentication
 */
@@ -80,12 +96,8 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::get('register/{id}', 'HomeController@Data');
 
-    Route::get('delete','HomeController@delete');
+    Route::post('delete','HomeController@delete');
 
-    Route::get('/dashboard',[
-        'middleware'=>'auth',
-        'uses' => 'HomeController@dashboard'
-    ]);
     Route::get('panel', 'AccessController@showPanel');
 
     Route::post('panel/getrrp','AccessController@getrrp');
