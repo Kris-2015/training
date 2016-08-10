@@ -27,6 +27,7 @@ class AccessController extends Controller
   /**
    * Display admin panel front end view
    *
+   * @param void
    * @return \Illuminate\View\View
   */
    public function showPanel()
@@ -84,6 +85,7 @@ class AccessController extends Controller
     */
    public function setPermission(Request $request)
    {
+
         //fetching the role id, resource id and permission id from request variable
         $get = $request->all();
         $role = $get['role'];
@@ -94,7 +96,7 @@ class AccessController extends Controller
         // example: add and delete
         $action = $get['action'];
         
-        //setting the permision of resource of role 
+        //setting the permision of resource based on role  
         $setrrp = RoleResourcePermission::addPermission($role, $resource, $permission, $action); 
 
    }
