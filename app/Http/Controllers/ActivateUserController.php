@@ -17,17 +17,21 @@ use App\Http\Requests;
  */
 class ActivateUserController extends Controller
 {
-  /**
-	* Function will activate the user account
-	*
-	* @param: $user_id
-	* @return: 
+    /**
+    * Function will activate the user account
+    *
+    * @param: $user_id
+    * @return: json
     */
     public function activateUser(Request $request)
     {
+        //user id for activating user account
         $user_id = $request['id'];
+
+        //changing the status of user account
         $active = User::changeStatus($user_id);
 
+        //returning the activate message to show 'activate' account
         echo json_encode('activate');
     }
 }
