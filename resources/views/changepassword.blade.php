@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="container">
-    <div class="col-sm-offset-3 col-sm-5">
+    <div class="col-sm-offset-3 col-sm-6">
         <div class="panel panel-default">
             <div class="panel-heading">Reset Password</div>
             <div class="panel-body">
@@ -16,30 +16,30 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <!-- Email -->
                 <div class="form-group">
-                    <label for="email" class="col-sm-3 control-label">Email</label>
-                    <div class="col-sm-6">
+                    <label for="email" class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-7">
                         {{ Form::email('email', null, array('class'=>'form-control')) }}
                     </div>
                 </div>
                 <!-- Password -->
                 <div class="form-group">
-                    <label for="password" class="col-sm-3 control-label">Password</label>
-                    <div class="col-sm-6">
+                    <label for="password" class="col-sm-4 control-label">Password</label>
+                    <div class="col-sm-7">
                         {{ Form::password('password', array('class'=>'form-control', 'id'=>'Password')) }}
                     </div>
                 </div>
                 <!-- Confirm Password -->
                 <div class="form-group">
                     <label for="cpassword" class="col-sm-4 control-label">Confirm Password</label>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         {{ Form::password('cpassword', array('class'=>'form-control', 'id'=>'CPassword')) }}
                     </div>
                 </div>
                 <!-- Add Task Button -->
                 <div class="form-group">
-                    <div class="col-sm-offset-4 col-sm-6">
+                    <div class="col-sm-offset-5 col-sm-6">
                         <button type="submit" class="btn btn-primary">
-                        Send Password Reset Link
+                        Reset Password
                         </button>
                     </div>
                 </div>
