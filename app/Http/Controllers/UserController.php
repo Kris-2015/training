@@ -13,82 +13,105 @@ use Auth;
 class UserController extends Controller
 {
     protected $dates = ['deleted_at'];
-	/*
-	 * Display datables front end view
-	 *
-	 * @return \Illuminate\View\View
-	*/
+   /**
+    * Display datables front end view
+    *
+    * @return \Illuminate\View\View
+    */
     public function getIndex()
     {
-    	return view('datatables.index');
+
+        return view('datatables.index');
     }
 
-    /*
-	 * Process datatables ajax requests
-	 *
-	 * @return \Illuminate\Http\JsonResponse
+    /**
+     * Process datatables ajax requests
+     *
+     * @param void
+     * @return \Illuminate\Http\JsonResponse
     */
     public function anyData()
     {   
 
+        //get user permission for datatables
         $permission = RoleResourcePermission::datatablePermission(Auth::user()->role_id,'datatables');
-        $perm = $permission->name;
 
-        $users = User::withTrashed()->select(['id', 'first_name', 'email', 'dob', 'github_id', 'created_at', 'updated_at', 'isActive', 'deleted_at']);
+        //get all the records of active/deactivated user
+        $users = User::withTrashed()->select(['id', 'first_name', 'email', 'dob', 'github_id', 'created_at', 'updated_at',
+            'role_id', 'isActive', 'deleted_at']);
+
+        //array for showing the status of users account using bootstrap button class
         $stat = [
             '0'=>'danger',
             '1'=>'primary'
         ];
+
+        //array to show the status of users account
         $status = [
             '0'=>'Deactivate',
             '1'=>'Activate'
         ];
 
         return Datatables::of($users,$stat)
-                ->addColumn('action', function($users) use($perm){
-                    $edit = '';
-                    $delete = '';
-                    $result='';
-                    if($perm == 'all' )
+            ->addColumn('action', function($users) use($permission){
+
+                //setting the variable with null values
+                $edit = '';
+                $delete = '';
+                $result='';
+
+                //checking the required permission is present in array
+                if(in_array('all', $permission) || in_array('update', $permission) && in_array('delete', $permission))
+                {
+                    //if user has the update permission, initialise the edit variable with edit row
+                    $edit = '<li><a href="register/'.$users->id.'">Edit</a></li>'; 
+
+                    //if user has the delete permission, initialise the delete variable with delete row 
+                    $delete = '<li><a href="#" class="delete" data-id="'.$users->id.'">Delete</a></li>';
+                }
+                else
+                    if(in_array("delete", $permission))
                     {
-                        $edit = '<li><a href="register/'.$users->id.'">Edit</a></li>'; 
                         $delete = '<li><a href="#" class="delete" data-id="'.$users->id.'">Delete</a></li>';
                     }
-                    else
-                        if($perm == 'delete')
-                        {
-                            $delete = '<li><a href="#" class="delete" data-id="'.$users->id.'">Delete</a></li>';
-                        }
-                    else
-                        if($perm == 'edit')
-                        {
-                            $edit = '<li><a href="register/'.$users->id.'">Edit</a></li>'; 
-                        }
-
-                    if($edit != '' || $delete != '' || $perm == 'view')
+                else
+                  if(in_array("update", $permission))
                     {
-                        $result = '
-                        <div class="btn-group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Action<span class="caret"></span></button>
-                          <ul class="dropdown-menu" role="menu">
-                            <li><a class="pro" data-id="'.$users->id.'" href="#">Profile</a></li>
-                            <li><a class="git" data-github="'.$users->github_id.'" href="#">Github Profile</a></li>
-                            '.$edit.'
-                            '.$delete.'  
-                          </ul>
-                        </div>';
+                        $edit = '<li><a href="register/'.$users->id.'">Edit</a></li>'; 
                     }
-                    return $result;
+
+                if($edit != '' || $delete != '' || in_array("view", $permission))
+                {
+
+                   $result = '
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Action<span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a class="pro" data-id="'.$users->id.'" href="#">Profile</a></li>
+                          <li><a class="git" data-github="'.$users->github_id.'" href="#">Github Profile</a></li>
+                        '.$edit.'
+                        '.$delete.'  
+                       </ul>
+                    </div>';
+                }
+
+                return $result;
             })
             ->addColumn('status', function($users) use($stat,$status){
-                $isDeleted = 0;
+                
+                  //assuming that deleted at column is null
+                  $isDeleted = 0;
 
-                if( !empty( $users->deleted_at ) )
-                {
-                    $isDeleted = 1;
-                }
-                return '
-                <button onclick="changeActivationStatus(this)" type="button" data-activate="' . $isDeleted . '" data-id="' . $users->id . '" class="btn btn-'.$stat[$isDeleted].'" btn-lg">'.$status[$isDeleted].'</button>';
+                  //if deleted_at column is not null, then set the isDeleted to '1' to indicate 
+                  //user account is not deactivated
+                  if( !empty( $users->deleted_at ) )
+                  {
+                      $isDeleted = 1;
+                  }
+                  return 
+                      '<button onclick="changeActivationStatus(this)" type="button" data-activate="' . $isDeleted . 
+                      '" data-id="' . $users->id . '" class="btn btn-'.$stat[$isDeleted].'" btn-lg">'.$status[$isDeleted].
+                      '</button>';                
             })
             ->make(true);
     }
