@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 /**
- * Manage request dashboard and list
+ * Manage request dashboard and list information
  * @access public
  * @package App\Http\Controllers
  * @subpackage void
@@ -68,12 +68,17 @@ class HomeController extends Controller
     */
     public function Data($id)
     {
+
+        if(Auth::user()->role_id == '2' &&  Auth::user()->id != $id) 
+        {
+            return redirect('dashboard')->with('access','Not authorised');
+        }    
+
         //storing the state list in array
         $state_list = config('constants.state_list');
-        $users_info = $this->UserInformation();
+        $users_info = $this->UserInformation($id);
 
-        return view("registration",compact('users_info','state_list'));
-        
+        return view("registration",compact('users_info','state_list'));  
     }
 
    /**
@@ -101,36 +106,51 @@ class HomeController extends Controller
     }
 
     /**
-     * Function to fetch all the users information 
+     * Function to fetch all the information of user 
      *
-     * @param: void
+     * @param: id
      * @return: array
     */
-    public function UserInformation()
+    public function UserInformation($id=false)
     {
 
-        $get_user = User::join('addresses', 'users.id', '=', 'addresses.user_id')
-                    ->join('communications','users.id', '=', 'communications.user_id')
-                    ->groupBy('users.id');
+        //get the information of user by user id
+        if($id)
+        {
+            $get_user = User::find($id)->join('addresses', 'users.id', '=', 'addresses.user_id')
+                ->join('communications','users.id', '=', 'communications.user_id')
+                ->groupBy('users.id');    
+        }
+        else
+        {
+            //get all the information of all user 
+            $get_user = User::join('addresses', 'users.id', '=', 'addresses.user_id')
+                ->join('communications','users.id', '=', 'communications.user_id')
+                ->groupBy('users.id');
+        }
+        
             
-        
+        //get the residence address of user of user
         $information_residence = $get_user->where('addresses.type', 'residence')
-                    ->get()->toArray();
+               ->get()->toArray();
 
+        //get the office address of user of user
         $information_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
-                    ->select( 
-                        "addresses.street AS office_street",
-                        "addresses.city AS office_city",
-                        "addresses.state AS office_state",
-                        "addresses.zip AS office_zip",
-                        "addresses.mobile AS office_mobile",
-                        "addresses.landline AS office_landline",
-                        "addresses.fax AS office_fax"
-                    )->groupBy('users.id')->where('addresses.type', 'office')
-                    ->get()->toArray();
+                ->select( 
+                    "addresses.street AS office_street",
+                    "addresses.city AS office_city",
+                    "addresses.state AS office_state",
+                    "addresses.zip AS office_zip",
+                    "addresses.mobile AS office_mobile",
+                    "addresses.landline AS office_landline",
+                    "addresses.fax AS office_fax"
+                )->groupBy('users.id')->where('addresses.type', 'office')
+                ->get()->toArray();
         
+        //array to store the all the information of user
         $information = array();
 
+        //loop to concat the residence and office information of user
         foreach ($information_residence as $key => $residence)
         {
             
@@ -138,6 +158,7 @@ class HomeController extends Controller
             $information[$key] = $residence + $office;
         }
 
+        //return the complete information of user
         return $information;
     }
 }
