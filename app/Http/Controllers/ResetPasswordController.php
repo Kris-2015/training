@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\User_activation;
+use App\Models\UserActivation;
 use DB;
 use Mail;
 use App\Http\Requests;
@@ -22,21 +22,39 @@ use App\Http\Requests;
 
 class ResetPasswordController extends Controller
 {
+
+   /**
+    * Function to return the view of reset password page
+    *
+    * @param: incoming request
+    * @return: reset password page
+    */
     public function sendLink(Request $request)
     {
-    	return view('resetPassword');
+        return view('reset_password');
     }
 
+   /**
+    * Function to sent the link of reset password
+    *
+    * @param: incoming request
+    * @return: mixed
+    */
     public function reset(Request $request)
-    {	
+    {   
         $get_request = $request->all();
         $email = $get_request['email'];
-    	
-    	$user= User::where('email',$email)->get();
         
-        if($email == $user[0]['email'])
+        $user= User::where('email',$email)->get();
+        
+        
+        if( $user->count()  == 0)
         {
-
+            return redirect('/login')->with('warning', 'Invalid email id.');
+        }
+        else
+        {
+            
             $id= $user[0]['id'];
             $newkey = AuthController::GenerateKey($id);
             $this->PasswordResetMail($newkey);
@@ -51,19 +69,19 @@ class ResetPasswordController extends Controller
      * @param: password reset link
      * @return: void
     */
-	public function PasswordResetMail($key)
+    public function PasswordResetMail($key)
      {
-     	$user = [
-     	'name' => 'kris',
-     	'email' => 'krishnadev.rnc@gmail.com'
-     	];
-     	
-     	Mail::queue('emails.reset', ['key'=> $key], function ($m) use ($user)
-     	{
-     		$m->from('kris@app.com', 'Reset Password');
+        $user = [
+        'name' => 'kris',
+        'email' => 'krishnadev.rnc@gmail.com'
+        ];
+        
+        Mail::queue('emails.reset', ['key'=> $key], function ($m) use ($user)
+        {
+            $m->from('kris@app.com', 'Reset Password');
 
-     		$m->to($user['email'], $user['name'])->subject('Reset Password');
-     	});
+            $m->to($user['email'], $user['name'])->subject('Reset Password');
+        });
      }
 
     /**
@@ -85,14 +103,22 @@ class ResetPasswordController extends Controller
         }
     }
 
+   /**
+    * Function to update with new password
+    *
+    * @param: incoming request
+    * @return: mixed
+    */
     public function updatepassword(Request $request)
     {
         try
         {
+
             $credential = $request->all();
             $email_id = $credential['email'];
             $password = $credential['password'];
             $cpassword = $credential['cpassword'];
+
             if($password == $cpassword)
             {
                 
