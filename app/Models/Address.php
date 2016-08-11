@@ -5,6 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Log;
 
+/**
+ * Address Model class
+ * @access public
+ * @package App\Models
+ * @subpackage void
+ * @category void
+ * @author vivek
+ * @link void
+ */
 class Address extends Model
 {
     /*
