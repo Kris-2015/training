@@ -158,6 +158,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         Ixudra\Curl\CurlServiceProvider::class,
+        Vinkla\Instagram\InstagramServiceProvider::class,
     ],
 
     /*
@@ -206,8 +207,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
-        'Curl'          => Ixudra\Curl\Facades\Curl::class,
-
+        'Curl' => Ixudra\Curl\Facades\Curl::class,
+        'Instagram' => Vinkla\Instagram\Facades\Instagram::class,
     ],
 
 ];
