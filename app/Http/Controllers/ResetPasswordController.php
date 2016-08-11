@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserActivation;
-use DB;
-use Mail;
+use App\MOdels\Helper;
 use App\Http\Requests;
 
 
@@ -42,47 +41,35 @@ class ResetPasswordController extends Controller
     */
     public function reset(Request $request)
     {   
+
         $get_request = $request->all();
         $email = $get_request['email'];
         
         $user= User::where('email',$email)->get();
         
         
-        if( $user->count()  == 0)
+        if ( $user->count()  == 0)
         {
             return redirect('/login')->with('warning', 'Invalid email id.');
         }
         else
         {
-            
-            $id= $user[0]['id'];
-            $newkey = AuthController::GenerateKey($id);
-            $this->PasswordResetMail($newkey);
+            //get user id
+            $id = $user[0]['id'];
+           
+            //get first name of user
+            $user_name = $user[0]['first_name'];
+
+            //subject of the mail
+            $subject = 'Reset Mail';
+            $newkey = Helper::GenerateKey($id);
+
+            Helper::Email($newkey, $user_name, $email, $subject);
 
             return redirect('/login')->with('status', 'We sent you an reset password link. Check your email.');
         }
     }
 
-    /**
-     * Function to send message
-     *
-     * @param: password reset link
-     * @return: void
-    */
-    public function PasswordResetMail($key)
-     {
-        $user = [
-        'name' => 'kris',
-        'email' => 'krishnadev.rnc@gmail.com'
-        ];
-        
-        Mail::queue('emails.reset', ['key'=> $key], function ($m) use ($user)
-        {
-            $m->from('kris@app.com', 'Reset Password');
-
-            $m->to($user['email'], $user['name'])->subject('Reset Password');
-        });
-     }
 
     /**
      * Function to activate the users account
@@ -90,9 +77,9 @@ class ResetPasswordController extends Controller
      * @param: token number
      * @return: login page with message
     */
-    public function PasswordPage($token)
+    public function passwordPage($token)
     {
-        $verify = new user_activation();
+        $verify = new UserActivation();
 
         $verify = $verify::where('token',$token)->get();
         $user_id = $verify[0]['user_id'];
@@ -109,11 +96,11 @@ class ResetPasswordController extends Controller
     * @param: incoming request
     * @return: mixed
     */
-    public function updatepassword(Request $request)
+    public function updatePassword(Request $request)
     {
         try
         {
-
+            //store required information from request variable
             $credential = $request->all();
             $email_id = $credential['email'];
             $password = $credential['password'];
