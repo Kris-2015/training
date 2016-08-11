@@ -61,13 +61,13 @@ Route::post('resetPassword', [
     'uses' => 'ResetPasswordController@reset'
 ]);
 
-Route::get('reset/{token}', 'ResetPasswordController@PasswordPage');
+Route::get('reset/{token}', 'ResetPasswordController@passwordPage');
 
 Route::get('/dashboard','HomeController@dashboard');
 
 Route::post('updatepassword', [
     'as' => 'updatepassword',
-    'uses'=>'ResetPasswordController@updatepassword'
+    'uses'=>'ResetPasswordController@updatePassword'
 ]);
 
 Route::get('new_user',[
