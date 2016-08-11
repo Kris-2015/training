@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Instagram;
 use App\Http\Requests;
 use App\Models\User;
+use Auth;
 use Vinkla\Instagram\InstagramManager;
 
 /**
@@ -59,8 +60,8 @@ class InstagramController extends Controller
         $server_response_json = json_decode($server_response);
         
         curl_close ($ch);
-        dd($server_response_json->{'user'});
-        $this->homePage($server_response_json);
+        
+        return $this->homePage($server_response_json);
     } 
 
    /**
@@ -71,22 +72,55 @@ class InstagramController extends Controller
     */
    public function homePage($data)
    {
-
+       
         $access_token = $data->{"access_token"};
         $user = $data->{'user'};
         $username = $user->{'username'};
-        $user_id = $user->id;
+        $instagram_id = $user->{"id"};
         $user_fullname = explode(" ",$user->{'full_name'});
         $first_name = $user_fullname[0];
-        $last_name = $user_fullname[1];
+        $last_name = isset($user_fullname[1]) ? $user_fullname[1] : '';
 
-        $insta_userdata = array(
-            $username,
-            $first_name,
-            $last_name,
-            $user_id
-        );
-         
-        //$server_response_json->{"access_token"}
+        //assuming there is no new user
+        $new_user = 0;
+        $id = User::where('instagram_username', $username)->value('id');
+
+        //check if the user is present in database
+        if(!isset($id))//
+        {
+            //user does not exist, creating a new user
+            $insta_userdata = array(
+                "access_token" => $access_token,
+                "username" => $username,
+                "first_name" => $first_name,
+                "last_name" => $last_name,
+                "instagram_id" => $instagram_id
+            );
+
+            $id = User::InstagaramUser($insta_userdata);
+
+            //new user has created
+            $new_user = 1;
+        }
+
+        if( Auth::loginUsingId($id))
+        {
+            
+            //if user already exist
+            if($new_user != 1)
+            {
+                return redirect('dashboard');
+            }
+
+            //if user is new user
+            return redirect('register/' . $id)->with('new', 'Please Update your profile');
+        }
+        else
+        {
+            //if login operation failed, direct the user to login page
+            return redirect('login')->with('warning', 'Something went wrong.');
+        }
+
+        
    }
 }
