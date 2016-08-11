@@ -4,6 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
+/**
+ * Role Model class
+ * @access public
+ * @package App\Models
+ * @subpackage void
+ * @category void
+ * @author vivek
+ * @link void
+ */
 class Role extends Model
 {
 	/**
