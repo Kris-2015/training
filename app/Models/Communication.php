@@ -5,6 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Log;
 
+
+/**
+ * Communication Model class
+ * @access public
+ * @package App\Models
+ * @subpackage void
+ * @category void
+ * @author vivek
+ * @link void
+ */
 class Communication extends Model
 {
    /*
