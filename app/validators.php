@@ -1,12 +1,12 @@
 <?php
-    /* app/validators.php */
+    /** @var \Illuminate\Validation\Factory $validator */
 
-    Validator::extend('alpha_spaces', function($attribute, $value)
+    $validator->extend('alpha_spaces', function($attribute, $value)
     {
         return preg_match('/^[a-zA-Z0-9-,\s]*$/', $value);    // /^[a-zA-Z\s]*$/ or [a-zA-Z0-9, ]
     });
 
-    Validator::extend('phone_number', function($attribute, $value)
+    $validator->extend('phone_number', function($attribute, $value)
     {
         return preg_match('/[0-9]{10}/', $value);
     });
