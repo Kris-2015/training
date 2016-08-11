@@ -85,14 +85,13 @@ class AccessController extends Controller
     */
    public function setPermission(Request $request)
    {
-
         //fetching the role id, resource id and permission id from request variable
         $get = $request->all();
         $role = $get['role'];
         $resource = $get['resource'];
         $permission = $get['permission'];
 
-        //action variable determines the permission of resources and role of user
+        // action variable determines the permission of resources and role of user
         // example: add and delete
         $action = $get['action'];
         
