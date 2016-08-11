@@ -2,15 +2,13 @@
  * @author: mfsi_krishnadev
  * @access: public
  * @purpose: validation of registration form
- * @param: none
+ * @param: void
  * @return: string
 */
 
 function validation()
 {
     validateText();
-
-    //validateNumber();
 
     validateEmail();
 
@@ -21,6 +19,12 @@ $(document).ready(function(){
    validation(); 
 });
 
+/*
+ * Function to validate the input text field
+ *
+ * @param: void
+ * @return: void
+*/
 function validateText()
 {
     $('#firstname').on('focus keypress keydown blur', function(){
@@ -81,12 +85,12 @@ function validateText()
     });
 }
 
-/*function validateNumber()
-{
-    
-}
+/*
+ * Function to validate the password field
+ *
+ * @param: void
+ * @return: void
 */
-
 function validatePassword()
 {
     $("#Password").on('focus keypress keydown blur', function(){
@@ -113,6 +117,12 @@ function validatePassword()
     });
 }
 
+/*
+ * Function to validate the email field
+ *
+ * @param: void
+ * @return: void
+*/
 function validateEmail()
 {
     $("#email").on('focus keypress keydown blur', function(){
