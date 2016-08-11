@@ -16,7 +16,7 @@ class Authenticate
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next, $guard = NULL)
     {
         if (Auth::guard($guard)->guest()) {
             if ($request->ajax() || $request->wantsJson()) {
@@ -29,9 +29,9 @@ class Authenticate
         $resource = explode('/',$request->getPathInfo())[1];
         $action = 'view';
         $role_id = Auth::user()->id;
-        //dd($resource);
+        
         //if user try to access list
-         if($resource == 'list')
+        if($resource == 'list')
         {
             $action = 'view';
         }
@@ -39,20 +39,20 @@ class Authenticate
 
         if($resource == 'delete')//if user to tries to delete
         {   
-            if(Auth::user()->id == $request->id)
+            if(Auth::user()->id == $request->id || Auth::user()->role_id == '1')
             {
                 $resource = 'datatables';
                 $action = 'delete';    
             }
             else
             {
-                return redirect('dashboard')->with('access','Unauthorized Access');
+                return redirect('dashboard')->with('warning','Unauthorized Access');
             }
         }
 
         if($resource == 'edit')//if user tries to edit info
         {
-            if(Auth::user()->id == $request->id)
+            if(Auth::user()->id == $request->id || Auth::user()->role_id == '1')
             {
                 $action = 'update';
             }
@@ -64,7 +64,7 @@ class Authenticate
 
         if($resource == 'do-update')
         {
-            if(Auth::user()->id == $request->id)
+            if(Auth::user()->id == $request->id || Auth::user()->role_id == '1')
             {
                $action = 'update';
             }
