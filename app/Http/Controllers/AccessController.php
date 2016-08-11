@@ -97,6 +97,5 @@ class AccessController extends Controller
         
         //setting the permision of resource based on role  
         $setrrp = RoleResourcePermission::addPermission($role, $resource, $permission, $action); 
-
    }
 }
