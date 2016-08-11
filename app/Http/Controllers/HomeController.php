@@ -36,6 +36,7 @@ class HomeController extends Controller
         //checking if user is logged in
         if (Auth::check())
         {
+
             return view('dashboard');    
         }
         else
