@@ -17,6 +17,8 @@
                 <!-- Display Validation Errors -->
                 @include('common.errors')
                 <!-- New Task Form -->
+                
+
                 {!! Form::open(array('url' => route('do-register'), 'method' => 'POST', 'class' => 'form-horizontal','id'=>'registration', 'files' => 'true')) !!}
                 {{ csrf_field() }}
                 <!-- Task Name -->
@@ -247,7 +249,6 @@
                     </div>
                 </div>
                 {!! Form::close() !!}
-                </form>
             </div>
         </div>
     </div>
