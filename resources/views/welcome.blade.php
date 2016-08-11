@@ -87,17 +87,5 @@ h3 {
   <div class="caption">
     <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">YOUR HAPPINESS IS OUR RESPONSIBILITY
 
-<!-- <div style="position:relative;">
-  <div style="color:#ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify;">
-    <p>Zero duplication of Data.</p>
-  </div>
-</div>
-
-<div class="bgimg-1">
-  <div class="caption">
-    <span class="border">SMILE</span>
-  </div>
-</div> -->
-
 </body>
 </html>
