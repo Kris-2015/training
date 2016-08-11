@@ -13,6 +13,16 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
+/**
+ * User Model class
+ * @access public
+ * @package App\Models
+ * @subpackage void
+ * @category void
+ * @author vivek
+ * @link void
+ */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
 
@@ -21,18 +31,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = ['id', 'first_name'];
     protected $dates = ['deleted_at'];
 
-	/*
-	 * store the information in users table
-	 * @param Request
-	 * 
-	 * @return boolean
-	*/
+    /*
+     * store the information in users table
+     * @param Request
+     * 
+     * @return boolean
+    */
    public static function insertUser($data)
    {
 
         try 
         {
-        	DB::beginTransaction();
+
+            DB::beginTransaction();
             $user = new User;
             $password = bcrypt($data['password']);
 
@@ -81,8 +92,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         catch (\Exception $e) 
         {
             //logging the error in log file
-        	Log::error($e);
-         	DB::rollBack();
+            Log::error($e);
+            DB::rollBack();
             return 0;
         } 
         return 1;
@@ -92,15 +103,40 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
    {
        try
        {
+        
             $user = User::withTrashed()->find($id);
-            $user->deleted_at = null;
-            $user->save();
+            $user->deleted_at = NULL;
 
-            return 1;
+            $changed_status = $user->save();
+
+            if($changed_status == 1)
+            {
+                //return 1 on deactivating the user account
+                return 1;
+            }
+
+            throw new Exception("Error: Failed to change the user account status");
        }
        catch(Exception $e)
        {
+            Log::error($e);
+
+            //return 0 as failed to change the status of user account
             return 0;
        }
+   }
+
+  /**
+    * Function to perform insertion for Intagram user
+    *
+    * @param: basic user_info
+    * @return:
+   */
+   public static function InstagaramUser($data)
+   {
+
+        $insta_user = new User();
+
+        $insta_user->
    }
 }
