@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @package App\Models
  * @subpackage void
  * @category void
- * @author vivek
+ * @author mfsi-krishnadev
  * @link void
  */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
@@ -130,13 +130,79 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     * Function to perform insertion for Intagram user
     *
     * @param: basic user_info
-    * @return:
+    * @return: integer
    */
    public static function InstagaramUser($data)
    {
 
-        $insta_user = new User();
+        try
+        {
+            $user_id = 0;
+            $insta_user = new User();
 
-        $insta_user->
+            $insta_user->first_name = $data['first_name'];
+            $insta_user->last_name = $data['last_name'];
+            $insta_user->instagram_id = $data['instagram_id'];
+            $insta_user->instagram_username = $data['username'];
+
+            $insta_user->save();
+            $user_id = $insta_user->id;
+
+            if($user_id != 0)
+            {
+                return $user_id;    
+            }
+            else
+            {
+                throw new Exception("Error occured while instagram sign-up");
+            }
+        }
+        catch (Exception $e)
+        {
+
+            Log::error($e);
+            return 0;
+        }
+   }
+
+   /**
+    * Function to insert information of facebook user
+    *
+    * @param array
+    * @return integer
+   */
+   public static function FacebookUser($fb)
+   {
+        try
+        {
+
+            //perform the insertion of facebook data
+            $fb_user = new User();
+
+            $user_id = 0;
+            
+            $fb_user->first_name = $fb['first_name'];
+            $fb_user->last_name = $fb['last_name'];
+            $fb_user->gender = $fb['gender'];
+            $fb_user->email = $fb['email'];
+            $fb_user->facebook_id = $fb['facebook_userid'];
+
+            $fb_user->save();
+            $user_id = $fb_user->id;
+            
+            if($user_id != 0)
+            {
+                return $user_id;    
+            }
+            else
+            {
+                throw new Exception("Error occured while instagram sign-up");
+            }
+        }
+        catch(Exception $e)
+        {
+            Log::error($e);
+        }
+
    }
 }
