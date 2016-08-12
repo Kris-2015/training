@@ -14,7 +14,7 @@ use App\Models\UserActivation;
  * @package App\Models
  * @subpackage void
  * @category void
- * @author vivek
+ * @author mfsi-krishnadev
  * @link void
  */
 class Helper extends Model
@@ -41,11 +41,16 @@ class Helper extends Model
             $request->file('image')->move( public_path( '/upload') , $image );
             $name = strtolower($image_new_name . '.' .$image_extension);
 
-            //returning the name of image 
-            return $name;
-
-            throw new Exception("Failed to upload image");
-        }
+            if(!empty($name))
+            {
+                //returning the name of image 
+                return $name;    
+            }
+            else
+            {
+                throw new Exception("Failed to upload image");
+            
+}        }
         catch(Exception $e)
         {
             //Log error about failed upload operation
@@ -63,27 +68,19 @@ class Helper extends Model
     */
     public static function Email($key, $name, $email, $subject='Activate Account')
     {
-        try
+        
+        $user = array(
+            'name' => $name,
+            'email' => $email,
+            'subject' => $subject
+        );
+
+        Mail::queue('emails.activate', ['key'=> $key], function ($m) use ($user)
         {
-            $user = array(
-                'name' => $name,
-                'email' => $email,
-                'subject' => $subject
-            );
+            $m->from('kris@app.com', 'Your Application');
 
-            Mail::queue('emails.activate', ['key'=> $key], function ($m) use ($user)
-            {
-                $m->from('kris@app.com', 'Your Application');
-
-                $m->to($user['email'], $user['name'])->subject($user['subject']);
-            });
-
-            throw new Exception("Email Operation failed");
-        }
-        catch(Exception $e)
-        {
-            Log::error($e);
-        }
+            $m->to($user['email'], $user['name'])->subject($user['subject']);
+        });
      }
 
      /**
@@ -140,14 +137,12 @@ class Helper extends Model
             {
                 //update the users table column actiavted to 1
                 $user = User::find($user_id);
-
                 $user->activated = '1';
-                
-                $accout_activated = $user->save();
+                $user->save();
 
                 return 1;
             }
-
+            
             throw new Exception("Failed to activate user account");
         }
         catch(Exception $e)
