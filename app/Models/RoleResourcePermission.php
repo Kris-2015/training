@@ -12,7 +12,7 @@ use DB;
  * @package App\Models
  * @subpackage void
  * @category void
- * @author vivek
+ * @author mfsi-krishnadev
  * @link void
  */
 class RoleResourcePermission extends Model
