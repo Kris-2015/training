@@ -72,17 +72,16 @@ class ResetPasswordController extends Controller
 
 
     /**
-     * Function to activate the users account
+     * Function to return change password page after token matching
      *
      * @param: token number
-     * @return: login page with message
+     * @return: change password page
     */
     public function passwordPage($token)
     {
         $verify = new UserActivation();
 
         $verify = $verify::where('token',$token)->get();
-        $user_id = $verify[0]['user_id'];
 
         if($verify[0]['token'] == $token)
         {
