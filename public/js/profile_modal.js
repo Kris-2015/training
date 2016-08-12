@@ -10,9 +10,6 @@ $(document).ready(function(){
 			data: {
 			    id: user_id,
 			},
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            },
 			success:function(response)
 			{				
 				$("#profile_name").html("<strong>Name:</strong> "+ response[0].first_name + ' ' + response[0].last_name);
@@ -45,9 +42,6 @@ $(document).ready(function(){
             dataType: 'json',
             data:{
                 gitid:github_name,
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             },
             success:function(response)
             {
@@ -84,7 +78,6 @@ $(document).ready(function(){
 
     $(document).on('click', '.del', function(){
 
-        var del = $(this).data("accept");
         var user_id = $(this).attr("data-id");
 
         deleteUser( user_id );
@@ -117,13 +110,8 @@ function changeActivationStatus ( btn ) {
         data:{
             id:id,
         },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-        },
         success:function(response)
         {
-            //console.log('hill');
-            //$('#delete').modal('hide');
             $('#users-table').DataTable().ajax.reload();
         }
     });
@@ -137,9 +125,6 @@ function deleteUser (user_id) {
         dataType: 'json',
         data:{
             id:user_id,
-        },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
         },
         success:function(response)
         {
