@@ -82,6 +82,9 @@ Route::post('add_user',[
 
 Route::post('activate', 'ActivateUserController@activateUser');
 
+Route::get('/redirect', 'SocialAuthController@redirect');
+Route::get('/callback', 'SocialAuthController@callback');
+
 /**
  * Group routes to check the user authentication
 */
