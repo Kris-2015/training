@@ -19,7 +19,8 @@ use Vinkla\Instagram\InstagramManager;
  * @link void
  */
 class InstagramController extends Controller
-    {
+{
+
     //taking a protected variable of instagram
     protected $instagram;
 
@@ -37,6 +38,7 @@ class InstagramController extends Controller
     */
     public function details(Request $request)
     {
+
         //get the response code given instagram api
         $code = $request->all()['code'];
 
@@ -105,7 +107,6 @@ class InstagramController extends Controller
 
         if( Auth::loginUsingId($id))
         {
-            
             //if user already exist
             if($new_user != 1)
             {
@@ -120,7 +121,6 @@ class InstagramController extends Controller
             //if login operation failed, direct the user to login page
             return redirect('login')->with('warning', 'Something went wrong.');
         }
-
-        
+  
    }
 }
