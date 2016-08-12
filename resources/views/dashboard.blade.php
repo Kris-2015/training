@@ -9,9 +9,14 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 @if(session('access'))
-                <div class="alert alert-danger">
-                    {{ session('access') }}
-                </div>
+                    <div class="alert alert-danger">
+                        {{ session('access') }}
+                    </div>
+                @endif
+                @if(session('new'))
+                    <div class="alert alert-danger">
+                        {{ session('new') }}
+                    </div>                  
                 @endif
                 <ol>
                     @if(Auth::user()->role_id == 1)
