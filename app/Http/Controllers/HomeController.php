@@ -129,8 +129,7 @@ class HomeController extends Controller
                 ->join('communications','users.id', '=', 'communications.user_id')
                 ->groupBy('users.id');
         }
-        
-            
+               
         //get the residence address of user of user
         $information_residence = $get_user->where('addresses.type', 'residence')
                ->get()->toArray();
