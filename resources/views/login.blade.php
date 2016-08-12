@@ -54,16 +54,28 @@
                 </div>
 
                 <hr>
-                <p class="col-sm-offset-4">Or Connect with Instagram!!!</p>
+                <p class="col-sm-offset-4">Or Connect with</p>
 
-                <div  class="col-sm-offset-5">
-                    <!-- Instagram Sign Up functionality-->
-                    <a href="https://api.instagram.com/oauth/authorize/?client_id={{env('CLIENT_ID') }}&redirect_uri={{ env('REDIRECT_URI', '00') }}&response_type=code&scope=basic" target="_top" class="btn btn-danger">
-                        <i class="fa fa-instagram"></i> 
-                        Instagram
-                    </a>
+                <div class="row">
+                    
+                    <div class="col-sm-4">
+                        <div  class="col-sm-offset-5">
+                        <!-- Instagram Sign Up functionality-->
+                            <a href="https://api.instagram.com/oauth/authorize/?client_id={{env('CLIENT_ID') }}&redirect_uri={{ env('REDIRECT_URI', '00') }}&response_type=code&scope=basic" target="_top" class="btn btn-danger">
+                                <i class="fa fa-instagram"></i> 
+                                Instagram
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <!-- Facebook Sign Up functionality-->
+                        <a href="redirect" class="btn btn-primary">
+                            <i class="fa fa-facebook"></i> 
+                            Facebook
+                        </a>
+                    </div>
                 </div>
-                
                 {!! Form::close() !!}
             </div>
         </div>
