@@ -10,15 +10,15 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Models
  * @subpackage void
  * @category void
- * @author vivek
+ * @author mfsi-krishnadev
  * @link void
  */
 class Resource extends Model
 {
     /**
-	* table is assosciated with models
-	*
-	* @var String
-	*/
+    * table is assosciated with models
+    *
+    * @var String
+    */
     protected $table = 'resources';
 }
