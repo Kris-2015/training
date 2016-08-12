@@ -35,4 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'facebook' => [
+        'client_id' => env('APP_ID'),
+        'client_secret' => env('APP_SECRET'),
+        'redirect' => 'http://laravel.local.com/callback',
+    ]
 ];
