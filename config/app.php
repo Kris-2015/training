@@ -159,6 +159,7 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Ixudra\Curl\CurlServiceProvider::class,
         Vinkla\Instagram\InstagramServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
     ],
 
     /*
@@ -209,6 +210,7 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Curl' => Ixudra\Curl\Facades\Curl::class,
         'Instagram' => Vinkla\Instagram\Facades\Instagram::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ],
 
 ];
