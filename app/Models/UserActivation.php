@@ -13,13 +13,16 @@ use Log;
  * @package App\Models
  * @subpackage void
  * @category void
- * @author vivek
+ * @author mfsi-krishnadev
  * @link void
  */
 class UserActivation extends Model
 {
-   /*
-
+   /**
+    * Function to insert activation key of user
+    *
+    * @param:user_id and token number
+    * @return: integer
     */
     public static function insertActivation($data)
     {
