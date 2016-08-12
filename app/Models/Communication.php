@@ -12,7 +12,7 @@ use Log;
  * @package App\Models
  * @subpackage void
  * @category void
- * @author vivek
+ * @author mfsi-krishnadev
  * @link void
  */
 class Communication extends Model
@@ -23,11 +23,11 @@ class Communication extends Model
 	 * 
 	 * @return boolean
 	*/
-   public static function insertCommunication($data)
-   {
+    public static function insertCommunication($data)
+    {
         try 
         {
-        	$comm = new Communication;
+            $comm = new Communication;
             $comm_list = implode(',', $data['communication']);
             $comm->user_id = $data['user_id'];
             $comm->type = $comm_list;
@@ -44,9 +44,9 @@ class Communication extends Model
         }
         catch (\Exception $e) 
         {
-        	//logging the error in log file
-        	Log::error($e);
+            //logging the error in log file
+            Log::error($e);
             return 0;
         } 
-   }
+    }
 }
