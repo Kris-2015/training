@@ -50,7 +50,8 @@ class Helper extends Model
             {
                 throw new Exception("Failed to upload image");
             
-}        }
+            }       
+        }
         catch(Exception $e)
         {
             //Log error about failed upload operation
