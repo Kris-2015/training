@@ -17,25 +17,25 @@ use Log;
 class Address extends Model
 {
     /*
-	 * store the information in address table
-	 * @param Request
-	 * 
-	 * @return boolean
-	*/
+     * store the information in address table
+     * @param Request
+     * 
+     * @return boolean
+    */
    public static function insertAddress($data)
    {
         try 
         {
             $residence_add = [
-        		'user_id' => $data['user_id'],
-			    'type' => "residence",
-			    'street' => $data['homestreet'],
-    			'city' => $data['homecity'],
-    			'state' => $data['homestate'],
-    			'zip' => $data['homezip'],
-    			'mobile' => $data['homemobile'],
-    			'landline' => $data['homelandline'],
-    			'fax' => $data['homefax'],
+                'user_id' => $data['user_id'],
+                'type' => "residence",
+                'street' => $data['homestreet'],
+                'city' => $data['homecity'],
+                'state' => $data['homestate'],
+                'zip' => $data['homezip'],
+                'mobile' => $data['homemobile'],
+                'landline' => $data['homelandline'],
+                'fax' => $data['homefax'],
                 'updated_at' => date( 'Y-m-d H:i:s' ),
                 'created_at' => date( 'Y-m-d H:i:s' )
             ];
@@ -60,8 +60,8 @@ class Address extends Model
         }
         catch (\Exception $e) 
         {
-        	//logging the error in log file
-        	Log::error($e);
+            //logging the error in log file
+            Log::error($e);
             return 0;
         } 
    }
