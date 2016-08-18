@@ -17,27 +17,32 @@
                 <!-- Display Validation Errors -->
                 @include('common.errors')
                 <!-- New Task Form -->
-                
-
+                @if(session('new'))
+                    <div class="alert alert-info">
+                        {{ session('new') }}
+                    </div>
+                @endif
+               
                 {!! Form::open(array('url' => route('do-register'), 'method' => 'POST', 'class' => 'form-horizontal','id'=>'registration', 'files' => 'true')) !!}
                 {{ csrf_field() }}
+
                 <!-- Task Name -->
                 <div class="form-group">
                     {{ Form::label('firstname', 'First Name', array('class' => 'control-label col-sm-3')) }}
                     <div class="col-sm-6">
-                        {{ Form::text('firstname', null , array('class'=>'form-control text_alpha','placeholder'=>'First Name')) }}
+                        {{ Form::text('firstname', $users_info[0]['first_name'], array('class'=>'form-control text_alpha','placeholder'=>'First Name')) }}
                     </div>
                 </div>
                 <div class="form-group">
                     {{ Form::label('middlename', 'Middle Name', array('class' => 'control-label col-sm-3')) }}
                     <div class="col-sm-6">
-                        {{ Form::text('middlename', null, array('class'=>'form-control text_alpha','placeholder'=>'Middle Name')) }}
+                        {{ Form::text('middlename', $users_info[0]['middle_name'], array('class'=>'form-control text_alpha','placeholder'=>'Middle Name')) }}
                     </div>
                 </div>
                 <div class="form-group">
                     {{ Form::label('lastname', 'Last Name', array('class' => 'control-label col-sm-3')) }}
                     <div class="col-sm-6">
-                        {{ Form::text('lastname', null, array('class'=>'form-control text_alpha', 'placeholder'=>'Last Name')) }}
+                        {{ Form::text('lastname', $users_info[0]['last_name'], array('class'=>'form-control text_alpha', 'placeholder'=>'Last Name')) }}
                     </div>
                 </div>
                 <div class="form-group">
@@ -57,7 +62,7 @@
                 <div class="form-group">
                     {{ Form::label('dob', 'DOB', array('class' => 'control-label col-sm-3')) }}
                     <div class="col-sm-6">
-                        {{ Form::date('dob', null, array('class' => 'form-control')) }}
+                        {{ Form::date('dob', $users_info[0]['dob'], array('class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group">
@@ -77,13 +82,13 @@
                 <div class="form-group">
                     {{ Form::label('employer', 'Employer', array('class' => 'control-label col-sm-3')) }}
                     <div class="col-sm-6">
-                        {{ Form::text('employer', null, array('class'=>'form-control text_alpha','placeholder'=>'Employer')) }}
+                        {{ Form::text('employer', $users_info[0]['employer'], array('class'=>'form-control text_alpha','placeholder'=>'Employer')) }}
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="email" class="col-sm-3 control-label">Email</label>
                     <div class="col-sm-6">
-                        {{ Form::email('email', null, array('class'=>'form-control', 'id'=>'email','placeholder'=>'xyz@gmail.com')) }}
+                        {{ Form::email('email', $users_info[0]['email'], array('class'=>'form-control', 'id'=>'email','placeholder'=>'xyz@gmail.com')) }}
                     </div>
                     <div class="col-sm-3">
                         <p class="error" id="email_error"></p>
@@ -92,7 +97,7 @@
                 <div class="form-group">
                     {{ Form::label('githubid', 'Github', array('class' => 'control-label col-sm-3')) }}
                     <div class="col-sm-6">
-                        {{ Form::text('githubid', null, array('class'=>'form-control','placeholder'=>'Github Id')) }}
+                        {{ Form::text('githubid', $users_info[0]['github_id'], array('class'=>'form-control','placeholder'=>'Github Id')) }}
                     </div>
                 </div>
                 <div class="form-group">
