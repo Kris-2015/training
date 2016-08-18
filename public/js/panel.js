@@ -103,18 +103,18 @@ function sendrrp(get_role, get_resource) {
          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
       },
       success: function(response) {
-
-         var getprivilege_id;
-         var getresource_id = $('.resource').val();
-         var getrole_id = $('.role').val();
-
-         $('.privilege input[type="checkbox"]').each(function(i, obj) {
+ 
+        $('.privilege input[type="checkbox"]').each(function() {
             var checkbox_obj = $(this);
+
+            //uncheck all the previously checked checkbox
             $(this).prop('checked', false);
             
 
             $.each(response, function(resp_key, resp_data) {
                if (checkbox_obj.val() === resp_data.permission_id) {
+
+                  //check the checkbox as per permission
                   checkbox_obj.prop('checked', true);
                }
 
