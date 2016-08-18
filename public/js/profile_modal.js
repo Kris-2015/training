@@ -128,7 +128,6 @@ function deleteUser (user_id) {
         },
         success:function(response)
         {
-            console.log(response);
             $('#delete').modal('hide');
             $('#users-table').DataTable().ajax.reload();
         }
