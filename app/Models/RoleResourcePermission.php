@@ -27,18 +27,15 @@ class RoleResourcePermission extends Model
     public static function datatablePermission($id,$res)
     {
 
-        $rrp = new RoleResourcePermission();
-
-        $permission = DB::table('role_resource_permissions')
-            ->join('resources','role_resource_permissions.resource_id','=','resources.resource_id')
+        $permission = RoleResourcePermission::join('resources','role_resource_permissions.resource_id','=','resources.resource_id')
             ->join('permissions','role_resource_permissions.permission_id','=','permissions.permission_id')
             ->orWhere(function($query)use($id,$res)
                 {
                    $query->where('role_id',$id)
                        ->where('resources.resource_name',$res);
                 })
-            ->pluck('permissions.name');       
-
+            ->pluck('permissions.name')->all();       
+            
             return $permission;
     }
 
@@ -94,7 +91,7 @@ class RoleResourcePermission extends Model
                 $rrp_obj ->role_id = $role;
                 $rrp_obj ->resource_id = $resource;
                 $rrp_obj ->permission_id = $permission;
-                $added_permission = $rrp_obj ->save();
+                $rrp_obj ->save();
 
                 return 1;
             }
@@ -103,7 +100,7 @@ class RoleResourcePermission extends Model
         else if($action == 'delete')
         {
             //delete the permission of resource based on role id
-            $delete_permission = RoleResourcePermission::where('role_id', $role)
+            RoleResourcePermission::where('role_id', $role)
                 ->where('resource_id', $resource)
                 ->where('permission_id', $permission)
                 ->delete();
