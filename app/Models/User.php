@@ -97,8 +97,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return 0;
         } 
         return 1;
-   }
+   } 
 
+   /**
+    * Function to change the user account status
+    *
+    * @param id
+    * @return integer
+   */
    public static function changeStatus($id)
    {
        try
