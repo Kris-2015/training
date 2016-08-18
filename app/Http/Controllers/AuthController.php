@@ -29,6 +29,7 @@ use App\Http\Requests\RegistrationRequest;
 
 class AuthController extends Controller
 {
+    
     /**
      * Show registration form
      *
@@ -45,8 +46,8 @@ class AuthController extends Controller
 
         //storing the list of states from config/state_list
         $state_list = config('constants.state_list');
-
-        return view('registration', ['state_list' => $state_list]);
+        $users_info = NULL;
+        return view('registration', ['state_list' => $state_list,'users_info' => $users_info]);
     }
 
    /**
