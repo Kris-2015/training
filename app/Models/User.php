@@ -203,6 +203,38 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         {
             Log::error($e);
         }
+   }
 
+   /**
+    * Function to return all users
+    * 
+    * @param: void
+    * @return: array
+   */
+   public static function getAllUser()
+   {
+        return DB::table('users')->get();
+   }
+
+   /**
+    * Function to return user data by id
+    * 
+    * @param: void
+    * @return: array
+   */
+   public static function GetUserById($id)
+   {
+        //return data if it exist
+        $user_data = User::find($id);
+
+            if( empty( $user_data ) )
+            {
+                return array(
+                    'error' => '404',
+                    'Exception' => 'Not found'
+                );
+            }
+
+            return $user_data;
    }
 }
