@@ -79,7 +79,16 @@ class HomeController extends Controller
         $state_list = config('constants.state_list');
         $users_info = $this->UserInformation($id);
 
-        return view("registration",compact('users_info','state_list'));  
+        if(!empty($users_info))
+        {   
+            return view("registration",['state_list' => $state_list,'users_info' => $users_info]);       
+        }
+        else
+        {   
+            $users_info = NULL;
+            return view("registration",['state_list' => $state_list,'users_info' => $users_info]);
+        }
+          
     }
 
    /**
@@ -120,7 +129,7 @@ class HomeController extends Controller
         {
             $get_user = User::find($id)->join('addresses', 'users.id', '=', 'addresses.user_id')
                 ->join('communications','users.id', '=', 'communications.user_id')
-                ->groupBy('users.id');    
+                ->groupBy('users.id');      
         }
         else
         {
@@ -129,9 +138,10 @@ class HomeController extends Controller
                 ->join('communications','users.id', '=', 'communications.user_id')
                 ->groupBy('users.id');
         }
-               
+
         //get the residence address of user of user
-        $information_residence = $get_user->where('addresses.type', 'residence')
+        $information_residence = $get_user->where([ ['addresses.type', 'residence'],
+                 ['addresses.user_id', '=', $id] ])
                ->get()->toArray();
 
         //get the office address of user of user
@@ -144,7 +154,8 @@ class HomeController extends Controller
                     "addresses.mobile AS office_mobile",
                     "addresses.landline AS office_landline",
                     "addresses.fax AS office_fax"
-                )->groupBy('users.id')->where('addresses.type', 'office')
+                )->groupBy('users.id')->where([ ['addresses.type', 'office'], 
+                    ['addresses.user_id', '=', $id] ])
                 ->get()->toArray();
         
         //array to store the all the information of user
