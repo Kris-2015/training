@@ -59,7 +59,7 @@ class UserController extends Controller
                 $edit = '';
                 $delete = '';
                 $result='';
-
+                
                 //checking the required permission is present in array
                 if(in_array('all', $permission) || in_array('update', $permission) && in_array('delete', $permission))
                 {
@@ -165,7 +165,7 @@ class UserController extends Controller
             curl_setopt($handler, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($handler, CURLOPT_USERPWD, "$username:$password");
 
-            $result = curl_exec ($handler);
+            //$result = curl_exec ($handler);
 
             curl_setopt_array($handler, array(
             CURLOPT_URL => "https://api.github.com/users/$github_username",
