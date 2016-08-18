@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Helper;
 use App\Models\UserActivation;
 use Auth;
+use App\Http\Requests\RegistrationRequest;
 
 /**
  * New user added by Admin
@@ -41,12 +42,8 @@ class AddUserController extends Controller
      * @param:Request $request
      * @return: mixed
     */
-    public function add_user(Request $request)
+    public function add_user(RegistrationRequest $request)
     {
-
-        $auth_obj = new AuthController();
-
-        $auth_obj->validateRequest($request);
 
         //Collects all the users detail
         $user_data = $request->all();
@@ -58,10 +55,10 @@ class AddUserController extends Controller
         if($new_user > 0)
         {
             //get the generated code
-            $generated_code = $auth_obj->GenerateKey($new_user);
+            $generated_code = Helper::GenerateKey($new_user);
 
             //mail the generated code to user
-            $auth_obj->Email($generated_code);
+            Helper::Email($generated_code);
 
             return redirect('/login')->with('status', 'We sent you an activation code. Check your email.');
         }
