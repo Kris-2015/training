@@ -16,6 +16,15 @@ use Log;
  */
 class Address extends Model
 {
+
+    /**
+     * Get the address that beongs to user
+    */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
     /*
      * store the information in address table
      * @param Request
@@ -29,13 +38,13 @@ class Address extends Model
             $residence_add = [
                 'user_id' => $data['user_id'],
                 'type' => "residence",
-                'street' => $data['homestreet'],
-                'city' => $data['homecity'],
-                'state' => $data['homestate'],
-                'zip' => $data['homezip'],
-                'mobile' => $data['homemobile'],
-                'landline' => $data['homelandline'],
-                'fax' => $data['homefax'],
+                'street' => isset($data['homestreet']) ? $data['homestreet'] : '',
+                'city' => isset($data['homecity']) ? $data['homecity'] : '',
+                'state' => isset($data['homestate']) ? $data['homestate'] : '',
+                'zip' => isset($data['homezip']) ? $data['homezip'] : '',
+                'mobile' => isset($data['homemobile']) ? $data['homemobile'] : '',
+                'landline' => isset($data['homelandline']) ? $data['homelandline'] : '',
+                'fax' => isset($data['homefax']) ? $data['homefax'] : '',
                 'updated_at' => date( 'Y-m-d H:i:s' ),
                 'created_at' => date( 'Y-m-d H:i:s' )
             ];
@@ -43,13 +52,13 @@ class Address extends Model
             $office_add = [
                 'user_id' => $data['user_id'],
                 'type' => "office",
-                'street' => $data['officestreet'],
-                'city' => $data['officecity'],
-                'state' => $data['officestate'],
-                'zip' => $data['officezip'],
-                'mobile' => $data['officemobile'],
-                'landline' => $data['officelandline'],
-                'fax' => $data['officefax'],
+                'street' => isset($data['officestreet']) ? $data['officestreet'] : '',
+                'city' => isset($data['officecity']) ? $data['officecity'] : '',
+                'state' => isset($data['officestate']) ? $data['officestate'] : '',
+                'zip' => isset($data['officezip']) ? $data['officezip'] : '',
+                'mobile' => isset($data['officemobile']) ? $data['officemobile'] : '',
+                'landline' => isset($data['officelandline']) ? $data['officelandline'] : '',
+                'fax' => isset($data['officefax']) ? $data['officefax'] : '',
                 'updated_at' => date( 'Y-m-d H:i:s' ),
                 'created_at' => date( 'Y-m-d H:i:s' )
             ];
