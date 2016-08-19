@@ -31,6 +31,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = ['id', 'first_name'];
     protected $dates = ['deleted_at'];
 
+    /**
+     * Get the address of the user
+    */
+    public function address()
+    {
+        return $this->hasMany('App\Models\Address');
+    }
     /*
      * store the information in users table
      * @param Request
@@ -47,20 +54,32 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $user = new User;
             $password = bcrypt($data['password']);
 
-            $user->first_name = $data['firstname'];
-            $user->middle_name = $data['middlename'];
-            $user->last_name = $data['lastname'];
-            $user->prefix = $data['prefix'];
-            $user->gender = $data['gender'];
-            $user->dob = $data['dob'];
-            $user->marital_status = $data['marital_status'];
-            $user->employment = $data['employment'];
-            $user->employer = $data['employer'];
-            $user->email = $data['email'];
-            $user->github_id = $data['githubid'];
+            $user->first_name = isset($data['firstname']) ? $data['firstname'] : '' ;
+
+            $user->middle_name = isset($data['middlename']) ? $data['middlename'] : '' ;
+
+            $user->last_name = isset($data['lastname']) ? $data['lastname'] : '' ;
+
+            $user->prefix = isset($data['prefix']) ? $data['prefix'] : '' ;
+
+            $user->gender = isset($data['gender']) ? $data['gender'] : '' ;
+
+            $user->dob = isset($data['dob']) ? $data['dob'] : '' ;
+
+            $user->marital_status = isset($data['marital_status']) ? $data['marital_status'] : '' ;
+
+            $user->employment = isset($data['employment']) ? $data['employment'] : '' ;
+
+            $user->employer = isset($data['employer']) ? $data['employer'] : '' ;
+
+            $user->email = isset($data['email']) ? $data['email'] : '' ;
+
+            $user->github_id = isset($data['githubid']) ? $data['githubid'] : '' ;
+
             $user->password = $password; 
-            $user->image = $data['uploaded_image'];
-            $success = $user->save();
+
+            $user->image = isset($data['uploaded_image']) ? $data['uploaded_image'] : '' ;
+            $success = $user->save(); 
             $data['user_id'] = $user->id;
 
             if($success)
@@ -215,26 +234,5 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
    {
         return DB::table('users')->get();
    }
-
-   /**
-    * Function to return user data by id
-    * 
-    * @param: void
-    * @return: array
-   */
-   public static function GetUserById($id)
-   {
-        //return data if it exist
-        $user_data = User::find($id);
-
-            if( empty( $user_data ) )
-            {
-                return array(
-                    'error' => '404',
-                    'Exception' => 'Not found'
-                );
-            }
-
-            return $user_data;
-   }
+   
 }
