@@ -107,5 +107,5 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::post('panel/permission','AccessController@getPermission');
 
-    Route::post('panel/setpermission', 'AccessController@setPermission');
+    Route::post('panel/setpermission', 'AccessController@setPermission', ['middleware' => 'csrf']);
 });
