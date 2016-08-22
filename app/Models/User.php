@@ -46,7 +46,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     */
    public static function insertUser($data)
    {
-
+    
         try 
         {
 
