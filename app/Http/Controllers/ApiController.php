@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Address;
+use App\Models\Communication;
 use App\Http\Requests;
 use Auth;
 
 class ApiController extends Controller
 {
+
+    public function postIndex(Request $request)
+    {
+        return response()->json(array('status' => false , 'message' => 'Incorrect URL'), 404);
+    }
 
     /**
      * Function to return data of all user
@@ -22,8 +29,18 @@ class ApiController extends Controller
         //checking for authenticate user
         if ( ! Auth::once(['email' => $request->email, 'password' => $request->password, 'activated'=>'1']))
         {
-            return response()->json(array('status' => false , 'message' => 'Parameters Missing'), 403);
-            
+            return response()->json(array('status' => false , 'message' => 'Parameters Missing'), 403);   
+        }
+
+        $isAllowed  = array(
+            'add',
+            'update',
+            'delete'
+            );
+
+        if(!in_array($action, $isAllowed) && !empty($action))
+        {
+            return response()->json(array('status' => false , 'message' => 'Incorrect URL'), 404);
         }
 
         switch($action)
@@ -33,7 +50,7 @@ class ApiController extends Controller
                 break;
 
             case 'update':
-                    $data =  $this->postUpdateUser($request);
+                    $data =  $this->postUpdate($request);
                 break;
 
             case 'delete':
@@ -49,35 +66,40 @@ class ApiController extends Controller
             
     }
 
-    public function User($request, $id)
+    private function User($request, $id)
     {
-        
         //limiting the number of records
         $limit  = isset($request->limit) ? $request->limit : 5;
-        $mobile = isset($request->mob)? $request->mob : '';
-        $name   = isset($request->name)? $request->name : '';
 
-        if ( ! Auth::once(['email' => $request->email, 'password' => $request->password, 'activated'=>'1']))
-        {
-            return response()->json(array('status' => false , 'message' => 'Parameters Missing'), 403);
-        }
-        
+        //array for search parameter
+        $filter = array(
+            'name'   => 'first_name',
+            'mobile' => 'mobile',
+            'state'  => 'state' 
+        );
 
         if ($id == 0 && is_numeric($limit) )
         {
+            //checking user on the basic of required and available search parameter
+            $users = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
+            ->where(function($query) use ($request, $filter)
+            {
+                foreach ( $filter as $column => $key )
+                {
+                    $value = array_get($request, $key);
 
-            $users = User::with('Address')
-                ->where('first_name', 'like', '%'.$name.'%')
-                ->paginate($limit);
-            
+                    if ( ! is_null($value)) $query->where($column, 'like', '%'.$value.'%');
+                }
+            })
+            ->paginate($limit);
         }
         else
         {
             $users = User::with('Address')
                 ->find($id);  
         }
-        
-        return isset($users)? $users : array('status' => '404', 'message' => 'Not Found');
+
+        return (isset($users) && ! $users->isEmpty()) ? $users : array('status' => '404', 'message' => 'Not Found');
     }
 
     /**
@@ -86,14 +108,8 @@ class ApiController extends Controller
      * @param request
      * @return array
     */
-    public function postAddUser(Request $request)
-    {
-        //authenticating the user
-        if ( ! Auth::once(['email' => $request->email, 'password' => $request->password, 'activated'=>'1']))
-        {
-            return response()->json(array('status' => false , 'message' => 'Parameters Missing'), 403);
-        }
-        
+    private function postAddUser(Request $request)
+    {        
         //storing the data from request parameter
         $first_name = $request->firstname;
         $middle_name = $request->middlename;
@@ -153,32 +169,37 @@ class ApiController extends Controller
      * @param request
      * @return json message
     */
-    public function postUpdateUser(Request $request)
+    private function postUpdate(Request $request)
     {
-        //authenticating the user
-        if ( ! Auth::once(['email' => $request->email, 'password' => $request->password, 'activated'=>'1']))
-        {
-            return response()->json(array('status' => false , 'message' => 'Parameters Missing'), 403);
-        }
-
         $name = $request->name;
+
+        //update user by first_name
         $update_name = $request->update_name;
 
-        $update_user = User::withTrashed()
-            ->where('first_name', $name)
-            ->update(['first_name' => $name]);
-        
-        if($update_user > 0)
+        $find_user = User::withTrashed()
+            ->where('first_name', $name)->get();
+
+        if($find_user->isEmpty())
         {
             $code = '114';
-            $info = 'Update user successfully';
-        }    
+            $info = 'User does not exist.';    
+        }
         else
         {
             $code = '114';
-            $info = 'Update user successfully';
-        }
+            $info = 'Failed to update....try again later.';
+
+            $update_user = User::withTrashed()
+            ->where('first_name', $name)
+            ->update(['first_name' => $update_name]);
         
+            if($update_user > 0)
+            {
+                $code = '114';
+                $info = 'Update user successfully';
+            }
+        }
+              
         //returning the message with code
         $res = ['code' => $code, 'message' => $info];
 
@@ -191,10 +212,10 @@ class ApiController extends Controller
      * @param request
      * @return json message
     */
-    public function postDeleteUser($request)
+    private function postDeleteUser($request)
     {
-        //dd($request->all());
         $id = $request->id;
+
         $message = 'Wrong Id!';
         $code = 456;
 
@@ -202,25 +223,34 @@ class ApiController extends Controller
             ->where('id', $id)
             ->get();
         
-            if  (!$find_id->isEmpty()) {
-        if($find_id[0]['deleted_at'] != null)
+        if  (!$find_id->isEmpty())
         {
-            $code = '110';
-            $message = 'memeber already deleted';
-        }
-        else
-        {
-            $code = '105';
-            $message = 'failed to delete....try again later';
-            $delete = User::find($find_id[0]['id'])
-                ->delete();
-
-            if($delete > 0)
+            if($find_id[0]['deleted_at'] != null)
             {
-                $code = '104';
-                $message = 'deleted successfully';
+                $code = '110';
+                $message = 'memeber already deleted';
             }
-        }}
+            else
+            {
+                $code = '105';
+                $message = 'failed to delete....try again later';
+
+                $delete_communication = Communication::where('user_id', $find_id[0]['id'])
+                    ->forceDelete();
+
+                $delete_address = Address::where('user_id', $find_id[0]['id'])
+                    ->forceDelete();
+
+                $delete_user = User::find($find_id[0]['id'])
+                    ->forceDelete();
+                   
+                if($delete_user > 0)
+                {
+                    $code = '104';
+                    $message = 'deleted successfully';
+                }
+            }
+        }
 
         //retunning the message with code
         $res = ['code' => $code, 'message' => $message];
