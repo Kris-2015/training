@@ -13,7 +13,8 @@ class ApiController extends Controller
     /**
      * Function to return data of all user
      *
-     * @param Request, action( user_id / {add, update, delete} )
+     * @param Request, 
+     * @param action( user_id / {add, update, delete} )
      * @return array
     */
     public function postUsers(Request $request, $action = '')
@@ -22,7 +23,7 @@ class ApiController extends Controller
         if ( ! Auth::once(['email' => $request->email, 'password' => $request->password, 'activated'=>'1']))
         {
             return response()->json(array('status' => false , 'message' => 'Parameters Missing'), 403);
-            exit;
+            
         }
 
         switch($action)
@@ -40,19 +41,17 @@ class ApiController extends Controller
                 break;
 
             default:
-                    $data = $this->user($request, $action);
+                    $data = $this->User($request, $action);
                 break;
         }
 
         return response()->json($data); 
-        exit;
-
-        
+            
     }
 
-    public function user($request, $id)
+    public function User($request, $id)
     {
-        //dd($request->all());
+        
         //limiting the number of records
         $limit  = isset($request->limit) ? $request->limit : 5;
         $mobile = isset($request->mob)? $request->mob : '';
@@ -63,22 +62,13 @@ class ApiController extends Controller
             return response()->json(array('status' => false , 'message' => 'Parameters Missing'), 403);
         }
         
-        if ($id == 0)
+
+        if ($id == 0 && is_numeric($limit) )
         {
-            if (isset($limit) && is_numeric($limit))
-            {
-                
-                $users = User::with('Address')
-                    ->where('first_name', 'like', '%'.$name.'%')
-                    ->paginate($limit);    
-            }
-            else
-            {
-                
-                $users = User::with('Address')
-                    ->where('first_name', 'like', '%'.$name.'%')
-                    ->paginate($limit);
-            }
+
+            $users = User::with('Address')
+                ->where('first_name', 'like', '%'.$name.'%')
+                ->paginate($limit);
             
         }
         else
