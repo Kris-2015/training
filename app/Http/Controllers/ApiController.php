@@ -13,13 +13,48 @@ class ApiController extends Controller
     /**
      * Function to return data of all user
      *
-     * @param Request, user_id and page limit
+     * @param Request, action( user_id / {add, update, delete} )
      * @return array
     */
-    public function postUsers(Request $request, $id = 0, $limit = 5)
+    public function postUsers(Request $request, $action = '')
     {
+        //checking for authenticate user
+        if ( ! Auth::once(['email' => $request->email, 'password' => $request->password, 'activated'=>'1']))
+        {
+            return response()->json(array('status' => false , 'message' => 'Parameters Missing'), 403);
+            exit;
+        }
+
+        switch($action)
+        {
+            case 'add':
+                    $data =  $this->postAddUser($request);
+                break;
+
+            case 'update':
+                    $data =  $this->postUpdateUser($request);
+                break;
+
+            case 'delete':
+                    $data =  $this->postDeleteUser($request);
+                break;
+
+            default:
+                    $data = $this->user($request, $action);
+                break;
+        }
+
+        return response()->json($data); 
+        exit;
+
+        
+    }
+
+    public function user($request, $id)
+    {
+        //dd($request->all());
         //limiting the number of records
-        $limit  = $request->limit;
+        $limit  = isset($request->limit) ? $request->limit : 5;
         $mobile = isset($request->mob)? $request->mob : '';
         $name   = isset($request->name)? $request->name : '';
 
@@ -100,10 +135,10 @@ class ApiController extends Controller
             'homecity' => $homecity,
             'homestate' => $homestate
         );
-
+        
         //performing inserting operation
         $insert = User::insertUser($data);
-
+        
         //checking if the insertion is successful or not
         if($insert > 0)
         {
@@ -117,7 +152,9 @@ class ApiController extends Controller
         }
         
         //returning the message with code
-        return response()->json(array('code' => $code, 'message' => $status));
+        $res = ['code' => $code, 'message' => $status];
+
+        return $res;
     }
 
     /**
@@ -153,7 +190,9 @@ class ApiController extends Controller
         }
         
         //returning the message with code
-        return response()->json(array('code' => $code, 'message' => $info));
+        $res = ['code' => $code, 'message' => $info];
+
+        return $res;
     }
 
     /**
@@ -162,38 +201,41 @@ class ApiController extends Controller
      * @param request
      * @return json message
     */
-    public function postDeleteUser(Request $request)
+    public function postDeleteUser($request)
     {
-        
-        $name = $request->name;
+        //dd($request->all());
+        $id = $request->id;
+        $message = 'Wrong Id!';
+        $code = 456;
 
         $find_id = User::withTrashed()
-            ->where('first_name', $name)
+            ->where('id', $id)
             ->get();
         
-        if($find_id->value('deleted_at') != null)
+            if  (!$find_id->isEmpty()) {
+        if($find_id[0]['deleted_at'] != null)
         {
             $code = '110';
             $message = 'memeber already deleted';
         }
         else
         {
-            $delete = User::find($find_id)
+            $code = '105';
+            $message = 'failed to delete....try again later';
+            $delete = User::find($find_id[0]['id'])
                 ->delete();
+
             if($delete > 0)
             {
                 $code = '104';
                 $message = 'deleted successfully';
             }
-            else
-            {
-                $code = '105';
-                $message = 'failed to delete....try again later';
-            }    
-        }
+        }}
+
+        //retunning the message with code
+        $res = ['code' => $code, 'message' => $message];
         
-        //returning the message with code
-        return response()->json(array('code' => $code, 'message' => $message));   
+        return $res;
     }
 
     /**
