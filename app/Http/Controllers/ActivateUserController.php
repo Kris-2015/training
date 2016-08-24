@@ -32,6 +32,6 @@ class ActivateUserController extends Controller
         $active = User::changeStatus($user_id);
 
         //returning the activate message to show 'activate' account
-        echo json_encode('activate');
+        return response()->json('activate');
     }
 }
