@@ -22,7 +22,12 @@
                         {{ session('new') }}
                     </div>
                 @endif
-               
+                @if(session('problem'))
+                <div class="alert alert-danger">
+                    {{ session('problem') }}
+                </div>
+                @endif
+
                 {!! Form::open(array('url' => route('do-register'), 'method' => 'POST', 'class' => 'form-horizontal','id'=>'registration', 'files' => 'true')) !!}
                 {{ csrf_field() }}
 

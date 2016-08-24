@@ -83,7 +83,8 @@ class AuthController extends Controller
         }
         else
         {
-            echo "error occured";
+            //redirect user to registration page with error message
+            return redirect('/register')->with('problem', 'Error occured....Try again later.');
         }
     }
 
