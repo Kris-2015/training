@@ -20,7 +20,6 @@ class UserController extends Controller
     */
     public function getIndex()
     {
-
         return view('datatables.index');
     }
 
@@ -32,7 +31,6 @@ class UserController extends Controller
     */
     public function anyData()
     {   
-
         //get user permission for datatables
         $permission = RoleResourcePermission::datatablePermission(Auth::user()->role_id,'datatables');
 
@@ -152,7 +150,7 @@ class UserController extends Controller
     */
     public function postGit(Request $request)
     {
-
+        //github id of user
         $github_username = $request["gitid"];
 
         $username = env('GITHUB_USERNAME','kris');
@@ -164,8 +162,6 @@ class UserController extends Controller
             curl_setopt($handler, CURLOPT_USERAGENT, 'Mozilla');
             curl_setopt($handler, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($handler, CURLOPT_USERPWD, "$username:$password");
-
-            //$result = curl_exec ($handler);
 
             curl_setopt_array($handler, array(
             CURLOPT_URL => "https://api.github.com/users/$github_username",
@@ -184,14 +180,11 @@ class UserController extends Controller
 
         if ($err) 
         {
-
-          echo "cURL Error #:" . $err;
-          exit;
+            return array('cURL Error #' => $err);
         } 
 
         header('Content-Type: application/json;charset=utf-8');
-        echo $response; 
-        exit;
         
+        return $response; 
     }
 }
