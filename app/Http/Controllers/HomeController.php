@@ -55,7 +55,7 @@ class HomeController extends Controller
     public function getlist()
     {
         //storing users information
-        $information = $this->UserInformation();
+        $information = $this->userInformation();
 
         //returning the users information with list blade file
         return view('list',compact('information'));
@@ -77,7 +77,7 @@ class HomeController extends Controller
 
         //storing the state list in array
         $state_list = config('constants.state_list');
-        $users_info = $this->UserInformation($id);
+        $users_info = $this->userInformation($id);
 
         if(!empty($users_info))
         {   
@@ -121,9 +121,8 @@ class HomeController extends Controller
      * @param: id
      * @return: array
     */
-    public function UserInformation($id=false)
+    public function userInformation($id=false)
     {
-
         //get the information of user by user id
         if($id)
         {
