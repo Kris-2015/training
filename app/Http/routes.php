@@ -85,7 +85,10 @@ Route::post('activate', 'ActivateUserController@activateUser');
 Route::get('/redirect', 'SocialAuthController@redirect');
 Route::get('/callback', 'SocialAuthController@callback');
 
-Route::post('image', 'UploadController@upload');
+
+Route::post('image', function() {
+    return 'hello';
+});
 
 /**
  * Group routes to check the user authentication
