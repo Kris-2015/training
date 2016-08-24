@@ -2,16 +2,9 @@
 
 @section('title', 'dashboard')
 
-@section('css')
-<link rel="stylesheet" type="text/css" href="{{ url('/css/dropzone.css') }}">
-@endsection
-
 @section('content')
 <h2 align="center">Hello, {{ Auth::user()->role_id == 1 ? 'Admin' : 'User' }}</h2>
 <div class="container">
-    <form>
-      <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-    </form>
     <div class="col-sm-offset-3 col-sm-5">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -48,8 +41,7 @@
     <div class="col-sm-offset-3 col-sm-5">
       <div class="panel panel-default">
         <div class="fallback">
-          <form action="" method="POST" enctype="multipart/form-data" class="dropzone" id="upload">   
-            {{ csrf_field() }}     
+          <form action="{{ url('upload') }}" method="POST" enctype="multipart/form-data" class="dropzone" id="upload">     
             <div class="dz-preview dz-file-preview">
               <div class="dz-details">
                 <div class="dz-filename"><span data-dz-name></span></div>
@@ -63,8 +55,8 @@
                 <div class="dz-progress">
                   <span class="dz-upload" data-dz-uploadprogress></span>
                 </div>
-               <!--  <div class="dz-success-mark"><span>✔  </span></div>
-                <div class="dz-error-mark"><span>✘</span></div> -->
+                <div class="dz-success-mark"><span>✔  </span></div>
+                <div class="dz-error-mark"><span>✘</span></div>
                 <div class="dz-error-message"><span data-dz-errormessage></span></div>
               </div>
           </form>

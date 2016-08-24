@@ -82,16 +82,16 @@ class ApiController extends Controller
         {
             //checking user on the basic of required and available search parameter
             $users = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
-                ->where(function($query) use ($request, $filter)
+            ->where(function($query) use ($request, $filter)
+            {
+                foreach ( $filter as $column => $key )
                 {
-                    foreach ( $filter as $column => $key )
-                    {
-                        $value = array_get($request, $key);
+                    $value = array_get($request, $key);
 
-                        if ( ! is_null($value)) $query->where($column, 'like', '%'.$value.'%');
-                    }
-                })
-                ->paginate($limit);
+                    if ( ! is_null($value)) $query->where($column, 'like', '%'.$value.'%');
+                }
+            })
+            ->paginate($limit);
         }
         else
         {
