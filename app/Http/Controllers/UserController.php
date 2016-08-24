@@ -135,7 +135,7 @@ class UserController extends Controller
                         ->where('users.id', $user_id)
                         ->get();
             
-            return json_encode($user_info);
+            return response()->json($user_info);
         }
         else
         {
