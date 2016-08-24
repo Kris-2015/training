@@ -101,7 +101,7 @@ class InstagramController extends Controller
     * @param void
     * @return json
    */
-    public function curlInsta()
+    private function curlInsta()
     {
         //initialising the curl operation
         $ch = curl_init();
