@@ -6,9 +6,9 @@
 
 @section('content')
     {{ csrf_field() }}
-	<table class="table table-bordered" id="users-table">
-	   <thead>
-	       <tr>
+  <table class="table table-bordered" id="users-table">
+     <thead>
+         <tr>
                 <th>Name</th>
                 <th>Email</th>
                 <th>DOB</th>
@@ -16,9 +16,9 @@
                 <th>Updated_at</th>
                 <th>Action</th>
                 <th>Status</th>
-           </tr>	  
-	   </thead>
-	</table>
+           </tr>    
+     </thead>
+  </table>
 @endsection
 
 @section('modal')
