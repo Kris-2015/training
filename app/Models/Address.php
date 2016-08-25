@@ -18,7 +18,7 @@ class Address extends Model
 {
     /*
      * store the information in address table
-     * @param Request
+     * @param address data
      * 
      * @return boolean
     */
