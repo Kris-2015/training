@@ -38,5 +38,5 @@
 @endsection
 
 @section('js-css')
-<script type="text/javascript" src="{{ url('/js/panel.js') }}"></script>
+<script type="text/javascript" src="{{ asset_timed('js/panel.js') }}"></script>
 @endsection

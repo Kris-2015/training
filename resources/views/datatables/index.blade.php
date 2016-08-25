@@ -119,5 +119,5 @@ $('#users-table').DataTable({
 
 @section('js-css')
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-<script src="{{ url('/js/profile_modal.js') }}"></script>
+<script src="{{ asset_timed('js/profile_modal.js') }}"></script>
 @endsection
