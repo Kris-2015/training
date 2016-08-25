@@ -45,8 +45,7 @@ class InstagramController extends Controller
      * @return mixed
     */
    public function homePage($data)
-   {
-       
+   {   
         $access_token = $data->{"access_token"};
         $user = $data->{'user'};
         $username = $user->{'username'};
@@ -71,7 +70,7 @@ class InstagramController extends Controller
                 "instagram_id" => $instagram_id
             );
 
-            $id = User::InstagaramUser($insta_userdata);
+            $id = User::instagaramUser($insta_userdata);
 
             //new user has created
             $new_user = 1;
@@ -88,11 +87,9 @@ class InstagramController extends Controller
             //if user is new user
             return redirect('register/' . $id)->with('new', 'Please Update your profile');
         }
-        else
-        {
-            //if login operation failed, direct the user to login page
-            return redirect('login')->with('warning', 'Something went wrong.');
-        }
+        
+        //if login operation failed, direct the user to login page
+        return redirect('login')->with('warning', 'Something went wrong.');
    }
 
   /**
