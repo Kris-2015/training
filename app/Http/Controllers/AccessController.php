@@ -52,7 +52,6 @@ class AccessController extends Controller
 
         //returning the role, resource and permission in json
         return response()->json($data);
-
    }
 
   /**
@@ -96,6 +95,6 @@ class AccessController extends Controller
         $action = $get['action'];
         
         //setting the permision of resource based on role  
-        $setrrp = RoleResourcePermission::addPermission($role, $resource, $permission, $action); 
+        RoleResourcePermission::addPermission($role, $resource, $permission, $action); 
    }
 }
