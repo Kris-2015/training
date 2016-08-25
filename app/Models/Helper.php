@@ -67,7 +67,7 @@ class Helper extends Model
      * @param: activation key
      * @return: void
     */
-    public static function Email($key, $name, $email, $subject='Activate Account')
+    public static function email($key, $name, $email, $subject='Activate Account')
     {
         
         $user = array(
@@ -78,7 +78,7 @@ class Helper extends Model
 
         Mail::queue('emails.activate', ['key'=> $key], function ($m) use ($user)
         {
-            $m->from('kris@app.com', 'Your Application');
+            $m->from(env('MAIL_FROM'), 'Your Application');
 
             $m->to($user['email'], $user['name'])->subject($user['subject']);
         });
@@ -91,9 +91,8 @@ class Helper extends Model
      * @param: user id
      * @return: hash 
     */
-    public static function GenerateKey($id)
+    public static function generateKey($id)
     {
-
         try
         {
 
