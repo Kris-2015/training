@@ -78,7 +78,7 @@ class AuthController extends Controller
            $key=Helper::generateKey($user_id);
 
            //Sending mail to user by passing the activation code
-           Helper::email($key, $user_name,$user_email);
+           Helper::email($key, $user_name,$user_email, 'activate');
 
            return redirect('/login')->with('status', 'We sent you an activation code. Check your email.');
         }

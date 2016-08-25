@@ -67,7 +67,7 @@ class Helper extends Model
      * @param: activation key
      * @return: void
     */
-    public static function email($key, $name, $email, $subject='Activate Account')
+    public static function email($key, $name, $email, $subject='Activate Account', $resource)
     {
         
         $user = array(
@@ -75,10 +75,10 @@ class Helper extends Model
             'email' => $email,
             'subject' => $subject
         );
-
-        Mail::queue('emails.activate', ['key'=> $key], function ($m) use ($user)
+//'emails.activate'
+        Mail::queue( " emails.$resource ", ['key'=> $key], function ($m) use ($user)
         {
-            $m->from(env('MAIL_FROM'), 'Your Application');
+            $m->from(env('MAIL_FROM'), 'Employee Management Team');
 
             $m->to($user['email'], $user['name'])->subject($user['subject']);
         });

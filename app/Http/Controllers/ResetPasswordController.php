@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserActivation;
-use App\MOdels\Helper;
+use App\Models\Helper;
 use App\Http\Requests;
-
 
 /**
  * Manage request for resetting password
@@ -64,7 +63,7 @@ class ResetPasswordController extends Controller
             $subject = 'Reset Mail';
             $newkey = Helper::generateKey($id);
 
-            Helper::email($newkey, $user_name, $email, $subject);
+            Helper::email($newkey, $user_name, $email, $subject, 'reset');
 
             return redirect('/login')->with('status', 'We sent you an reset password link. Check your email.');
         }
