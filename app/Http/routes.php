@@ -51,7 +51,7 @@ Route::get('activation/{token}', 'AuthController@activateAccount');
 
 Route::get('logout','AuthController@logout');
 
-Route::get('/resetPassword',[
+Route::get('resetPassword',[
     'as' => 'sendLink',
     'uses' => 'ResetPasswordController@sendLink'
 ]);
@@ -70,10 +70,7 @@ Route::post('updatepassword', [
     'uses'=>'ResetPasswordController@updatePassword'
 ]);
 
-Route::get('new_user',[
-   'as' => 'new_user',
-   'uses' => 'AddUserController@newUser'
-]);
+Route::get('newuser','AddUserController@newUser');
 
 Route::post('add_user',[
    'as' => 'add_user',

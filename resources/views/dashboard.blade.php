@@ -24,7 +24,7 @@
                        <br>
                        <li><a class="btn btn-info col-xs-4" href="{{ url('list') }}">User</a></li>
                        <br>
-                       <li><a class="btn btn-danger col-xs-4" href="{{ url('newUser') }}">Add New User</a></li>
+                       <li><a class="btn btn-danger col-xs-4" href="{{ url('newuser') }}">Add New User</a></li>
                        <br>
                        <li><a class="btn btn-success col-xs-4" href="{{ url('panel') }}">Admin Panel</a></li>
                     @else
