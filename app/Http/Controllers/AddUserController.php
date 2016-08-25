@@ -42,7 +42,7 @@ class AddUserController extends Controller
      * @param:Request $request
      * @return: mixed
     */
-    public function add_user(RegistrationRequest $request)
+    public function addUser(RegistrationRequest $request)
     {
 
         //Collects all the users detail
@@ -62,9 +62,7 @@ class AddUserController extends Controller
 
             return redirect('/login')->with('status', 'We sent you an activation code. Check your email.');
         }
-        else
-        {
-            return redirect('/login')->with('warning', 'Error occured, Try again later');
-        }
+        
+        return redirect('/login')->with('warning', 'Error occured, Try again later');
     }
 }
