@@ -77,7 +77,7 @@ Route::get('new_user',[
 
 Route::post('add_user',[
    'as' => 'add_user',
-   'uses' => 'AddUserController@add_user'
+   'uses' => 'AddUserController@addUser'
 ]);
 
 Route::post('activate', 'ActivateUserController@activateUser');
@@ -97,7 +97,7 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::controller('datatables', 'UserController');
 
-    Route::get('register/{id}', 'HomeController@Data');
+    Route::get('register/{id}', 'HomeController@data');
 
     Route::post('delete','HomeController@delete');
 
