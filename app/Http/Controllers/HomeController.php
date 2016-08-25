@@ -67,7 +67,7 @@ class HomeController extends Controller
      * @param: integer
      * @return: void
     */
-    public function Data($id)
+    public function data($id)
     {
 
         if(Auth::user()->role_id == '2' &&  Auth::user()->id != $id) 
@@ -81,14 +81,13 @@ class HomeController extends Controller
 
         if(!empty($users_info))
         {   
-            return view("registration",['state_list' => $state_list,'users_info' => $users_info]);       
+            return view('registration', ['state_list' => $state_list,'users_info' => $users_info]);       
         }
-        else
-        {   
-            $users_info = NULL;
-            return view("registration",['state_list' => $state_list,'users_info' => $users_info]);
-        }
-          
+        
+        //making null if new user want to visit registration page
+        $users_info = NULL;
+        
+        return view('registration', ['state_list' => $state_list,'users_info' => $users_info]);  
     }
 
    /**
@@ -140,8 +139,8 @@ class HomeController extends Controller
 
         //get the residence address of user of user
         $information_residence = $get_user->where([ ['addresses.type', 'residence'],
-                 ['addresses.user_id', '=', $id] ])
-               ->get()->toArray();
+            ['addresses.user_id', '=', $id] ])
+            ->get()->toArray();
 
         //get the office address of user of user
         $information_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
