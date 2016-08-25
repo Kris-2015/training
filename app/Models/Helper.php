@@ -75,7 +75,7 @@ class Helper extends Model
             'email' => $email,
             'subject' => $subject
         );
-//'emails.activate'
+
         Mail::queue( " emails.$resource ", ['key'=> $key], function ($m) use ($user)
         {
             $m->from(env('MAIL_FROM'), 'Employee Management Team');
