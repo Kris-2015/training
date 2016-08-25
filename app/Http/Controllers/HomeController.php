@@ -110,6 +110,7 @@ class HomeController extends Controller
         }
         catch(Exception $e)
         {
+            
             return 0;
         }
     }
@@ -127,44 +128,71 @@ class HomeController extends Controller
         {
             $get_user = User::find($id)->join('addresses', 'users.id', '=', 'addresses.user_id')
                 ->join('communications','users.id', '=', 'communications.user_id')
-                ->groupBy('users.id');      
+                ->groupBy('users.id');  
+            
+            //get the residence address of user
+            $information_residence = $get_user->where([ ['addresses.type', 'residence'],
+                ['addresses.user_id', '=', $id] ])
+                ->get()
+                ->toArray();
+
+            //get the office address of user of user
+            $information_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
+                ->select( 
+                "addresses.street AS office_street",
+                "addresses.city AS office_city",
+                "addresses.state AS office_state",
+                "addresses.zip AS office_zip",
+                "addresses.mobile AS office_mobile",
+                "addresses.landline AS office_landline",
+                "addresses.fax AS office_fax"
+                )->groupBy('users.id')->where([ ['addresses.type', 'office'], 
+                ['addresses.user_id', '=', $id] ])
+                ->get()
+                ->toArray();
+
+            //array to store the all the information of user
+            $information = array();
+            //loop to concat the residence and office information of user
+            foreach ($information_residence as $key => $residence)
+            {
+                $office = $information_office[$key];
+                $information[$key] = $residence + $office;
+            }
         }
         else
         {
             //get all the information of all user 
-            $get_user = User::join('addresses', 'users.id', '=', 'addresses.user_id')
+            $get_user = User::join('addresses', function ($join){
+                $join->on('users.id', '=', 'addresses.user_id')
+                ->where('addresses.type', '=', 'residence');
+                })
                 ->join('communications','users.id', '=', 'communications.user_id')
-                ->groupBy('users.id');
-        }
+                ->groupBy('users.id')
+                ->get()
+                ->toArray();
 
-        //get the residence address of user of user
-        $information_residence = $get_user->where([ ['addresses.type', 'residence'],
-            ['addresses.user_id', '=', $id] ])
-            ->get()->toArray();
-
-        //get the office address of user of user
-        $information_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
+            $get_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
                 ->select( 
-                    "addresses.street AS office_street",
-                    "addresses.city AS office_city",
-                    "addresses.state AS office_state",
-                    "addresses.zip AS office_zip",
-                    "addresses.mobile AS office_mobile",
-                    "addresses.landline AS office_landline",
-                    "addresses.fax AS office_fax"
-                )->groupBy('users.id')->where([ ['addresses.type', 'office'], 
-                    ['addresses.user_id', '=', $id] ])
-                ->get()->toArray();
-        
-        //array to store the all the information of user
-        $information = array();
+                "addresses.street AS office_street",
+                "addresses.city AS office_city",
+                "addresses.state AS office_state",
+                "addresses.zip AS office_zip",
+                "addresses.mobile AS office_mobile",
+                "addresses.landline AS office_landline",
+                "addresses.fax AS office_fax"
+                )->groupBy('users.id')
+                ->where('addresses.type', '=', 'office')
+                ->get()
+                ->toArray();
 
-        //loop to concat the residence and office information of user
-        foreach ($information_residence as $key => $residence)
-        {
+            $information = array();
             
-            $office = $information_office[$key];
-            $information[$key] = $residence + $office;
+            foreach($get_user as $key => $residence)
+            {
+                $office = $get_office[$key];
+                $information[$key] = $residence + $office;
+            }
         }
 
         //return the complete information of user
