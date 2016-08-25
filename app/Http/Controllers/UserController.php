@@ -10,6 +10,16 @@ use App\Http\Requests;
 use DB;
 use Auth;
 
+/**
+ * Manage request of datatables
+ * @access public
+ * @package App\Http\Controllers
+ * @subpackage void
+ * @category void
+ * @author mfsi-krishnadev
+ * @link void
+ */
+
 class UserController extends Controller
 {
     protected $dates = ['deleted_at'];
@@ -35,8 +45,9 @@ class UserController extends Controller
         $permission = RoleResourcePermission::datatablePermission(Auth::user()->role_id,'datatables');
 
         //get all the records of active/deactivated user
-        $users = User::withTrashed()->select(['id', 'first_name', 'email', 'dob', 'github_id', 'created_at', 'updated_at',
-            'role_id', 'isActive', 'deleted_at']);
+        $users = User::withTrashed()->select(['id', 'first_name', 'email', 'dob',
+         'github_id', 'created_at', 'updated_at',
+         'role_id', 'isActive', 'deleted_at']);
 
         //array for showing the status of users account using bootstrap button class
         $stat = [
@@ -153,9 +164,9 @@ class UserController extends Controller
         //github id of user
         $github_username = $request["gitid"];
 
-        $username = env('GITHUB_USERNAME','kris');
-        $password = env('GITHUB_PASSWORD','kris');
-        $curl_url = "https://api.github.com/users/$github_username";
+        $username = env('GITHUB_USERNAME');
+        $password = env('GITHUB_PASSWORD');
+        $curl_url = 'https://api.github.com/users/$github_username';
 
         $handler = curl_init();
             curl_setopt($handler, CURLOPT_URL, $curl_url);
