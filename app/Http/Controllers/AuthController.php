@@ -47,6 +47,7 @@ class AuthController extends Controller
         //storing the list of states from config/state_list
         $state_list = config('constants.state_list');
         $users_info = NULL;
+        
         return view('registration', ['state_list' => $state_list,'users_info' => $users_info]);
     }
 
@@ -74,18 +75,16 @@ class AuthController extends Controller
         if($user_id > 0)
         {
            //calling the Generate key function, by passing the user id of user
-           $key=Helper::GenerateKey($user_id);
+           $key=Helper::generateKey($user_id);
 
            //Sending mail to user by passing the activation code
-           Helper::Email($key, $user_name,$user_email);
+           Helper::email($key, $user_name,$user_email);
 
            return redirect('/login')->with('status', 'We sent you an activation code. Check your email.');
         }
-        else
-        {
-            //redirect user to registration page with error message
-            return redirect('/register')->with('problem', 'Error occured....Try again later.');
-        }
+        
+        //redirect user to registration page with error message
+        return redirect('/register')->with('problem', 'Error occured....Try again later.');
     }
 
    /**
@@ -100,6 +99,7 @@ class AuthController extends Controller
         {
             return view('login');    
         }
+
         return redirect('dashboard');
     }
 
@@ -111,7 +111,6 @@ class AuthController extends Controller
    */
     public function dologin(Request $request)
     {
-
         //validation message of login page
         $message['email_id.required'] = 'Email id required';
         $message['password.required'] = 'Give your password';
@@ -132,10 +131,8 @@ class AuthController extends Controller
             //User authenticated, redirect to dashboard
             return redirect('/dashboard');  
         }
-        else 
-        {
-            return redirect('/login')->with('status', 'Invalid email id or password');
-        }
+        
+        return redirect('/login')->with('warning', 'Invalid email id or password');
     }
 
     /**
@@ -162,7 +159,7 @@ class AuthController extends Controller
     */
    public function activateAccount($token)
    {
-        
+        // checking the given token is authenticate or not
         $account_status = Helper::activateUser($token);
 
         if(1 == $account_status)
@@ -170,9 +167,7 @@ class AuthController extends Controller
             //after successful account activation, redirect user to login page
             return redirect('login')->with('status', 'your email is verified, please login to access your account.');
         }    
-        else
-        {
-            return redirect('login');
-        }    
+        
+        return redirect('login');   
    }
 }
