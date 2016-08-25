@@ -76,7 +76,6 @@ class RoleResourcePermission extends Model
     public static function addPermission($role, $resource, $permission,$action)
     {
 
-        
         if($action == 'add')
         {
             //checking whether the requested permission for the role and resource exists or not
