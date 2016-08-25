@@ -39,7 +39,7 @@ class Communication extends Model
             }
             else
             {
-                throw new \Exception ( 'Bad' );
+                throw new \Exception ( 'Error: error occured while inserting in communication table' );
             }
         }
         catch (\Exception $e) 
