@@ -30,7 +30,7 @@ class ResetPasswordController extends Controller
     */
     public function sendLink(Request $request)
     {
-        return view('reset_password');
+        return view('resetpassword');
     }
 
    /**
@@ -62,9 +62,9 @@ class ResetPasswordController extends Controller
 
             //subject of the mail
             $subject = 'Reset Mail';
-            $newkey = Helper::GenerateKey($id);
+            $newkey = Helper::generateKey($id);
 
-            Helper::Email($newkey, $user_name, $email, $subject);
+            Helper::email($newkey, $user_name, $email, $subject);
 
             return redirect('/login')->with('status', 'We sent you an reset password link. Check your email.');
         }
@@ -79,9 +79,7 @@ class ResetPasswordController extends Controller
     */
     public function passwordPage($token)
     {
-        $verify = new UserActivation();
-
-        $verify = $verify::where('token',$token)->get();
+        $verify = UserActivation::where('token',$token)->get();
 
         if($verify[0]['token'] == $token)
         {
@@ -117,7 +115,7 @@ class ResetPasswordController extends Controller
             }   
             else
             {
-                throw new \Exception( 'Could not change. Change Password Failed' );
+                throw new Exception( 'Could not change. Change Password Failed' );
             }         
         }
         catch(Exception $e)
