@@ -47,30 +47,25 @@ function display() {
    $.ajax({
       url: 'panel/getrrp',
       type: 'POST',
-      headers: {
-         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-      },
       success: function(data) {
 
-         var role = " ";
-         var resource = " ";
-         var privilege = " ";
+         var role = resource = privilege = " ", key;
 
-         for (var key in data.role) {
+         for (key in data.role) {
             if (data.role.hasOwnProperty(key)) {
                role += '<option id="' + data.role[key]['role_name'] + '" value="' + 
                data.role[key]['role_id'] + '">' + data.role[key]['role_name'] + '</option>';
             }
          }
 
-         for (var key in data.resource) {
+         for (key in data.resource) {
             if (data.resource.hasOwnProperty(key)) {
                resource += '<option id="' + data.resource[key]['resource_name'] + '" value="' 
                + data.resource[key]['resource_id'] + '">' + data.resource[key]['resource_name'] + '</option>';
             }
          }
 
-         for (var key in data.permission) {
+         for (key in data.permission) {
             if (data.permission.hasOwnProperty(key)) {
                privilege += '<label class="checkbox-inline"><input type="checkbox" id="' + 
                data.permission[key]['name'] + '" value="' + data.permission[key]['permission_id'] + '">' 
@@ -99,16 +94,13 @@ function sendrrp(get_role, get_resource) {
          role: get_role,
          resource: get_resource,
       },
-      headers: {
-         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-      },
       success: function(response) {
  
         $('.privilege input[type="checkbox"]').each(function() {
             var checkbox_obj = $(this);
 
             //uncheck all the previously checked checkbox
-            $(this).prop('checked', false);
+            checkbox_obj.prop('checked', false);
             
 
             $.each(response, function(resp_key, resp_data) {
@@ -139,9 +131,6 @@ function setrrp(get_role, get_resource, get_privilege, action) {
          resource: get_resource,
          permission: get_privilege,
          action: action,
-      },
-      headers: {
-         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
       },
       success: function(response) {
          display();
