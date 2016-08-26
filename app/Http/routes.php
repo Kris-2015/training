@@ -53,31 +53,31 @@ Route::get('logout','AuthController@logout');
 
 Route::get('resetPassword',[
     'as' => 'sendLink',
-    'uses' => 'ResetPasswordController@sendLink'
+    'uses' => 'AuthController@sendLink'
 ]);
 
 Route::post('resetPassword', [
     'as' => 'resetPassword', 
-    'uses' => 'ResetPasswordController@reset'
+    'uses' => 'AuthController@reset'
 ]);
 
-Route::get('reset/{token}', 'ResetPasswordController@passwordPage');
-
-Route::get('/dashboard','HomeController@dashboard');
+Route::get('reset/{token}', 'AuthController@passwordPage');
 
 Route::post('updatepassword', [
     'as' => 'updatepassword',
-    'uses'=>'ResetPasswordController@updatePassword'
+    'uses'=>'AuthController@updatePassword'
 ]);
 
-Route::get('newuser','AddUserController@newUser');
+Route::get('/dashboard','HomeController@dashboard');
+
+Route::get('newuser','AuthController@newUser');
 
 Route::post('add_user',[
    'as' => 'add_user',
-   'uses' => 'AddUserController@addUser'
+   'uses' => 'AuthController@addUser'
 ]);
 
-Route::post('activate', 'ActivateUserController@activateUser');
+Route::post('activate', 'AuthController@activateUser');
 
 Route::get('/redirect', 'SocialAuthController@redirect');
 Route::get('/callback', 'SocialAuthController@callback');
