@@ -18,6 +18,11 @@
                         {{ session('new') }}
                     </div>                  
                 @endif
+                @if(session('message'))
+                    <div class="alert alert-primary">
+                        {{ session('message') }}
+                    </div>                  
+                @endif
                 <ol>
                     @if(Auth::user()->role_id == 1)
                        <li><a class="btn btn-primary col-xs-4" href="{{ url('datatables') }}">User Status</a></li>
