@@ -29,5 +29,6 @@
 @endsection
 
 @section('js-css')
-<script src="https://maps.googleapis.com/maps/api/js?key=env('GOOGLE_API')&callback=initMap" async defer></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API') }}&callback=initMap" async defer></script>
 @endsection
