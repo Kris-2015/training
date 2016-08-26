@@ -28,7 +28,7 @@ class Communication extends Model
         try 
         {
             $comm = new Communication;
-            $comm_list = implode(',', $data['communication']);
+            $comm_list = isset( $data['communication'] ) ? implode(',', $data['communication']) : '';
             $comm->user_id = $data['user_id'];
             $comm->type = $comm_list;
             $communication_success = $comm->save();
