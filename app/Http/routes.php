@@ -87,6 +87,8 @@ Route::get('/callback', 'SocialAuthController@callback');
 
 Route::post('image', 'UploadController@upload');
 
+Route::get('map', 'MapController@map');
+
 /**
  * Group routes to check the user authentication
 */
