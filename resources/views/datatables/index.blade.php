@@ -23,6 +23,8 @@
 
 @section('modal')
 <!-- Profile Modal -->
+<input type="hidden" class="path" value="{{ url('map') }}">
+
 <div id="profile" class="modal fade" role="dialog">
     <div class="modal-dialog">
     <!-- Modal content -->
@@ -41,8 +43,7 @@
                       <p id="profile_email"></p>
                       <p id="profile_github"></p>
                       <p id="marital_status"></p>
-                      <p id="employer"></p>
-                      <p id="employment"></p>
+                      <p id="location"></p>
                     </div>
                     <div class="col-xs-3 profile_pic"></div>
                 </div>
