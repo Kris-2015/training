@@ -1,26 +1,31 @@
 $(document).ready(function(){
 
-	$(document).on('click', '.pro', function() {
-		var user_id = $(this).data("id");
+    $(document).on('click', '.pro', function() {
+        var user_id = $(this).data("id");
        
-		$.ajax({
-			url: 'datatables/user',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-			    id: user_id,
-			},
-			success:function(response)
-			{				
-				$("#profile_name").html("<strong>Name:</strong> "+ response[0].first_name + ' ' + response[0].last_name);
-				$("#profile_dob").html("<strong>DOB:</strong> "+ response[0].dob);
-				$("#profile_gender").html("<strong>Gender:</strong> "+response[0].gender);
-				$("#profile_prefix").html("<strong>Prefix:</strong> "+response[0].prefix);
-				$("#profile_email").html("<strong>Email:</strong> "+ response[0].email);
-				$("#profile_github").html("<strong>Github Id: </strong>"+ response[0].github_id);
-				$(".profile_pic").html('<img src=/upload/'+response[0].image+' width="150px" height="150px">');
-			}	
-		});
+        $.ajax({
+            url: 'datatables/user',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: user_id,
+            },
+            success:function(response)
+            {
+                var url = $('.path').val();
+                
+                $("#profile_name").html("<strong>Name:</strong> "+ response[0].first_name+ ' ' +
+                response[0].last_name);
+                $("#profile_dob").html("<strong>DOB:</strong> "+ response[0].dob);
+                $("#profile_gender").html("<strong>Gender:</strong> "+response[0].gender);
+                $("#profile_prefix").html("<strong>Prefix:</strong> "+response[0].prefix);
+                $("#profile_email").html("<strong>Email:</strong> "+ response[0].email);
+                $("#profile_github").html("<strong>Github Id: </strong>"+ response[0].github_id);
+                $(".profile_pic").html('<img src=/upload/'+response[0].image+' width="150px" height="150px">');
+                $("#location").html('<strong>Location:</strong><a href="'+url+'?user='+
+                    response[0].userId+'" target="_blank">View Map</a>');
+            }   
+        });
 
         $("#profile").modal({
             backdrop: 'static',
@@ -30,7 +35,7 @@ $(document).ready(function(){
 
    $(document).on('click', '.git', function(){
 
-   	    var github_name = $(this).data("github");
+        var github_name = $(this).data("github");
 
         $(".loader-container").removeClass('hidden');
         $(".github-container").addClass('hidden');
@@ -50,7 +55,8 @@ $(document).ready(function(){
 
                 $(".git_name").html('Github Profile of <strong>' + response.name + '</strong>');
                 $(".image").html('<img src="' + response.avatar_url + '"id="image" height="150px" width="150px"/>');
-                $("#git_login").html('<strong id="log">Login Id: </strong>' + '<a href="' + response.html_url + '" target="_blank">' + response.login + '</a>');
+                $("#git_login").html('<strong id="log">Login Id: </strong>' + '<a href="' + response.html_url +
+                '" target="_blank">' + response.login + '</a>');
                 $("#git_location").html('<strong>Location: </strong>' + response.location);
                 $("#git_repositories").html('<strong>Number of repositories: </strong>' + response.public_repos);
                 $("#git_follower").html('<strong>Follower: </strong>' + response.followers);
