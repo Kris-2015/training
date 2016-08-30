@@ -21,12 +21,15 @@
 <h3>Location of {{ $residence[0]['first_name'] }} {{ $residence[0]['last_name'] }}</h3>
     
 <input type="hidden" id="residence" value="{{ $residence[0]['street'] }},
- {{ $residence[0]['city'] }}, {{ $residence[0]['state'] }}, India">
+    {{ $residence[0]['city'] }}, {{ $residence[0]['state'] }}, India">
 
- <input type="hidden" id="office" value="{{ $office[0]['office_street'] }},
+<input type="hidden" id="office" value="{{ $office[0]['office_street'] }},
   {{ $office[0]['office_city'] }}, {{ $office[0]['office_state']}}">
 
- <input type="hidden" id="users" value="{{ $residence[0]['userId'] }}">
+<input type="hidden" id="usersName" value="{{ $residence[0]['first_name'] }}
+    {{ $residence[0]['last_name'] }} }}">
+
+<input type="hidden" id="empId" value="{{ $resdence[0]['userId'] }}">
 
 <div id="map"></div>
 <script type="text/javascript">
@@ -52,7 +55,12 @@
         success: function(response){
             var res = $('#residence').val();
             var off = $("#office").val();
-
+            console.log(res);
+            console.log(off);
+            var contentString = '<div id="content">'+
+                '<div id="siteNotice">'+
+                '</div>'+
+                '<h1 id="firstHeading" class="firstHeading">'+id+'</h1>';
             var address = [res, off];
             for(var i=0; i<address.length; i++)
             {
@@ -61,7 +69,8 @@
                         resultsMap.setCenter(results[0].geometry.location);
                         var marker = new google.maps.Marker({
                             map: resultsMap,
-                            position: results[0].geometry.location
+                            position: results[0].geometry.location,
+                            title: "hello dear"
                         });
                     }
                     else{
