@@ -111,16 +111,23 @@ class UserController extends Controller
                   //assuming that deleted at column is null
                   $isDeleted = 0;
 
-                  //if deleted_at column is not null, then set the isDeleted to '1' to indicate 
-                  //user account is not deactivated
-                  if( !empty( $users->deleted_at ) )
+                  //account deactivating button
+                  $status_button = '';
+
+                  //only admin is allowed
+                  if(Auth::user()->role_id == 1)
                   {
-                      $isDeleted = 1;
+                      //if deleted_at column is not null, then set the isDeleted to '1' to indicate 
+                      //user account is not deactivated
+                      if( !empty( $users->deleted_at ) )
+                      {
+                          $isDeleted = 1;
+                      }
+
+                      $status_button = '<button onclick="changeActivationStatus(this)" type="button" data-activate="' . $isDeleted .'" data-id="' . $users->id . '" class="btn btn-'.$stat[$isDeleted].'" btn-lg">'.$status[$isDeleted].'</button>' ;                 
                   }
-                  return 
-                      '<button onclick="changeActivationStatus(this)" type="button" data-activate="' . $isDeleted . 
-                      '" data-id="' . $users->id . '" class="btn btn-'.$stat[$isDeleted].'" btn-lg">'.$status[$isDeleted].
-                      '</button>';                
+                  
+                  return $status_button;                
             })
             ->make(true);
     }
@@ -138,13 +145,15 @@ class UserController extends Controller
         {
             $user_id = $request["id"];
         
-            $user_info = User::join('addresses', 'users.id', '=', 'addresses.user_id')
-                        ->join('communications','users.id', '=', 'communications.user_id')
+            $user_info = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
+                        ->leftJoin('communications','users.id', '=', 'communications.user_id')
                         ->groupBy('users.id')
+                        ->select('users.id as userId', 'first_name', 'last_name', 'dob', 'gender', 'prefix',
+                            'email', 'github_id', 'marital_status', 'image')
                         ->where('users.id', $user_id)
                         ->get();
-            
-            return json_encode($user_info);
+                        
+            return response()->json($user_info);
         }
         else
         {

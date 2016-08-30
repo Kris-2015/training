@@ -10,7 +10,12 @@
         "laravelcollective/html": "5.2.*",
         "yajra/laravel-datatables-oracle": "^6.16",
         "ixudra/curl": "6.*",
-        "vinkla/instagram": "^4.1"
+        "vinkla/instagram": "^4.1",
+        "laravel/socialite": "^2.0",
+        "infyomlabs/laravel-generator": "dev-master",
+        "infyomlabs/core-templates": "dev-master",
+        "infyomlabs/swagger-generator": "dev-master",
+        "jlapp/swaggervel": "master-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

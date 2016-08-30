@@ -16,6 +16,15 @@ use Log;
  */
 class Address extends Model
 {
+
+    /**
+     * Get the address that beongs to user
+    */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
     /*
      * store the information in address table
      * @param address data
@@ -29,6 +38,7 @@ class Address extends Model
             $residence_add = [
                 'user_id' => $data['user_id'],
                 'type' => "residence",
+
                 'street' => isset( $data['homestreet'] ) ? $data['homestreet'] : '',
                 'city' => isset( $data['homecity'] ) ? $data['homecity'] : '',
                 'state' => isset( $data['homestate'] ) ? $data['homestate'] : '',
