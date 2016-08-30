@@ -45,7 +45,7 @@ class Communication extends Model
         catch (\Exception $e) 
         {
             //logging the error in log file
-            Log::error($e);
+            errorReporting($e);
             return 0;
         } 
     }

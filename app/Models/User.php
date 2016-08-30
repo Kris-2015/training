@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
-use Log;
+/*use Log;*/
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Authenticatable;
@@ -92,7 +92,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         catch (\Exception $e) 
         {
             //logging the error in log file
-            Log::error($e);
+            errorReporting($e);
             DB::rollBack();
             return 0;
         } 
@@ -125,7 +125,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
        }
        catch(Exception $e)
        {
-            Log::error($e);
+            errorReporting($e);
 
             //return 0 as failed to change the status of user account
             return 0;
@@ -165,7 +165,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         catch (Exception $e)
         {
 
-            Log::error($e);
+            errorReporting($e);
             return 0;
         }
    }
@@ -205,7 +205,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         catch(Exception $e)
         {
-            Log::error($e);
+            errorReporting($e);
         }
    }
 }

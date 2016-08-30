@@ -47,7 +47,7 @@ class UserActivation extends Model
         catch(Exception $e)
         {
             //Log error about the failing of activation key insertion
-            Log::error($e);
+            errorReporting($e);
             DB::rollback();
         }
     }
