@@ -22,17 +22,17 @@ class MapController extends Controller
     {   
         $user_id = $request['user'];
 
-        $residence = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
+        $office = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
             ->where('users.id', $user_id)
             ->where('addresses.type', 'office')
             ->select('users.id as userId', 'first_name', 'last_name', 'street', 'city', 'state')
             ->get()
             ->toArray();
         
-        $office = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
+        $residence = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
             ->where('user_id', $user_id)
             ->where('addresses.type', 'residence')
-            ->select('street as office_street', 'city as office_city', 'state as office_state')
+            ->select('street as residence_street', 'city as residence_city', 'state as residence_state')
             ->get()->toArray();
 
         //default resource for unauthenticate user
