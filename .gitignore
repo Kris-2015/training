@@ -4,3 +4,6 @@
 Homestead.yaml
 Homestead.json
 .env
+/public/upload
+/public/img
+/public/vendor
