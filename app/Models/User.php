@@ -243,3 +243,4 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             errorReporting($e);
         }
    }
+}
