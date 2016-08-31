@@ -1,8 +1,8 @@
 .error
 {
-	visibility:visible;
-	color: red;
-	font-size: 15px;
+    visibility:visible;
+    color: red;
+    font-size: 15px;
 }
 /* Center the loader */
 #loader {
@@ -23,7 +23,7 @@
 }
 
 .git-modal {
-	min-height: 150px;
+    min-height: 150px;
 }
 
 @-webkit-keyframes spin {
