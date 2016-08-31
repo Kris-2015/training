@@ -41,7 +41,7 @@ class AccessController extends Controller
    * @param handle incoming request
    * @return json
    */
-   public function getrrp(Request $request)
+   public function getAuthorisationDetails(Request $request)
    {
 
         //empty array to store role, resource and permisson in an array            
