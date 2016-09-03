@@ -32,7 +32,7 @@ class RegistrationRequest extends Request
             'marital_status' => 'required',
             'employment' => 'required',
             'employer'=>'required|alpha_spaces',
-            'email'=> 'required',//|unique:users,email
+            'email'=> 'required|unique:users,email',
             'password' =>'required',
             'image' => 'mimes:jpeg,bmp,png|max:6144',
             'homestreet' => 'alpha_spaces',                             
