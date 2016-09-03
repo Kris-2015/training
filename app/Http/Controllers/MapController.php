@@ -9,7 +9,13 @@ use App\Http\Requests;
 
 /**
  * Manages the Google map api request
-*/
+ * @access public
+ * @package App\Http\Controllers
+ * @subpackage void
+ * @category void
+ * @author mfsi-krishnadev
+ * @link void
+ */
 class MapController extends Controller
 {
     /**
@@ -40,7 +46,7 @@ class MapController extends Controller
         if(Auth::check())
         {
             //return view to logged in user
-            $resource = view('map')->with(['residence'=> $residence, 'office'=> $office]);
+            $resource = view('maps/map')->with(['residence'=> $residence, 'office'=> $office]);
         }
         
         return $resource;
