@@ -38,6 +38,6 @@ return [
     'facebook' => [
         'client_id' => env('APP_ID'),
         'client_secret' => env('APP_SECRET'),
-        'redirect' => 'http://laravel.local.com/callback',
+        'redirect' => env('FBCALLBACK_URL'),
     ]
 ];
