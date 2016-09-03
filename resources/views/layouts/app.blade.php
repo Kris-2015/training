@@ -44,6 +44,8 @@
             </div>
             <!-- Right side of navbar -->
             <ul class="nav navbar-nav navbar-right">
+
+                @yield('map')
             <!-- Authentication Links -->
             @if(Auth::guest())
                 <li>@yield('page')</li>
@@ -74,6 +76,7 @@
     @yield('modal')
     @yield('github-modal')
     @yield('delete-modal')
+    @yield('user-map')
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>

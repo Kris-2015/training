@@ -2,13 +2,18 @@
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="{{ url('css/map.css') }}">
+@endsection
+
+@section('map')
+<li><a id="user_location" href="#"> Map </a></li>
 @endsection
 
 @section('content')
     {{ csrf_field() }}
-	<table class="table table-bordered" id="users-table">
-	   <thead>
-	       <tr>
+    <table class="table table-bordered" id="users-table">
+       <thead>
+           <tr>
                 <th>Name</th>
                 <th>Email</th>
                 <th>DOB</th>
@@ -16,13 +21,14 @@
                 <th>Updated_at</th>
                 <th>Action</th>
                 <th>Status</th>
-           </tr>	  
-	   </thead>
-	</table>
+           </tr>      
+       </thead>
+    </table>
 @endsection
 
 @section('modal')
 <!-- Profile Modal -->
+<!-- making the map url in hidden input field -->
 <input type="hidden" class="path" value="{{ url('map') }}">
 
 <div id="profile" class="modal fade" role="dialog">
@@ -98,9 +104,32 @@
 </div>
 @endsection
 
+@section('user-map')
+<div id="user_map" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> User Location </h4>
+            </div>
+            <div class="modal-body map-wrapper">
+                <div id="map_canvas"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
 @push('scripts')
 <script>
-$('#users-table').DataTable({
+var json;
+
+$(document).ready(function(){
+
+    var table =$('#users-table').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu:[2,5,10],
@@ -115,10 +144,17 @@ $('#users-table').DataTable({
             { data: 'status', name: 'status', orderable:false, searchable: false}
         ]
     });
+
+    var user = table.on( 'xhr', function() { 
+        json = table.ajax.json();
+    });
+});
 </script>
 @endpush
 
 @section('js-css')
+<script src="//maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API') }}" id="google_map"></script>
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 <script src="{{ url('/js/profile_modal.js') }}"></script>
+<script src=" {{ url('js/groupmap.js') }} " ></script>
 @endsection
