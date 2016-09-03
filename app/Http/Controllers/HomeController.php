@@ -36,14 +36,14 @@ class HomeController extends Controller
         //checking if user is logged in
         if (Auth::check())
         {
-
-            return view('dashboard');    
-        }
-        else
-        {
-            return redirect('login');
+            //return user to dashboard
+            $page = view('dashboard');    
         }
         
+        //redirect new user to login page
+        $page = redirect('login');
+
+        return $page;
     }
 
     /**
@@ -79,16 +79,16 @@ class HomeController extends Controller
         $state_list = config('constants.state_list');
         $users_info = Helper::UserInformation($id);
 
+        //checking user_info contain some data
         if(!empty($users_info))
         {   
-            return view("registration",['state_list' => $state_list,'users_info' => $users_info]);       
+            $view = view("registration",['state_list' => $state_list,'users_info' => $users_info]);
         }
-        else
-        {   
-            $users_info = NULL;
-            return view("registration",['state_list' => $state_list,'users_info' => $users_info]);
-        }
-          
+        
+        //return view if user_data is empty
+        $view = view("registration",['state_list' => $state_list,'users_info' => NULL]);
+         
+        return $view; 
     }
 
    /**
