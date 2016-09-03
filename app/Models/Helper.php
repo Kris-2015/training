@@ -166,15 +166,10 @@ class Helper extends Model
         //get the information of user by user id
         if($id)
         {
-            $get_user = User::find($id)->join('addresses', 'users.id', '=', 'addresses.user_id')
-                ->join('communications','users.id', '=', 'communications.user_id')
-                ->groupBy('users.id');  
+            $get_user = User::withTrashed()
+                ->leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
+                ->find($id);  
 
-            //get the residence address of user
-            $information_residence = $get_user->where([ ['addresses.type', 'residence'],
-                ['addresses.user_id', '=', $id] ])
-               ->get()->toArray();
-            
             //get the office address of user of user
             $information_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
                 ->select( 
@@ -193,12 +188,12 @@ class Helper extends Model
             $information = array();
 
             //loop to concat the residence and office information of user
-            foreach ($information_residence as $key => $residence)
+            foreach ($get_user as $key => $user)
             {
-                
                 $office = $information_office[$key];
-                $information[$key] = $residence + $office;
+                $information[$key] = $user + $office;
             }
+
         }
         else
         {
