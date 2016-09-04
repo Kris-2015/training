@@ -155,6 +155,6 @@ $(document).ready(function(){
 @section('js-css')
 <script src="//maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API') }}" id="google_map"></script>
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-<script src="{{ url('/js/profile_modal.js') }}"></script>
+<script src="{{ url('/js/profile.js') }}"></script>
 <script src=" {{ url('js/groupmap.js') }} " ></script>
 @endsection
