@@ -6,6 +6,16 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Http\Requests;
 
+/**
+ * Uploading the image
+ * @access public
+ * @package App\Http\Controllers
+ * @subpackage void
+ * @category void
+ * @author mfsi-krishnadev
+ * @link void
+ */
+
 class UploadController extends Controller
 {
     

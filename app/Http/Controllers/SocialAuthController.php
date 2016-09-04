@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Models\User;
 use Socialite;
 use Auth;
+
 /**
  * Manage request dashboard and list information
  * @access public

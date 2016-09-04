@@ -10,6 +10,16 @@ use App\Http\Requests;
 use DB;
 use Auth;
 
+/**
+ * Manages the request for Datatables
+ * @access public
+ * @package App\Http\Controllers
+ * @subpackage void
+ * @category void
+ * @author mfsi-krishnadev
+ * @link void
+ */
+
 class UserController extends Controller
 {
     protected $dates = ['deleted_at'];
