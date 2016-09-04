@@ -1,3 +1,11 @@
+/**
+ * Name: Profile.js  file 
+ * Purpose: Profile of the user ( Personal Profile, Github, Edit and Delete) 
+ * Package: public/js
+ * Created On: 20th July, 2016
+ * Author: msfi-krishnadev
+*/
+
 profile = {
 
     global : function() {

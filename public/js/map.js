@@ -1,94 +1,102 @@
-    /**
-    *Function to initialise the google map
-    *
-    * @param void
-    * @return void
-    */
-    function initMap() {
+/**
+ * Name: Map js  file 
+ * Purpose: Mark user as per residence and official address 
+ * Package: public/js
+ * Created On: 2nd Sept, 2016
+ * Author: msfi-krishnadev
+*/
 
-        //instantiate the Geocoder class
-        var geocoder = new google.maps.Geocoder();
+/**
+ *Function to initialise the google map
+ *
+ * @param void
+ * @return void
+ */
+function initMap() {
 
-        //defining the cooridnate of India
-        var latlng = new google.maps.LatLng(28.543455, 77.217685);
+   //instantiate the Geocoder class
+   var geocoder = new google.maps.Geocoder();
 
-        //map region with zoom level and coorinates
-        var mapOption = {
-        zoom: 10,
-        center: latlng
-        }
+   //defining the cooridnate of India
+   var latlng = new google.maps.LatLng(28.543455, 77.217685);
 
-        //Requesting google map api with map option,then printing the map in div 
-        var map = new google.maps.Map(document.getElementById('map'), mapOption);
+   //map region with zoom level and coorinates
+   var mapOption = {
+      zoom: 10,
+      center: latlng
+   }
 
-        //calling the geocodeAddress function with map for printing the marker
-        geocodeAddress(geocoder, map);
-    }
+   //Requesting google map api with map option,then printing the map in div 
+   var map = new google.maps.Map(document.getElementById('map'), mapOption);
 
-    function geocodeAddress(geocoder, resultsMap) {
+   //calling the geocodeAddress function with map for printing the marker
+   geocodeAddress(geocoder, map);
+}
 
-    // get the employee id 
-    var id = $('#empId').val();
+function geocodeAddress(geocoder, resultsMap) {
 
-        $.ajax({
-        url: 'map',
-        data: {
-           user: id,
-        },
-        success: function(response) {
-           var res = $('#residence').val();
-           var off = $('#office').val();
-           var user_name = $('#usersName').val();
-           var i;
+   // get the employee id 
+   var id = $('#empId').val();
 
-           //type of address
-           var type = ["Residence", "Office"];
-           var address = [res, off];
+   $.ajax({
+      url: 'map',
+      data: {
+         user: id,
+      },
+      success: function(response) {
+         var res = $('#residence').val();
+         var off = $('#office').val();
+         var user_name = $('#usersName').val();
+         var i;
 
-           var contentList = [],
-              currentMarkerRef = 0;
+         //type of address
+         var type = ["Residence", "Office"];
+         var address = [res, off];
 
-           for (i = 0; i < address.length; i++) {
-              contentList.push(
-                 '<div id="content">' +
-                 '<div id="siteNotice"></div>' +
-                 '<h4 id="firstHeading" class="firstHeading">' + user_name + '</h4>' +
-                 '<div class="bodyContent">' +
-                 '<p> <strong>EID: </strong>' + id + '<br>' +
-                 '<strong>' + type[i] + ': </strong>' + address[i] + '</p>' +
-                 '</div>' +
-                 '</div>'
-              );
-           }
+         var contentList = [],
+            currentMarkerRef = 0;
 
-           for (i = 0; i < address.length; i++) {
+         for (i = 0; i < address.length; i++) {
+            contentList.push(
+               '<div id="content">' +
+               '<div id="siteNotice"></div>' +
+               '<h4 id="firstHeading" class="firstHeading">' + user_name + '</h4>' +
+               '<div class="bodyContent">' +
+               '<p> <strong>EID: </strong>' + id + '<br>' +
+               '<strong>' + type[i] + ': </strong>' + address[i] + '</p>' +
+               '</div>' +
+               '</div>'
+            );
+         }
 
-              geocoder.geocode({
-                 'address': address[i]
-              }, function(results, status) {
-                 if (status === 'OK') {
-                    resultsMap.setCenter(results[0].geometry.location);
+         for (i = 0; i < address.length; i++) {
 
-                    var infowindow = new google.maps.InfoWindow({
-                       content: contentList[currentMarkerRef]
-                    });
+            geocoder.geocode({
+               'address': address[i]
+            }, function(results, status) {
+               if (status === 'OK') {
+                  resultsMap.setCenter(results[0].geometry.location);
 
-                    var marker = new google.maps.Marker({
-                       map: resultsMap,
-                       position: results[0].geometry.location,
-                       title: user_name
-                    });
+                  var infowindow = new google.maps.InfoWindow({
+                     content: contentList[currentMarkerRef]
+                  });
 
-                    marker.addListener('click', function() {
-                       infowindow.open(map, marker);
-                    });
+                  var marker = new google.maps.Marker({
+                     map: resultsMap,
+                     position: results[0].geometry.location,
+                     title: user_name
+                  });
 
-                    currentMarkerRef++;
-                 } else {
-                    console.log('Geocode was not successful for the following reason: ' + status);
-                 }
-              });
-           }
-        }
-    });
-  }
+                  marker.addListener('click', function() {
+                     infowindow.open(map, marker);
+                  });
+
+                  currentMarkerRef++;
+               } else {
+                  console.log('Geocode was not successful for the following reason: ' + status);
+               }
+            });
+         }
+      }
+   });
+}

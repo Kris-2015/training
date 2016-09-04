@@ -1,3 +1,11 @@
+/**
+ * Name: Map.js  file 
+ * Purpose: Admin panel of user  
+ * Package: public/js
+ * Created On: 28th July, 2016
+ * Author: msfi-krishnadev
+*/
+
 $(document).ready(function() {
    display();
 
@@ -17,11 +25,13 @@ $(document).ready(function() {
     */
    $(document).on('change', '.privilege input[type="checkbox"]', function() {
 
+      // Get the new data given by admin
       var set_role = $('.role').val();
       var set_resource = $('.resource').val();
       var set_privilege = $(this).val(); 
       var action;
 
+      //if the checkbox is checked, then set action variable to add otherwise delete
       if ($(this)[0].checked) {
 
          action = 'add';
@@ -32,6 +42,7 @@ $(document).ready(function() {
 
       }
       
+      // Calling set function to set new role, resource and privileges of user
       setrrp(set_role, set_resource, set_privilege, action);
 
    });
@@ -47,30 +58,28 @@ function display() {
    $.ajax({
       url: 'panel/getrrp',
       type: 'POST',
-      headers: {
-         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-      },
       success: function(data) {
 
-         var role = " ";
-         var resource = " ";
-         var privilege = " ";
+         var role,resource, privilege = " ", key;
 
-         for (var key in data.role) {
+         // Iterating to display dropdown menu of role of user
+         for (key in data.role) {
             if (data.role.hasOwnProperty(key)) {
                role += '<option id="' + data.role[key]['role_name'] + '" value="' + 
                data.role[key]['role_id'] + '">' + data.role[key]['role_name'] + '</option>';
             }
          }
 
-         for (var key in data.resource) {
+         // Iterating to display dropdown menu of resource of user
+         for (key in data.resource) {
             if (data.resource.hasOwnProperty(key)) {
                resource += '<option id="' + data.resource[key]['resource_name'] + '" value="' 
                + data.resource[key]['resource_id'] + '">' + data.resource[key]['resource_name'] + '</option>';
             }
          }
 
-         for (var key in data.permission) {
+         // Iterating to create the checkbox of permission of the resource
+         for (key in data.permission) {
             if (data.permission.hasOwnProperty(key)) {
                privilege += '<label class="checkbox-inline"><input type="checkbox" id="' + 
                data.permission[key]['name'] + '" value="' + data.permission[key]['permission_id'] + '">' 
@@ -78,6 +87,7 @@ function display() {
             }
          }
 
+         //Printing the data to the html based on classes
          $(".role").html(role);
          $(".resource").html(resource);
          $(".privilege").html(privilege);
@@ -98,9 +108,6 @@ function sendrrp(get_role, get_resource) {
       data: {
          role: get_role,
          resource: get_resource,
-      },
-      headers: {
-         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
       },
       success: function(response) {
  
@@ -139,9 +146,6 @@ function setrrp(get_role, get_resource, get_privilege, action) {
          resource: get_resource,
          permission: get_privilege,
          action: action,
-      },
-      headers: {
-         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
       },
       success: function(response) {
          display();

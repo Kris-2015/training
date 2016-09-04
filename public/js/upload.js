@@ -1,3 +1,11 @@
+/**
+ * Name: Map.js  file 
+ * Purpose: Uploadin picture by ajax 
+ * Package: public/js
+ * Created On: 24th August, 2016
+ * Author: msfi-krishnadev
+*/
+
 //dropzone id
 Dropzone.options.upload = { 
     url: 'image',
