@@ -27,9 +27,9 @@
   {{ $office[0]['office_city'] }}, {{ $office[0]['office_state']}}">
 
 <input type="hidden" id="usersName" value="{{ $residence[0]['first_name'] }}
-    {{ $residence[0]['last_name'] }} }}">
+    {{ $residence[0]['last_name'] }}">
 
-<input type="hidden" id="empId" value="{{ $resdence[0]['userId'] }}">
+<input type="hidden" id="empId" value="{{ $residence[0]['userId'] }}">
 
 <div id="map"></div>
 <script type="text/javascript">
@@ -45,8 +45,8 @@
     }
 
     function geocodeAddress(geocoder, resultsMap) {
-       var id = $('#users').val();
-
+       var id = $('#empId').val();
+       var user_name = $('#usersName').val();
        $.ajax({
         url:'map?user='+id,
         data:{
@@ -55,8 +55,7 @@
         success: function(response){
             var res = $('#residence').val();
             var off = $("#office").val();
-            console.log(res);
-            console.log(off);
+
             var contentString = '<div id="content">'+
                 '<div id="siteNotice">'+
                 '</div>'+
@@ -70,7 +69,7 @@
                         var marker = new google.maps.Marker({
                             map: resultsMap,
                             position: results[0].geometry.location,
-                            title: "hello dear"
+                            title: user_name
                         });
                     }
                     else{
