@@ -33,15 +33,15 @@ class HomeController extends Controller
     */
     public function dashboard(Request $request)
     {
+        //redirect new user to login page
+        $page = redirect('login');
+        
         //checking if user is logged in
         if (Auth::check())
         {
             //return user to dashboard
             $page = view('dashboard');    
         }
-        
-        //redirect new user to login page
-        $page = redirect('login');
 
         return $page;
     }
