@@ -129,7 +129,7 @@ var json;
 
 $(document).ready(function(){
 
-    var table =$('#users-table').DataTable({
+    var table = $('#users-table').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu:[2,5,10],
