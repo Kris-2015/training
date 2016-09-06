@@ -116,7 +116,7 @@
                 <h4 class="modal-title"> User Location </h4>
             </div>
             <div class="modal-body map-wrapper">
-                <!-- <input id="pac-input" class="controls" type="text" placeholder="Search"> -->
+                <input id="pac-input" class="controls search-box" type="text" placeholder="Search">
                 <div id="map_canvas"></div>
             </div>
             <div class="modal-footer">
@@ -129,7 +129,7 @@
 
 @section('js-css')
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-<script src="//maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API') }}" id="google_map"></script>
+<script src="//maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API') }}&libraries=places" id="google_map"></script>
 <script src="{{ url('/js/datatables.js') }}"></script>
 <script src=" {{ url('js/groupmap.js') }} " ></script>
 <script src="{{ url('/js/profile.js') }}"></script>
