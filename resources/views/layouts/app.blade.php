@@ -87,7 +87,7 @@
             }
         });
     </script>
+    
     @yield('js-css')
-    @stack('scripts')
 </body>
 </html>

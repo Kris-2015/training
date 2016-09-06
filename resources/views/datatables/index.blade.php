@@ -2,15 +2,18 @@
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
-<link rel="stylesheet" type="text/css" href="{{ url('css/map.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url('css/map.css') }}">
 @endsection
 
 @section('map')
-<li><a id="user_location" href="#"> Map </a></li>
+    <li><a id="user_location" href="#"> Map </a></li>
 @endsection
 
 @section('content')
     {{ csrf_field() }}
+
+    <input type="hidden" id="url" value="{!! url('datatables/data') !!}">
+    
     <table class="table table-bordered" id="users-table">
        <thead>
            <tr>
@@ -113,6 +116,7 @@
                 <h4 class="modal-title"> User Location </h4>
             </div>
             <div class="modal-body map-wrapper">
+                <!-- <input id="pac-input" class="controls" type="text" placeholder="Search"> -->
                 <div id="map_canvas"></div>
             </div>
             <div class="modal-footer">
@@ -123,38 +127,10 @@
 </div>
 @endsection
 
-@push('scripts')
-<script>
-var json;
-
-$(document).ready(function(){
-
-    var table = $('#users-table').DataTable({
-        processing: true,
-        serverSide: true,
-        lengthMenu:[2,5,10],
-        ajax: '{!! url("datatables/data") !!}',
-        columns: [
-            { data: 'first_name', name: 'first_name' },
-            { data: 'email', name: 'email' },
-            { data: 'dob', name:'dob'},
-            { data: 'created_at', name:'created_at'},
-            { data: 'updated_at', name:'updated_at'},
-            { data: 'action', name: 'action', orderable: false, searchable: false},
-            { data: 'status', name: 'status', orderable:false, searchable: false}
-        ]
-    });
-
-    var user = table.on( 'xhr', function() { 
-        json = table.ajax.json();
-    });
-});
-</script>
-@endpush
-
 @section('js-css')
-<script src="//maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API') }}" id="google_map"></script>
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-<script src="{{ url('/js/profile.js') }}"></script>
+<script src="//maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API') }}" id="google_map"></script>
+<script src="{{ url('/js/datatables.js') }}"></script>
 <script src=" {{ url('js/groupmap.js') }} " ></script>
+<script src="{{ url('/js/profile.js') }}"></script>
 @endsection
