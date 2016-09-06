@@ -126,14 +126,14 @@ groupmap = {
                     if (status === 'OK') {
                        resultsMap.setCenter(results[0].geometry.location);
 
-                       // Instantiate the Marker class for setting up the marker
+                       // Put the marker on the respective location
                        marker = new google.maps.Marker({
                           map: resultsMap,
                           position: results[0].geometry.location,
                           title: map_data.User_Name[currentMarkerRef]
                        });
 
-                       // Instantiate the InfoWindow for user details 
+                       // Put infowindow on the respective marker
                        var infowindow = new google.maps.InfoWindow({
                           content: contentList[currentMarkerRef]
                        }), marker, k;
