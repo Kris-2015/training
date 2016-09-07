@@ -9,26 +9,36 @@
 
 // Deaclaring global variable
 var address = [], id = [], user_name = [], map_data = [] ;
-var map, geocoder;
+var map, geocoder, latlng;
 
-groupmap = {
+var groupmap = {
 
-    /**
-     *Function to call modal with map
-     *
-     * @param void
-     * return void
-     */
-    modal : function() {
+    global : function() {
+        $(document).on("change", "#pac-input", function() {
 
-        //Jquery event for modal call and initialise the google map
-        // $('#user_location').on('click', function() {
+            var search_data = $(this).val();
+            
+            // Check if there is any search query.              
+            if ( ! search_data) {
+                
+                // return empty if there search data is empty
+                return;
+            } else {
+                // Perform search operation
+                groupmap.initAutocomplete();
+            }
+        });
 
-        // });
-
-        $('#user_location').off('click').on('click', function() {
-
+        $(document).on('click', '#user_location', function() {
             $('#user_map').modal();
+
+            try {
+                $('#user_map .modal-body').css({
+                  'height' : $(window).height() - 180
+                });
+            } catch (err) {
+
+            }
 
             groupmap.initMap();
         });
@@ -42,40 +52,32 @@ groupmap = {
      */
     initMap : function() {
 
-        //instantiate the Geocoder class
-        geocoder = new google.maps.Geocoder();
+        if (typeof geocoder == 'undefined') {
+            //instantiate the Geocoder class
+            geocoder = new google.maps.Geocoder();    
+        }
+        
 
         //defining the co-ordinate of India
-        var latlng = new google.maps.LatLng(28.543455, 77.217685);
-
+        if (typeof latlng == 'undefined') {
+            latlng = new google.maps.LatLng(28.49957, 77.11718);
+        }
+        
         //map region with zoom level and coorinates
         var mapOption = {
-           zoom: 6,
-           center: latlng
+            zoom: 6,
+            center: latlng
         }
 
-        $("#pac-input").on("change", function() {
-
-            var search_data = $(this).val();
-            
-            // Check if there is any search query.              
-            if (!search_data) {
-                
-                // return empty if there search data is empty
-                return;
-            } else {
-                // Perform search operation
-                groupmap.initAutocomplete();
-            }
-        });
-
         //Requesting google map api with map option,then printing the map in div 
-        map = new google.maps.Map(document.getElementById('map_canvas'), mapOption);
-        map.setTilt(45);
+        if (typeof map == 'undefined') {
+            map = new google.maps.Map(document.getElementById('map_canvas'), mapOption);
+        }
+
+        map.setTilt(60);
 
         //calling the geocodeAddress function with map for printing the marker
-        this.geocodeAddress(geocoder, map);
-
+        groupmap.geocodeAddress(geocoder, map);
     },
 
     /**
@@ -90,84 +92,92 @@ groupmap = {
         var user_data = json_data.data;
         
         $.ajax({
-           url: 'datatables',
-           success: function(response) {
+            url: 'datatables',
+            success: function(response) {
 
-              //Local Variables
-              var i;
-              var street, city, state;
-              var emp_name;
-              var marker;
+                //Local Variables
+                var i;
+                var street, city, state;
+                var emp_name;
+                var marker;
 
-              //type of address
-              var type = "Office";
+                // Remove the previously added data
+                address = []; 
+                id = []; 
+                user_name = []; 
+                //map_data = []
 
-              // taking an empty array and index for users details
-              var contentList = [], currentMarkerRef = 0;
+                //type of address
+                var type = "Office";
 
-              // Iterating user's address, id and name
-              for (var i = 0; i < user_data.length; i++) {
-                 street = user_data[i].street;
-                 city = user_data[i].city;
-                 state = user_data[i].state;
+                // taking an empty array and index for users details
+                var contentList = [], currentMarkerRef = 0;
 
-                address.push( street + ',' + city + ',' + state + ',India' );
-                id.push( json_data.data[i].id );
-                user_name.push( json_data.data[i].first_name + ' ' + json_data.data[i].last_name );
-              }
+                // Iterating user's address, id and name
+                for (var i = 0; i < user_data.length; i++) {
+                    street = user_data[i].street;
+                    city = user_data[i].city;
+                    state = user_data[i].state;
 
-              map_data = { "User_Id" : id, "Address" : address, "User_Name" : user_name };
+                    address.push( street + ',' + city + ',' + state + ',India' );
+                    id.push( json_data.data[i].id );
+                    user_name.push( json_data.data[i].first_name + ' ' + json_data.data[i].last_name );
+                }
+
+                map_data = { "User_Id" : id, "Address" : address, "User_Name" : user_name };
               
-              // Iterating to add user details in array
-              for (var j = 0; j < address.length; j++) {
-                 contentList.push(
-                    '<div id="content">' +
-                    '<div id="siteNotice"></div>' +
-                    '<h4 id="firstHeading" class="firstHeading">' + user_name[j] + '</h4>' +
-                    '<div class="bodyContent">' +
-                    '<p> <strong>EID: </strong>' + id[j] + '<br>' +
-                    '<strong>' + type + ': </strong>' + address[j] + '</p>' +
-                    '</div>' +
-                    '</div>'
-                 );
-              }
+                // Iterating to add user details in array
+                for (var j = 0; j < address.length; j++) {
+                    contentList.push(
+                        '<div id="content">' +
+                        '<div id="siteNotice"></div>' +
+                        '<h4 id="firstHeading" class="firstHeading">' + user_name[j] + '</h4>' +
+                        '<div class="bodyContent">' +
+                        '<p> <strong>EID: </strong>' + id[j] + '<br>' +
+                        '<strong>' + type + ': </strong>' + address[j] + '</p>' +
+                        '</div>' +
+                        '</div>'
+                    );
+                }
+                
+                // Instantiate the infowindow object
+                var infowindow = new google.maps.InfoWindow(), marker, k;
 
-              // Iteration to mark user based on address
-              for (var k = 0; k < map_data.Address.length; k++) {
+                // Iteration to mark user based on address
+                for (var k = 0; k < map_data.Address.length; k++) {
 
-                 geocoder.geocode({
-                    'address': map_data.Address[k]
-                 }, function(results, status) {
+                    geocoder.geocode({
+                        'address': map_data.Address[k]
+                    }, function(results, status) {
 
-                    // checking whether status code is OK or not 
-                    if (status === 'OK') {
-                       resultsMap.setCenter(results[0].geometry.location);
+                        // checking whether status code is OK or not 
+                        if (status === 'OK') {
+                            resultsMap.setCenter(results[0].geometry.location);
+                            
+                            // Put the marker on the respective location
+                            var marker = new google.maps.Marker({
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                                title: map_data.User_Name[currentMarkerRef]
+                            });
 
-                       // Put the marker on the respective location
-                       marker = new google.maps.Marker({
-                          map: resultsMap,
-                          position: results[0].geometry.location,
-                          title: map_data.User_Name[currentMarkerRef]
-                       });
+                            // Bind event for on clicking the marker to show user details
+                            google.maps.event.addListener( marker, 'click',( function(marker, k, currentMarkerRef, contentList) {
+                                return function() {
+                                    console.log(contentList[currentMarkerRef]);
+                                    infowindow.setContent(contentList[currentMarkerRef]);
+                                    infowindow.open(map, marker);
+                                }
+                            }) (marker, k, currentMarkerRef, contentList));
 
-                       // Put infowindow on the respective marker
-                       var infowindow = new google.maps.InfoWindow({
-                          content: contentList[currentMarkerRef]
-                       }), marker, k;
-
-                       // Bind event for on clicking the marker to show user details
-                       marker.addListener('click', function() {
-                          infowindow.open(map, marker);
-                       });
-
-                       // Increment the index of next user details
-                       currentMarkerRef++;
-                    } else {
-                       console.log('Geocode was not successful for the following reason: ' + status);
-                    }
-                 });
-              }
-           }
+                            // Increment the index of next user details
+                            currentMarkerRef++;
+                        } else {
+                           console.log('Geocode was not successful for the following reason: ' + status);
+                        }
+                    });
+                }
+            }
        });
     },
 
@@ -241,4 +251,5 @@ groupmap = {
     }
 };
 
-groupmap.modal();
+// groupmap.modal();
+groupmap.global();

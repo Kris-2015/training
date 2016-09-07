@@ -30,6 +30,6 @@ $(document).ready(function(){
 
     var user = table.on( 'xhr', function() { 
         json_data = table.ajax.json();
-        groupmap.modal();
+        // groupmap.modal();
     });
 });
