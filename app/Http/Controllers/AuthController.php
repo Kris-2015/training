@@ -64,7 +64,6 @@ class AuthController extends Controller
         
 
         $data['uploaded_image'] = Helper::imageUpload($request);
-        dd( $data['uploaded_image'] );
         $user_id = User::insertUser($data);
         $user_email = $data['email'];
         $user_name = $data['firstname'];
