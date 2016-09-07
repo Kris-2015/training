@@ -25,7 +25,7 @@ class Address extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    /*
+    /**
      * store the information in address table
      * @param Request
      * 
