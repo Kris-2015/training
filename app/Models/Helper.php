@@ -30,40 +30,39 @@ class Helper extends Model
     public static function imageUpload($request)
     {
 
-            $file_name = '';   
+        $file_name = '';   
 
-            // Condition to determine if file contains image or not 
-            if ($request->hasFile('image'))
+        // Condition to determine if file contains image or not 
+        if ($request->hasFile('image'))
+        {
+            //fetch the extension of image
+            $image_extension = $request->file('image')->getClientOriginalExtension();
+
+            //encrypted name for image
+            $image_new_name = md5(microtime(true));
+            $image = strtolower($image_new_name . '.' .$image_extension);
+
+            //transferring the image from temporary folder to permanent folder
+            $move_file = $request->file('image')->move( public_path( 'upload') , $image );
+            $file_name = strtolower($image_new_name . '.' .$image_extension);
+
+            try
             {
-                //fetch the extension of image
-                $image_extension = $request->file('image')->getClientOriginalExtension();
-
-                //encrypted name for image
-                $image_new_name = md5(microtime(true));
-                $image = strtolower($image_new_name . '.' .$image_extension);
-
-                //transferring the image from temporary folder to permanent folder
-                $move_file = $request->file('image')->move( public_path( 'upload') , $image );
-                $file_name = strtolower($image_new_name . '.' .$image_extension);
-
-                try
+                // if image upload is not successful
+                if( !$move_file )
                 {
-                    // if image upload is not successful
-                    if( !$move_file )
-                    {
-                        throw new Exception('Failed to upload image.');
-                    }    
-                }
-                catch ( \Exception $e)
-                {
-                    //Log error
-                    helper_function($e);
-                }
-                
+                    throw new Exception('Failed to upload image.');
+                }    
             }
-            
-            //returning the name of image 
-            return $file_name;                
+            catch ( \Exception $e)
+            {
+                //Log error
+                errorReporting($e);
+            }   
+        }
+        
+        //returning the name of image 
+        return $file_name;                
     }
 
     /**
