@@ -7,7 +7,6 @@ use Datatables;
 use App\Models\User;
 use App\Models\RoleResourcePermission;
 use App\Http\Requests;
-use DB;
 use Auth;
 
 /**

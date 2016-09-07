@@ -10,7 +10,6 @@ use App\Models\Resource;
 use App\Models\Permission;
 use App\Models\RoleResourcePermission;
 use Auth;
-use DB;
 
 /**
  * Manage the role, resource and permission
@@ -39,40 +38,69 @@ class AccessController extends Controller
    * Function to get role, resource and permission
    *
    * @param handle incoming request
-   * @return json
+   * @return json / integer
    */
    public function getAuthorisationDetails(Request $request)
    {
+        try
+        {
+            //empty array to store role, resource and permisson in an array            
+            $data = [];
+            $data['role'] = Role::all();   
+            $data['resource'] = Resource::all();
+            $data['permission'] = Permission::all();            
+        
+            // if there is no data, throw exception
+            if ( empty($data) )
+            {
+                throw new \Exception('Error occured while getting AuthorisationDetails');
+            }
 
-        //empty array to store role, resource and permisson in an array            
-        $data = [];
-        $data['role'] = Role::all();   
-        $data['resource'] = Resource::all();
-        $data['permission'] = Permission::all();
+            //returning the role, resource and permission in json
+            return response()->json($data);
+        }
+        catch (\Exception $e)
+        {
+            errorReportiing($e);
 
-        //returning the role, resource and permission in json
-        return response()->json($data);
+            return 0;
+        }
    }
 
   /**
    * Function to get permission based on roles
    *
    * @param handle incoming request
-   * @return json
+   * @return json / integer
    */
    public function getPermission(Request $request)
    {
-        //fetching the role and resource id from request variable
-        $flag = $request->all();
-        $role = $flag['role'];
-        $resource = $flag['resource'];
-      
-        //getting the permission of resources based on role
-        $resource_permission = RoleResourcePermission::where('role_id',$role)
-                    ->where('resource_id',$resource)->get();
+        try
+        {
+            //fetching the role and resource id from request variable
+            $flag = $request->all();
+            $role = $flag['role'];
+            $resource = $flag['resource'];
+          
+            //getting the permission of resources based on role
+            $resource_permission = RoleResourcePermission::where('role_id',$role)
+                ->where('resource_id',$resource)->get();
 
-        //returning the permission of resource in json 
-        return response()->json($resource_permission);    
+            // if there is no data, throw exception
+            if (empty($resource_permission))
+            {
+                throw new \Exception('Error occured while getting Permission of resource');
+            }
+
+            //returning the permission of resource in json 
+            return response()->json($resource_permission);            
+        }
+        catch (\Exception $e)
+        {
+            errorReportiing($e);
+
+            return 0;
+        }    
               
    }
 
@@ -80,21 +108,38 @@ class AccessController extends Controller
     * Function to set the permission of user
     *
     * @param handle incoming request
-    * @return void
+    * @return integer
     */
    public function setPermission(Request $request)
    {
-        //fetching the role id, resource id and permission id from request variable
-        $get = $request->all();
-        $role = $get['role'];
-        $resource = $get['resource'];
-        $permission = $get['permission'];
+        try
+        {
+            //fetching the role id, resource id and permission id from request variable
+            $get = $request->all();
+            $role = $get['role'];
+            $resource = $get['resource'];
+            $permission = $get['permission'];
 
-        // action variable determines the permission of resources and role of user
-        // example: add and delete
-        $action = $get['action'];
-        
-        //setting the permision of resource based on role  
-        RoleResourcePermission::addPermission($role, $resource, $permission, $action); 
+            // action variable determines the permission of resources and role of user
+            // example: add and delete
+            $action = $get['action'];
+
+            //setting the permision of resource based on role  
+            $status = RoleResourcePermission::addPermission($role, $resource, $permission, $action);
+
+            if ($status != 1)
+            {
+                throw new \Exception('Error occured while setting permission');
+            } 
+
+            return 1;
+
+        }
+        catch (\Exception $e)
+        {
+            errorReportiing($e);
+
+            return 0;
+        }        
    }
 }
