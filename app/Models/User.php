@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
-/*use Log;*/
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Authenticatable;
@@ -67,33 +66,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $user->github_id = isset( $data['githubid'] ) ? $data['githubid'] : '';
             $user->password = $password; 
             $user->image = isset( $data['uploaded_image'] ) ? $data['uploaded_image'] : '';
-            $success = $user->save();
-
-            $user->first_name = isset($data['firstname']) ? $data['firstname'] : '' ;
-
-            $user->middle_name = isset($data['middlename']) ? $data['middlename'] : '' ;
-
-            $user->last_name = isset($data['lastname']) ? $data['lastname'] : '' ;
-
-            $user->prefix = isset($data['prefix']) ? $data['prefix'] : '' ;
-
-            $user->gender = isset($data['gender']) ? $data['gender'] : '' ;
-
-            $user->dob = isset($data['dob']) ? $data['dob'] : '' ;
-
-            $user->marital_status = isset($data['marital_status']) ? $data['marital_status'] : '' ;
-
-            $user->employment = isset($data['employment']) ? $data['employment'] : '' ;
-
-            $user->employer = isset($data['employer']) ? $data['employer'] : '' ;
-
-            $user->email = isset($data['email']) ? $data['email'] : '' ;
-
-            $user->github_id = isset($data['githubid']) ? $data['githubid'] : '' ;
-
-            $user->password = $password; 
-
-            $user->image = isset($data['uploaded_image']) ? $data['uploaded_image'] : '' ;
             $success = $user->save(); 
 
             $data['user_id'] = $user->id;

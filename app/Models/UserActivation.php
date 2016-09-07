@@ -3,8 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
-use Log;
+use Exception;
 
 
 /**
@@ -28,7 +27,6 @@ class UserActivation extends Model
     {
         try
         {
-            DB::beginTransaction();
             $insert_activation_code = new UserActivation();
            
             $insert_activation_code->user_id = $data['user_id'];
@@ -38,7 +36,6 @@ class UserActivation extends Model
 
             if($sucess_insertcode == 1)
             {
-               DB::commit();
                return 1;
             }
 
@@ -48,7 +45,6 @@ class UserActivation extends Model
         {
             //Log error about the failing of activation key insertion
             errorReporting($e);
-            DB::rollback();
         }
     }
     
