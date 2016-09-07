@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Mail;
 use Log;
 use Exception;
@@ -28,37 +29,41 @@ class Helper extends Model
     */
     public static function imageUpload($request)
     {
-        try
-        {
-            //fetch the extension of image
-            $image_extension = $request->file('image')->getClientOriginalExtension();
 
-            //encrypted name for image
-            $image_new_name = md5(microtime(true));
-            $image = strtolower($image_new_name . '.' .$image_extension);
+            $file_name = '';   
 
-            //transferring the image from temporary folder to permanent folder
-            $request->file('image')->move( public_path( '/upload') , $image );
-            $name = strtolower($image_new_name . '.' .$image_extension);
-
-            if(!empty($name))
+            // Condition to determine if file contains image or not 
+            if ($request->hasFile('image'))
             {
-                //returning the name of image 
-                return $name;    
+                //fetch the extension of image
+                $image_extension = $request->file('image')->getClientOriginalExtension();
+
+                //encrypted name for image
+                $image_new_name = md5(microtime(true));
+                $image = strtolower($image_new_name . '.' .$image_extension);
+
+                //transferring the image from temporary folder to permanent folder
+                $move_file = $request->file('image')->move( public_path( 'upload') , $image );
+                $file_name = strtolower($image_new_name . '.' .$image_extension);
+
+                try
+                {
+                    // if image upload is not successful
+                    if( !$move_file )
+                    {
+                        throw new Exception('Failed to upload image.');
+                    }    
+                }
+                catch ( \Exception $e)
+                {
+                    //Log error
+                    helper_function($e);
+                }
+                
             }
-            else
-            {
-                throw new Exception("Failed to upload image");
             
-            }       
-        }
-        catch(Exception $e)
-        {
-            //Log error about failed upload operation
-            Log::error($e);
-            return 0;
-        }
-         
+            //returning the name of image 
+            return $file_name;                
     }
 
     /**
@@ -69,7 +74,6 @@ class Helper extends Model
     */
     public static function email($data, $resource)
     {
-
         $key = $data['activation'];
         $email = $data['email'];
         $name = $data['username'];

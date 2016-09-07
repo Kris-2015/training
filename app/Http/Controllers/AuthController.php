@@ -61,14 +61,10 @@ class AuthController extends Controller
     public function doRegister(RegistrationRequest $request)
     {
         $data = $request->all();
-
-        //perform image upload operation, if image data is present
-        if(!empty($data['image']))
-        {
-            $data[ 'uploaded_image' ] = Helper::imageUpload($request);    
-        }
         
-        $data['uploaded_image'] = " ";
+
+        $data['uploaded_image'] = Helper::imageUpload($request);
+        dd( $data['uploaded_image'] );
         $user_id = User::insertUser($data);
         $user_email = $data['email'];
         $user_name = $data['firstname'];
