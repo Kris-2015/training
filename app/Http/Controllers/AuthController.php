@@ -47,9 +47,9 @@ class AuthController extends Controller
 
         //storing the list of states from config/state_list
         $state_list = config('constants.state_list');
-        $users_info = NULL;
         
-        return view('registration', ['state_list' => $state_list,'users_info' => $users_info]);
+        return view('registration', ['state_list' => $state_list, 'route' => 'do-register',
+            'users_info' => NULL]);
     }
 
    /**
@@ -61,8 +61,6 @@ class AuthController extends Controller
     public function doRegister(RegistrationRequest $request)
     {
         $data = $request->all();
-        
-
         $data['uploaded_image'] = Helper::imageUpload($request);
         $user_id = User::insertUser($data);
         $user_email = $data['email'];
@@ -89,6 +87,29 @@ class AuthController extends Controller
         
         //redirect user to registration page with error message
         return redirect('/register')->with('problem', 'Error occured....Try again later.');
+    }
+
+    /**
+     * Function to Update Information of user
+     *
+     * @param Request
+     * @return redirect
+    */
+    public function doUpdate(Request $request)
+    {
+        // Get the required update data
+        $update_data = $request->all();
+
+        // Updating the information
+        $update_status = User::updateUser($update_data);
+        
+        // Checking if user information has been successfully updated
+        if ($update_status == 1)
+        {
+            return redirect('dashboard')->with('success', 'Updated the information successfully.');
+        }
+
+        return redirect('dashboard')->with('access', 'Some problem occured...Try again later.');
     }
 
    /**
@@ -297,7 +318,7 @@ class AuthController extends Controller
         catch(Exception $e)
         {
             //logging the error into log file
-            Log::error($e);
+            errorReporting($e);
             return redirect('/login')->with('status','Error occured, try again later');
         }
     }

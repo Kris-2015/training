@@ -12,21 +12,21 @@
     <div class="col-sm-offset-3 col-sm-5">
         <div class="panel panel-default">
             <div class="panel-body">
-                @if(session('access'))
+            <!-- Bootstrap Alert to give message -->
+                @if ( session('access') )
                     <div class="alert alert-danger">
                         {{ session('access') }}
                     </div>
-                @endif
-                @if(session('new'))
-                    <div class="alert alert-danger">
-                        {{ session('new') }}
+                @elseif ( session('success') )
+                    <div class="alert alert-success">
+                        {{ session('success') }}
                     </div>                  
-                @endif
-                @if(session('message'))
+                @elseif ( session('message') )
                     <div class="alert alert-primary">
                         {{ session('message') }}
                     </div>                  
                 @endif
+
                 <ol>
                     @if(Auth::user()->role_id == 1)
                        <li><a class="btn btn-primary col-xs-4" href="{{ url('datatables') }}">User Status</a></li>

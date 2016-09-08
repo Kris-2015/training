@@ -49,7 +49,7 @@ class Authenticate
                 return redirect('dashboard')->with('warning','Unauthorized Access');
             }
         }
-
+        
         if($resource == 'edit')//if user tries to edit info
         {
             if(Auth::user()->id == $request->id || Auth::user()->role_id == '1')
@@ -63,17 +63,17 @@ class Authenticate
         }
 
         if($resource == 'do-update')
-        {
+        {   
             if(Auth::user()->id == $request->id || Auth::user()->role_id == '1')
-            {
+            {   
                $action = 'update';
             }
             else
-            {
+            {   
                return redirect('dashboard')->with('access','Unauthorized Access'); 
             }
         }
-
+        //dd($resource);
         //checking authorization of user
         if(!RoleResourcePermission::checkPermission($resource, $action))
         {

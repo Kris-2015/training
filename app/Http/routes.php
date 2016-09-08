@@ -100,11 +100,16 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::get('register/{id}', 'HomeController@data');
 
+    Route::post('do-update', [
+        'as' => 'do-update', 
+        'uses' => 'AuthController@doUpdate'
+    ]);
+    
     Route::post('delete','HomeController@delete');
 
     Route::get('panel', 'AccessController@showPanel');
 
-    Route::post('panel/getrrp','AccessController@getrrp');
+    Route::post('panel/getAuthorisationDetails','AccessController@getAuthorisationDetails');
 
     Route::post('panel/permission','AccessController@getPermission');
 

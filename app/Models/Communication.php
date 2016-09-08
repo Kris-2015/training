@@ -39,7 +39,7 @@ class Communication extends Model
             }
             else
             {
-                throw new \Exception ( 'Error: error occured while inserting in communication table' );
+                throw new \Exception ( 'Database Error: Error occured while inserting in communication table' );
             }
         }
         catch (\Exception $e) 
@@ -48,5 +48,36 @@ class Communication extends Model
             errorReporting($e);
             return 0;
         } 
+    }
+
+    /**
+     * Function to update the communication medium of user
+     *
+     * @param data
+     * @return boolean
+    */
+    public static function updateCommunication($data)
+    {
+        try
+        {
+            $new_list = isset( $data['communication'] ) ? implode(',', $data['communication']) : '';
+            
+            $update_comm = Communication::where('user_id', $data['id'])
+                ->update(['type' => $new_list]);
+
+            if ($update_comm)
+            {
+                return 1;
+            }
+            else
+            {
+                throw new \Exception ('Database Error: Error occured while updating the communication table.');
+            }            
+        }
+        catch (\Exception $e)
+        {
+            errorReporting($e);
+            return 0;
+        }
     }
 }

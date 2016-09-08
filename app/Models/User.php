@@ -37,15 +37,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany('App\Models\Address');
     }
-    /*
-     * store the information in users table
+    
+    /**
+     * Function to store User information
      * @param Request
      * 
      * @return boolean
     */
-   public static function insertUser($data)
-   {
-    
+    public static function insertUser($data)
+    {
+
         try 
         {
 
@@ -104,16 +105,74 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             return 0;
         } 
         return 1;
-   } 
+    } 
 
-   /**
+    /**
+    * Function to Update the data of user
+    *
+    * @param user data
+    * @return integer
+    */
+    public static function updateUser($data)
+    {
+        try
+        {
+            $update_data = User::find($data['id']);
+            
+            $update_data->first_name = $data['firstname'];
+            $update_data->middle_name = $data['middlename'];
+            $update_data->last_name = $data['lastname'];
+            $update_data->prefix = $data['prefix'];
+            $update_data->gender = $data['gender'];
+            $update_data->dob = $data['dob'];
+            $update_data->marital_status = $data['marital_status'];
+            $update_data->employment = $data['employment'];
+            $update_data->employer = $data['employer'];
+            $update_data->email = $data['email'];
+            $update_data->github_id = $data['githubid'];
+
+            $update_success = $update_data->save();
+
+            if($update_success)
+            {
+                $update_address = Address::updateAddress($data);  
+
+                if($update_address === 1)
+                {
+                    $update_comm = Communication::updateCommunication($data); 
+
+                    if($update_comm === 0)
+                    {
+                        throw new \Exception( 'Database Error: Failed to update communication.' );
+                    }
+                }
+                else
+                {
+                    throw new \Exception( 'Database Error: Failed to update address.' );
+                }
+            }
+            else
+            {
+                throw new \Exception( 'Database Error: Failed to update user information' );
+            } 
+
+            return $update_success;
+        }
+        catch (\Exception $e)
+        {
+            errorReporting($e);
+            return 0;
+        }
+    }
+
+    /**
     * Function to change the user account status
     *
     * @param id
     * @return integer
-   */
-   public static function changeStatus($id)
-   {
+    */
+    public static function changeStatus($id)
+    {
        try
        {
         
@@ -137,16 +196,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             //return 0 as failed to change the status of user account
             return 0;
        }
-   }
+    }
 
-  /**
+    /**
     * Function to perform insertion for Intagram user
     *
     * @param: basic user_info
     * @return: integer
-   */
-   public static function instagaramUser($data)
-   {
+    */
+    public static function instagaramUser($data)
+    {
         try
         {
             $user_id = 0;
@@ -175,16 +234,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             errorReporting($e);
             return 0;
         }
-   }
+    }
 
-   /**
+    /**
     * Function to insert information of facebook user
     *
     * @param array
     * @return integer
-   */
-   public static function facebookUser($fb)
-   {
+    */
+    public static function facebookUser($fb)
+    {
         try
         {
             //perform the insertion of facebook data
@@ -214,5 +273,5 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         {
             errorReporting($e);
         }
-   }
+    }
 }

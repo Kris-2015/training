@@ -75,4 +75,51 @@ class Address extends Model
             return 0;
         } 
    }
+
+    /*
+     * Function to update address table
+     * @param address data
+     * 
+     * @return boolean
+    */
+   public static function updateAddress($data)
+   {
+        try 
+        {
+            $update_residence = Address::where('user_id', $data['id'])
+                ->where('type', '=', 'residence')
+                ->update([
+                        'street' => $data['homestreet'],
+                        'city' => $data['homecity'],
+                        'state' => $data['homestate'],
+                        'zip' => $data['homezip'],
+                        'mobile' => $data['homemobile'],
+                        'landline' => $data['homelandline'],
+                        'fax' => $data['homefax'],
+                        'updated_at' => date( 'Y-m-d H:i:s' ),
+                        'created_at' => date( 'Y-m-d H:i:s' )
+                    ]);
+
+            $update_office = Address::where('user_id', $data['id'])
+                ->where('type', '=', 'office')
+                ->update([
+                        'street' => $data['officestreet'],
+                        'city' => $data['officecity'],
+                        'state' => $data['officestate'],
+                        'zip' => $data['officezip'],
+                        'mobile' => $data['officemobile'],
+                        'landline' => $data['officelandline'],
+                        'fax' => $data['officefax'],
+                        'updated_at' => date( 'Y-m-d H:i:s' ),
+                        'created_at' => date( 'Y-m-d H:i:s' )
+                    ]);
+            return 1;
+        }
+        catch (\Exception $e) 
+        {
+            //logging the error in log file
+            errorReporting($e);
+            return 0;
+        } 
+   }
 }

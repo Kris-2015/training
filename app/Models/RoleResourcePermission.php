@@ -77,7 +77,7 @@ class RoleResourcePermission extends Model
                 ->where('resource_id',$resourceId)
                 ->where('permission_id', $permissionId)
                 ->first();
-
+            
             $adminAccess = $rrp->where('role_id', $roleId)
                 ->where('resource_id',$resourceId)->where('permission_id', $adminPermission)
                 ->first();
@@ -135,6 +135,8 @@ class RoleResourcePermission extends Model
             {
                 throw new Exception("Database Error: Error occured while setting permission ");
             }
+
+            return $action_status;
         }
         catch (\Exception $e)
         {

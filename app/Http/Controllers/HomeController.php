@@ -69,28 +69,34 @@ class HomeController extends Controller
     */
     public function data($id)
     {
-
-        if(Auth::user()->role_id == '2' &&  Auth::user()->id != $id) 
+        try
         {
-            return redirect('dashboard')->with('access','Not authorised');
-        }    
+            if(Auth::user()->role_id == '2' &&  Auth::user()->id != $id) 
+            {
+                return redirect('dashboard')->with('access','Not authorised');
+            }    
 
-        //storing the state list in array
-        $state_list = config('constants.state_list');
-        $users_info = Helper::UserInformation($id);
+            //storing the state list in array
+            $state_list = config('constants.state_list');
+            $users_info = Helper::UserInformation($id);
 
+            // Condition is applicaticable when user wish to update profile
+            if(!empty($users_info))
+            {   
+            
+               return view('registration', ['state_list' => $state_list, 'route' => 'do-update',
+                   'users_info' => $users_info]); 
+            }
 
-        if(!empty($users_info))
-        {   
-            return view('registration', ['state_list' => $state_list,'users_info' => $users_info]);       
+            throw new Exception("Database Error: Error processing request while database operation");            
         }
-        
-        //making null if new user want to visit registration page
-        $users_info = NULL;
-        
-        return view('registration', ['state_list' => $state_list,'users_info' => $users_info]);  
-    }
+        catch ( \Exception $e)
+        {
+            errorReporting($e);
+        }
 
+            
+    }
    /**
      * Function to delete the user
      *
@@ -105,13 +111,19 @@ class HomeController extends Controller
             $id = $request['id'];
 
             //performing delete operation
-            User::destroy($id);
+           $delete_status = User::destroy($id);
 
-            return 1;
+           if ($delete_status == 1)
+           {
+                return 1;
+           }
+
+           throw new Exception("Database Error: Error processing request while delete");
+            
         }
         catch(Exception $e)
         {
-            
+            errorReporting($e);
             return 0;
         }
     }

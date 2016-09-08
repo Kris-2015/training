@@ -181,7 +181,9 @@ class Helper extends Model
             //get the residence address of user
             $information_residence = $get_user->where([ ['addresses.type', 'residence'],
                 ['addresses.user_id', '=', $id] ])
-               ->get()->toArray();
+               ->select('users.id as userId', 'first_name', 'middle_name', 'last_name', 'prefix', 'gender', 'dob', 'marital_status', 'employer', 'employment', 'email', 'role_id', 'github_id', 'image', 'street', 'city', 'state', 'zip', 'mobile', 'landline', 'fax', 'communications.type')
+               ->get()
+               ->toArray();
             
             //get the office address of user of user
             $information_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
@@ -243,7 +245,7 @@ class Helper extends Model
                 $information[$key] = $residence + $office;
             }
         }
-        
+        //dd($information);
         //return the complete information of user
         return $information;
     }
