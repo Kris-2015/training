@@ -3,7 +3,7 @@
 @section('title', 'dashboard')
 
 @section('css')
-  <link rel="stylesheet" type="text/css" href="{{ url('/css/dropzone.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset_timed('css/dropzone.css') }}">
 @endsection
 
 @section('content')

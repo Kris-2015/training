@@ -1,5 +1,5 @@
 <?php
- use Log;
+use Log;
 
 /**
   * Function is used for versioning the css and js files

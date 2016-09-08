@@ -2,6 +2,10 @@
 
 @section('title', 'Admin Panel')
 
+@section('css')
+  <link rel="stylesheet" type="text/css" href="{{ asset_timed('css/panel.css') }}">
+@endsection
+
 @section('page')
 <a href="/register"><span class="glyphicon glyphicon-user"></span>Registration</a>
 @endsection
@@ -11,7 +15,12 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-offset-2 col-xs-7">
-            <div class="panel panel-default">
+
+        <div class="alert alert-success user-alert">
+            <p><strong> Permission Changed. </strong></p>
+        </div>
+
+            <div class="panel panel-default panel">
                 <div class="panel-heading">
                     <p align="center"><strong>ADMIN PANEL</strong></p>
                 </div>

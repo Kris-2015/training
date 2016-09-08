@@ -61,7 +61,7 @@ class AccessController extends Controller
         }
         catch (\Exception $e)
         {
-            errorReportiing($e);
+            errorReporting($e);
 
             return 0;
         }
@@ -97,7 +97,7 @@ class AccessController extends Controller
         }
         catch (\Exception $e)
         {
-            errorReportiing($e);
+            errorReporting($e);
 
             return 0;
         }    
@@ -127,7 +127,7 @@ class AccessController extends Controller
             //setting the permision of resource based on role  
             $status = RoleResourcePermission::addPermission($role, $resource, $permission, $action);
 
-            if ($status != 1)
+            if ($status == 0)
             {
                 throw new \Exception('Error occured while setting permission');
             } 
@@ -137,7 +137,7 @@ class AccessController extends Controller
         }
         catch (\Exception $e)
         {
-            errorReportiing($e);
+            errorReporting($e);
 
             return 0;
         }        

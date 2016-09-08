@@ -45,7 +45,7 @@ $(document).ready(function() {
  */
 function display() {
    $.ajax({
-      url: 'panel/getrrp',
+      url: 'panel/getAuthorisationDetails',
       type: 'POST',
       success: function(data) {
 
@@ -133,7 +133,8 @@ function setrrp(get_role, get_resource, get_privilege, action) {
          action: action,
       },
       success: function(response) {
-         display();
+         
+         $('.user-alert').fadeIn('fast').delay(2000).fadeOut('fast');
       }
    });
 }
