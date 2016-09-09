@@ -20,29 +20,45 @@ class MapController extends Controller
     */
     public function map(Request $request)
     {   
-        $user_id = $request['user'];
-
-        $residence = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
-            ->where('users.id', $user_id)
-            ->where('addresses.type', 'office')
-            ->select('users.id as userId', 'first_name', 'last_name', 'street', 'city', 'state')
-            ->get()
-            ->toArray();
-        
-        $office = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
-            ->where('user_id', $user_id)
-            ->where('addresses.type', 'residence')
-            ->select('street as office_street', 'city as office_city', 'state as office_state')
-            ->get()->toArray();
-
-        //default resource for unauthenticate user
-        $resource = redirect('login');
-        if(Auth::check())
+        try
         {
-            //return view to logged in user
-            $resource = view('map')->with(['residence'=> $residence, 'office'=> $office]);
+            $user_id = $request['user'];
+
+            $residence = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
+                ->where('users.id', $user_id)
+                ->where('addresses.type', 'office')
+                ->select('users.id as userId', 'first_name', 'last_name', 'street', 'city', 'state')
+                ->get()
+                ->toArray();
+            
+            $office = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
+                ->where('user_id', $user_id)
+                ->where('addresses.type', 'residence')
+                ->select('street as office_street', 'city as office_city', 'state as office_state')
+                ->get()->toArray();
+
+            if ( !empty($residence) && !empty($office))
+            {
+                //default resource for unauthenticate user
+                $resource = redirect('login');
+                if(Auth::check())
+                {
+                    //return view to logged in user
+                    $resource = view('map')->with(['residence'=> $residence, 'office'=> $office]);
+                }
+                
+                return $resource;                
+            }
+
+            throw new \Exception("Database Error: Error occured while fetching information.");
         }
-        
-        return $resource;
+        catch(\Exception $e)
+        {
+            // Logging the error
+            errorReporting($e);
+
+            // Return user to dashboard with message
+            return redirect('dashboard')->with('access', 'Due to some problem, try again later.');
+        }
     }
 }
