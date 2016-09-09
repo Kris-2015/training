@@ -310,12 +310,10 @@ class AuthController extends Controller
 
                 return redirect('/login')->with('status', 'Password changed !!!');    
             }   
-            else
-            {
-                throw new Exception( 'Could not change. Change Password Failed' );
-            }         
+            
+            throw new \Exception( 'Could not change. Change Password Failed' );      
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
             //logging the error into log file
             errorReporting($e);

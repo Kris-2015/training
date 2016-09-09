@@ -22,7 +22,7 @@
                         {{ session('success') }}
                     </div>                  
                 @elseif ( session('message') )
-                    <div class="alert alert-primary">
+                    <div class="alert alert-info">
                         {{ session('message') }}
                     </div>                  
                 @endif

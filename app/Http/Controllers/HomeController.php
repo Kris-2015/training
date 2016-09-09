@@ -54,11 +54,28 @@ class HomeController extends Controller
     */
     public function getlist()
     {
-        //storing users information
-        $information = Helper::UserInformation();
+        try
+        {
+            //storing users information
+            $information = Helper::UserInformation();
 
-        //returning the users information with list blade file
-        return view('list',compact('information'));
+            // Condition to check whether any user data present or not
+            if ( sizeof($information) != 0 )
+            {            
+                //returning the users information with list blade file
+                return view('list',compact('information'));
+            }
+
+            throw new \Exception("Error: Error occured. Try again later.");
+        }
+        catch (\Exception $e)
+        {
+            // Log the error
+            errorReporting($e);
+
+            return redirect('dashboard')->with('access', 'Some error occured...Try again later.');
+        }
+        
     }
 
     /**
@@ -71,6 +88,7 @@ class HomeController extends Controller
     {
         try
         {
+            // Redirect the unauthorised user to dashboard with message
             if(Auth::user()->role_id == '2' &&  Auth::user()->id != $id) 
             {
                 return redirect('dashboard')->with('access','Not authorised');
@@ -80,18 +98,19 @@ class HomeController extends Controller
             $state_list = config('constants.state_list');
             $users_info = Helper::UserInformation($id);
 
-            // Condition is applicaticable when user wish to update profile
-            if(!empty($users_info))
+            // Condition to check user data is present or not
+            if( sizeof($users_info) != 0)
             {   
             
                return view('registration', ['state_list' => $state_list, 'route' => 'do-update',
                    'users_info' => $users_info]); 
             }
 
-            throw new Exception("Database Error: Error processing request while database operation");            
+            throw new \Exception("Database Error: Error processing request while database operation");            
         }
-        catch ( \Exception $e)
+        catch (\Exception $e)
         {
+            // Logging error
             errorReporting($e);
         }
 
@@ -118,11 +137,12 @@ class HomeController extends Controller
                 return 1;
            }
 
-           throw new Exception("Database Error: Error processing request while delete");
+           throw new \Exception("Database Error: Error processing request while delete");
             
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
+            // Logging error
             errorReporting($e);
             return 0;
         }
