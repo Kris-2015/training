@@ -75,17 +75,10 @@ class Helper extends Model
     */
     public static function email($data, $resource)
     {
-        // Collecting the required information
-        $user = array(
-            'name' => $data['username'],
-            'email' => $data['email'],
-            'subject' => $data['subject']
-        );
-
         // Sending email to user
         Mail::queue( " emails.$resource ", ['data'=> $data], function ($m) use ($user)
         {
-            $m->to($user['email'], $user['name'])->subject($user['subject']);
+            $m->to($data['email'], $data['username'])->subject($data['subject']);
         });
      }
 
