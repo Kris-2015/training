@@ -29,13 +29,31 @@ class InstagramController extends Controller
     */
     public function details(Request $request)
     {
-        //get the response code given instagram api
-        $code = $request->all()['code'];
-        
-        //instagram data
-        $insta_data = $this->curlInsta();
+        try
+        {
+            //get the response code given instagram api
+            $code = $request->all()['code'];
+            
+            // Condition to check if instagram token present or not
+            if ( ! empty($code) )
+            {
+                //instagram data
+                $insta_data = $this->curlInstagram($code);
 
-        return $this->homePage($insta_data);
+                return $this->homePage($insta_data);
+            }    
+
+            throw new Exception("Error: Error occured while connecting to Instagram");
+        }
+        catch(\Exception $e)
+        {   
+            // Logging error
+            errorReporting($e);
+
+            // Redirecting the user if error has occured while connecting to instagram
+            return redirect('login');
+        }
+
     } 
 
    /**
@@ -98,7 +116,7 @@ class InstagramController extends Controller
     * @param void
     * @return json
    */
-    private function curlInsta()
+    private function curlInstagram($token)
     {
         //initialising the curl operation
         $ch = curl_init();
@@ -110,7 +128,7 @@ class InstagramController extends Controller
             'client_secret' => env('CLIENT_SECRET') ,
             'grant_type' => 'authorization_code',
             'redirect_uri' => env('REDIRECT_URI'),
-            'code' => $code
+            'code' => $token
         )));
 
         // receive server response ...
