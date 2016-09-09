@@ -7,11 +7,14 @@ use Datatables;
 use App\Models\User;
 use App\Models\RoleResourcePermission;
 use App\Http\Requests;
-use DB;
 use Auth;
 
 /**
+<<<<<<< HEAD
  * Manages the request for Datatables
+=======
+ * Manage request of datatables
+>>>>>>> api
  * @access public
  * @package App\Http\Controllers
  * @subpackage void
@@ -30,7 +33,6 @@ class UserController extends Controller
     */
     public function getIndex()
     {
-
         return view('datatables.index');
     }
 
@@ -42,11 +44,11 @@ class UserController extends Controller
     */
     public function anyData()
     {   
-
         //get user permission for datatables
         $permission = RoleResourcePermission::datatablePermission(Auth::user()->role_id,'datatables');
 
         //get all the records of active/deactivated user
+
         $users = User::withTrashed()
             ->leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
             ->where('type', 'office')
@@ -173,20 +175,18 @@ class UserController extends Controller
     */
     public function postGit(Request $request)
     {
-
+        //github id of user
         $github_username = $request["gitid"];
 
-        $username = env('GITHUB_USERNAME','kris');
-        $password = env('GITHUB_PASSWORD','kris');
-        $curl_url = "https://api.github.com/users/$github_username";
+        $username = env('GITHUB_USERNAME');
+        $password = env('GITHUB_PASSWORD');
+        $curl_url = 'https://api.github.com/users/$github_username';
 
         $handler = curl_init();
             curl_setopt($handler, CURLOPT_URL, $curl_url);
             curl_setopt($handler, CURLOPT_USERAGENT, 'Mozilla');
             curl_setopt($handler, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($handler, CURLOPT_USERPWD, "$username:$password");
-
-            //$result = curl_exec ($handler);
 
             curl_setopt_array($handler, array(
             CURLOPT_URL => "https://api.github.com/users/$github_username",
@@ -205,14 +205,11 @@ class UserController extends Controller
 
         if ($err) 
         {
-
-          echo "cURL Error #:" . $err;
-          exit;
+            return array('cURL Error #' => $err);
         } 
 
         header('Content-Type: application/json;charset=utf-8');
-        echo $response; 
-        exit;
         
+        return $response; 
     }
 }

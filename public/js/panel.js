@@ -9,9 +9,7 @@
 $(document).ready(function() {
    display();
 
-   /*
-    *Send the request to get the privilege
-    */
+   // Send the request to get the privilege
    $(document).on('change', '.role, .resource', function() {
 
       var get_role = $('.role').val();
@@ -20,9 +18,7 @@ $(document).ready(function() {
 
    });
 
-   /*
-    *Set the permission for the resource on the basis of role
-    */
+   //Set the permission for the resource on the basis of role
    $(document).on('change', '.privilege input[type="checkbox"]', function() {
 
       // Get the new data given by admin
@@ -56,11 +52,11 @@ $(document).ready(function() {
  */
 function display() {
    $.ajax({
-      url: 'panel/getrrp',
+      url: 'panel/getAuthorisationDetails',
       type: 'POST',
       success: function(data) {
 
-         var role,resource, privilege = " ", key;
+         var role = resource = privilege = " ", key;
 
          // Iterating to display dropdown menu of role of user
          for (key in data.role) {
@@ -115,7 +111,7 @@ function sendrrp(get_role, get_resource) {
             var checkbox_obj = $(this);
 
             //uncheck all the previously checked checkbox
-            $(this).prop('checked', false);
+            checkbox_obj.prop('checked', false);
             
 
             $.each(response, function(resp_key, resp_data) {
@@ -148,7 +144,8 @@ function setrrp(get_role, get_resource, get_privilege, action) {
          action: action,
       },
       success: function(response) {
-         display();
+         
+         $('.user-alert').fadeIn('fast').delay(2000).fadeOut('fast');
       }
    });
 }

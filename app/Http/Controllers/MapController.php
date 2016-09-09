@@ -26,9 +26,11 @@ class MapController extends Controller
     */
     public function map(Request $request)
     {   
-        $user_id = $request['user'];
+        try
+        {
+            $user_id = $request['user'];
 
-        $office = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
+            $office = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
             ->where('users.id', $user_id)
             ->where('addresses.type', 'office')
             ->select('users.id as userId', 'first_name', 'last_name', 'street', 'city', 'state')
@@ -41,14 +43,28 @@ class MapController extends Controller
             ->select('street as residence_street', 'city as residence_city', 'state as residence_state')
             ->get()->toArray();
 
-        //default resource for unauthenticate user
-        $resource = redirect('login');
-        if(Auth::check())
-        {
-            //return view to logged in user
-            $resource = view('maps/map')->with(['residence'=> $residence, 'office'=> $office]);
+            if ( !empty($residence) && !empty($office))
+            {
+                //default resource for unauthenticate user
+                $resource = redirect('login');
+                if(Auth::check())
+                {
+                    //return view to logged in user
+                    $resource = view('maps/map')->with(['residence'=> $residence, 'office'=> $office]);
+                }
+                
+                return $resource;                
+            }
+
+            throw new \Exception("Database Error: Error occured while fetching information.");
         }
-        
-        return $resource;
+        catch(\Exception $e)
+        {
+            // Logging the error
+            errorReporting($e);
+
+            // Return user to dashboard with message
+            return redirect('dashboard')->with('access', 'Due to some problem, try again later.');
+        }
     }
 }

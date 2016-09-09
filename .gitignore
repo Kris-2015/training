@@ -4,6 +4,9 @@
 Homestead.yaml
 Homestead.json
 .env
-/public/upload
-/public/img
-/public/vendor
+public/img/
+public/upload/
+public/vendor/
+storage/
+.sonar/
+.htaccess

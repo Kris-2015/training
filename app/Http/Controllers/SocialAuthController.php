@@ -65,7 +65,7 @@ class SocialAuthController extends Controller
                 "last_name" => $user_lastname
             );
 
-            $user_id = User::FacebookUser($facebook_user);
+            $user_id = User::facebookUser($facebook_user);
 
             $new_fbuser = 1;
         }
@@ -82,11 +82,8 @@ class SocialAuthController extends Controller
             //if the user is new, request user to update profile info
             return redirect('register/' . $user_id)->with('new', 'Please Update your profile');
         }
-        else
-        {
-            //if login operation failed, direct the user to login page
-            return redirect('login')->with('warning', 'Something went wrong.');
-        }
-
+        
+        //if login operation failed, direct the user to login page
+        return redirect('login')->with('warning', 'Something went wrong.');
   }
 }

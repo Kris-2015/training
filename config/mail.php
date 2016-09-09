@@ -55,7 +55,8 @@ return [
     |
     */
 
-    'from' => ['address' => 'krishnadevb@mindfiresolutions.com', 'name' => 'krishnadevb'],
+    'from' => ['address' => env('MAIL_FROM', 'kris@app.com'), 
+        'name' => env('MAIL_NAME', 'Employee Management Team')],
 
     /*
     |--------------------------------------------------------------------------

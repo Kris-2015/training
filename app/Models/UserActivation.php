@@ -1,10 +1,9 @@
-dd<?php
+<?php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
-use Log;
+use Exception;
 
 
 /**
@@ -28,27 +27,24 @@ class UserActivation extends Model
     {
         try
         {
-             DB::beginTransaction();
-             $insert_activation_code = new UserActivation();
+            $insert_activation_code = new UserActivation();
            
-             $insert_activation_code->user_id = $data['user_id'];
-             $insert_activation_code->token = $data['token'];
+            $insert_activation_code->user_id = $data['user_id'];
+            $insert_activation_code->token = $data['token'];
 
-             $sucess_insertcode = $insert_activation_code->save();
+            $sucess_insertcode = $insert_activation_code->save();
 
-             if($sucess_insertcode == 1)
-             {
-                DB::commit();
-                return 1;
-             }
+            if($sucess_insertcode == 1)
+            {
+               return 1;
+            }
 
-             throw new Exception("Error: Failed to process activation key");
+            throw new Exception("Error: Failed to process activation key");
         }
         catch(Exception $e)
         {
             //Log error about the failing of activation key insertion
-            Log::error($e);
-            DB::rollback();
+            errorReporting($e);
         }
     }
     

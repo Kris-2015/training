@@ -51,36 +51,33 @@ Route::get('activation/{token}', 'AuthController@activateAccount');
 
 Route::get('logout','AuthController@logout');
 
-Route::get('/resetPassword',[
+Route::get('resetPassword',[
     'as' => 'sendLink',
-    'uses' => 'ResetPasswordController@sendLink'
+    'uses' => 'AuthController@sendLink'
 ]);
 
 Route::post('resetPassword', [
     'as' => 'resetPassword', 
-    'uses' => 'ResetPasswordController@reset'
+    'uses' => 'AuthController@reset'
 ]);
 
-Route::get('reset/{token}', 'ResetPasswordController@passwordPage');
-
-Route::get('/dashboard','HomeController@dashboard');
+Route::get('reset/{token}', 'AuthController@passwordPage');
 
 Route::post('updatepassword', [
     'as' => 'updatepassword',
-    'uses'=>'ResetPasswordController@updatePassword'
+    'uses'=>'AuthController@updatePassword'
 ]);
 
-Route::get('new_user',[
-   'as' => 'new_user',
-   'uses' => 'AddUserController@newUser'
-]);
+Route::get('/dashboard','HomeController@dashboard');
+
+Route::get('newuser','AuthController@newUser');
 
 Route::post('add_user',[
    'as' => 'add_user',
-   'uses' => 'AddUserController@add_user'
+   'uses' => 'AuthController@addUser'
 ]);
 
-Route::post('activate', 'ActivateUserController@activateUser');
+Route::post('activate', 'AuthController@activateUser');
 
 Route::get('/redirect', 'SocialAuthController@redirect');
 Route::get('/callback', 'SocialAuthController@callback');
@@ -101,13 +98,18 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::controller('datatables', 'UserController');
 
-    Route::get('register/{id}', 'HomeController@Data');
+    Route::get('register/{id}', 'HomeController@data');
 
+    Route::post('do-update', [
+        'as' => 'do-update', 
+        'uses' => 'AuthController@doUpdate'
+    ]);
+    
     Route::post('delete','HomeController@delete');
 
     Route::get('panel', 'AccessController@showPanel');
 
-    Route::post('panel/getrrp','AccessController@getrrp');
+    Route::post('panel/getAuthorisationDetails','AccessController@getAuthorisationDetails');
 
     Route::post('panel/permission','AccessController@getPermission');
 

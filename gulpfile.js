@@ -14,3 +14,10 @@ var elixir = require('laravel-elixir');
 elixir(function(mix) {
     mix.sass('app.scss');
 });
+
+elixir(function(mix) {
+    mix.version([
+    	'css/cover.css', 'css/mail.css',
+    	'js/panel.js' ,'js/profile_modal.js'
+    ]);
+});

@@ -1,0 +1,9 @@
+.panel{
+    display: block;
+    top: 110px;
+    position: absolute;	
+}
+
+.user-alert{
+	display:none;
+}

@@ -15,7 +15,7 @@
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="{{ url('/css/cover.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset_timed('css/cover.css') }}">
 
     @yield('css')
     <style>

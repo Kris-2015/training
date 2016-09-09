@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Mail;
 use Log;
 use Exception;
@@ -28,7 +29,11 @@ class Helper extends Model
     */
     public static function imageUpload($request)
     {
-        try
+
+        $file_name = '';   
+
+        // Condition to determine if file contains image or not 
+        if ($request->hasFile('image'))
         {
             //fetch the extension of image
             $image_extension = $request->file('image')->getClientOriginalExtension();
@@ -38,27 +43,28 @@ class Helper extends Model
             $image = strtolower($image_new_name . '.' .$image_extension);
 
             //transferring the image from temporary folder to permanent folder
-            $request->file('image')->move( public_path( '/upload') , $image );
-            $name = strtolower($image_new_name . '.' .$image_extension);
-
-            if(!empty($name))
-            {
-                //returning the name of image 
-                return $name;    
-            }
-            else
-            {
-                throw new Exception("Failed to upload image");
+            $move_file = $request->file('image')->move( public_path( 'upload') , $image );
             
-            }       
+            // Making a new file name
+            $file_name = strtolower($image_new_name . '.' .$image_extension);
+
+            try
+            {
+                // if image upload is not successful
+                if( !$move_file )
+                {
+                    throw new \Exception('Failed to upload image.');
+                }    
+            }
+            catch ( \Exception $e)
+            {
+                //Log error
+                errorReporting($e);
+            }   
         }
-        catch(Exception $e)
-        {
-            //Log error about failed upload operation
-            Log::error($e);
-            return 0;
-        }
-         
+        
+        //returning the name of image 
+        return $file_name;                
     }
 
     /**
@@ -67,20 +73,12 @@ class Helper extends Model
      * @param: activation key
      * @return: void
     */
-    public static function Email($key, $name, $email, $subject='Activate Account')
+    public static function email($data, $resource)
     {
-        
-        $user = array(
-            'name' => $name,
-            'email' => $email,
-            'subject' => $subject
-        );
-
-        Mail::queue('emails.activate', ['key'=> $key], function ($m) use ($user)
+        // Sending email to user
+        Mail::queue( " emails.$resource ", ['data'=> $data], function ($m) use ($user)
         {
-            $m->from('kris@app.com', 'Your Application');
-
-            $m->to($user['email'], $user['name'])->subject($user['subject']);
+            $m->to($data['email'], $data['username'])->subject($data['subject']);
         });
      }
 
@@ -91,32 +89,38 @@ class Helper extends Model
      * @param: user id
      * @return: hash 
     */
-    public static function GenerateKey($id)
+    public static function generateKey($id)
     {
-
         try
         {
-
+            // Creating instance of User class
             $user = new User();
+
+            // Verifying the id of user
             $get_user = $user::where('id',$id)->get();
             
             $id = $get_user[0]['id'];
             $name = $get_user[0]['first_name'];
+
+            // Generating a random string
             $key = md5($id.$name);
 
             $data = array('user_id'=>$id, 'token'=>$key);
+
+            // Storing the user id and key in Activation table
             $insert_code = UserActivation::insertActivation($data);
 
+            // Condition for checking successful db operation
             if($insert_code > 0)
             {
                 return $key;    
             }
 
-            throw new Exception("Failed to generate key");       
+            throw new \Exception("Database Error: Failed to update Activation table");       
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
-            Log::error($e);
+            errorReporting($e);
         }
     }
 
@@ -130,27 +134,31 @@ class Helper extends Model
     {
         try
         {
-
+            // Instantiate the UserActivatioin Class
             $verify = UserActivation::where('token',$token)->get();
+            
+            // Get the id of user based on token
             $user_id = $verify[0]['user_id'];
 
+            // Verifying the token with the requested token
             if($verify[0]['token'] == $token)
             {
-                //update the users table column actiavted to 1
+                // Update the users table column activated to 1
                 $user = User::find($user_id);
+
+                // Activating the account of the user
                 $user->activated = '1';
                 $user->save();
 
                 return 1;
             }
             
-            throw new Exception("Failed to activate user account");
+            throw new \Exception("Error: Invalid token has been used");
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
-
-            Log::error($e);
-
+            // Logging error
+            errorReporting($e);
             return 0;
         }
     }
@@ -163,14 +171,44 @@ class Helper extends Model
     */
     public static function UserInformation($id=false)
     {
-        //get the information of user by user id
-        if($id)
+        try
         {
-            $get_user = User::withTrashed()
-                ->leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
-                ->find($id);  
+            //get the information of user by user id with residence address
+            if($id)
+            {
+                $get_user = User::where('users.id', $id)
+                    ->join('addresses', 'users.id', '=', 'addresses.user_id')
+                    ->join('communications','users.id', '=', 'communications.user_id')
+                    ->groupBy('users.id')
+                    ->select('users.id as userId', 'first_name', 'middle_name', 'last_name', 'prefix', 'gender', 'dob',
+                        'marital_status', 'employer', 'employment', 'email', 'role_id', 'github_id', 'image', 'street',
+                        'city', 'state', 'zip', 'mobile', 'landline', 'fax', 'communications.type')
+                    ->get()
+                    ->toArray(); 
+            }
+            else
+            {   
+                //get all the information of all user with residence address
+                $get_user = User::join('addresses', 'users.id', '=', 'addresses.user_id')
+                    ->join('communications','users.id', '=', 'communications.user_id')
+                    ->groupBy('users.id')
+                    ->select('users.id as userId', 'first_name', 'middle_name', 'last_name', 'prefix', 'gender', 'dob',
+                        'marital_status', 'employer', 'employment', 'email', 'role_id', 'github_id', 'image', 'street', 
+                        'city', 'state', 'zip', 'mobile', 'landline', 'fax', 'communications.type')
+                    ->get()
+                    ->toArray(); 
+            }
+            
+            // Where condition if request is for all user
+            $condition = ([ ['addresses.type', 'office'] ]);
 
-            //get the office address of user of user
+            // Where condition if the id is specified for the user
+            if ($id)
+            {
+                $condition = ([ ['addresses.type', 'office'],['addresses.user_id', '=', $id] ]);
+            }
+
+            // Get the information of user related to address office
             $information_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
                 ->select( 
                     "addresses.street AS office_street",
@@ -180,58 +218,34 @@ class Helper extends Model
                     "addresses.mobile AS office_mobile",
                     "addresses.landline AS office_landline",
                     "addresses.fax AS office_fax"
-                )->groupBy('users.id')->where([ ['addresses.type', 'office'], 
-                ['addresses.user_id', '=', $id] ])
+                )->groupBy('users.id')->where($condition)
                 ->get()->toArray();
-            
+                
             //array to store the all the information of user
             $information = array();
 
             //loop to concat the residence and office information of user
-            foreach ($get_user as $key => $user)
+            foreach ($get_user as $key => $residence)
             {
                 $office = $information_office[$key];
                 $information[$key] = $user + $office;
             }
 
-        }
-        else
-        {
-            //get all the information of all user 
-            $get_user = User::join('addresses', function ($join){
-
-                $join->on('users.id', '=', 'addresses.user_id')
-                    ->where('addresses.type', '=', 'residence');
-                })
-                ->join('communications','users.id', '=', 'communications.user_id')
-                ->groupBy('users.id')
-                ->get()
-                ->toArray();
-
-            $get_office = User::join('addresses', 'users.id', '=', 'addresses.user_id')
-                ->select( 
-                    "addresses.street AS office_street",
-                    "addresses.city AS office_city",
-                    "addresses.state AS office_state",
-                    "addresses.zip AS office_zip",
-                    "addresses.mobile AS office_mobile",
-                    "addresses.landline AS office_landline",
-                    "addresses.fax AS office_fax"
-                )->groupBy('users.id')
-                ->where('addresses.type', '=', 'office')
-                ->get()
-                ->toArray();
-
-            $information = array();
-
-            foreach($get_user as $key => $residence)
+            // Condition for checking if information is present or not
+            if (!empty($information))
             {
-                $office = $get_office[$key];
-                $information[$key] = $residence + $office;
+                //return the complete information of user
+                return $information;                
             }
+
+            throw new \Exception("Database Error: Error occured while fetching the information");
         }
-        
-        //return the complete information of user
-        return $information;
+        catch (\Exception $e)
+        {
+            // Logging error 
+            errorReporting($e);
+
+            return 0;
+        }
     }
 }
