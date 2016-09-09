@@ -39,7 +39,7 @@ class RoleResourcePermission extends Model
 
             if (empty($permission)) 
             {
-                throw new Exception("Database Error: Error occured while processing request for datatable");
+                throw new \Exception("Database Error: Error occured while processing request for datatable");
             }
 
             return $permission;
@@ -133,7 +133,7 @@ class RoleResourcePermission extends Model
             // 1 for successful db operation 
             if ( $action_status != 1)
             {
-                throw new Exception("Database Error: Error occured while setting permission ");
+                throw new \Exception("Database Error: Error occured while setting permission ");
             }
 
             return $action_status;

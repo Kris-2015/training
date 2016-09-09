@@ -43,7 +43,7 @@ class InstagramController extends Controller
                 return $this->homePage($insta_data);
             }    
 
-            throw new Exception("Error: Error occured while connecting to Instagram");
+            throw new \Exception("Error: Error occured while connecting to Instagram");
         }
         catch(\Exception $e)
         {   
