@@ -10,3 +10,12 @@ public/vendor/
 storage/
 .sonar/
 .htaccess
+app/Http/Controllers/AppBaseController.php
+app/Http/Requests/NewUserRequest.php
+config/infyom/
+config/repository.php
+config/swaggervel.php
+npm-shrinkwrap.json
+resources/views/vendor/flash/
+resources/views/vendor/swaggervel/
+tests/ApiTestTrait.php
