@@ -10,11 +10,7 @@ use App\Http\Requests;
 use Auth;
 
 /**
-<<<<<<< HEAD
  * Manages the request for Datatables
-=======
- * Manage request of datatables
->>>>>>> api
  * @access public
  * @package App\Http\Controllers
  * @subpackage void
@@ -47,28 +43,23 @@ class UserController extends Controller
         //get user permission for datatables
         $permission = RoleResourcePermission::datatablePermission(Auth::user()->role_id,'datatables');
 
-        //get all the records of active/deactivated user
-
+//get all the records of active/deactivated user
         $users = User::withTrashed()
             ->leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
             ->where('type', 'office')
             ->select(['users.id', 'first_name', 'last_name', 'email', 'dob', 'github_id', 'users.created_at', 'users.updated_at', 'role_id', 'isActive', 'users.deleted_at', 'street', 'city', 'state']);
-
         //array for showing the status of users account using bootstrap button class
         $stat = [
             '0'=>'danger',
             '1'=>'primary'
         ];
-
         //array to show the status of users account
         $status = [
             '0'=>'Deactivate',
             '1'=>'Activate'
         ];
-
         return Datatables::of($users,$stat)
             ->addColumn('action', function($users) use($permission){
-
                 //setting the variable with null values
                 $edit = '';
                 $delete = '';
@@ -79,7 +70,6 @@ class UserController extends Controller
                 {
                     //if user has the update permission, initialise the edit variable with edit row
                     $edit = '<li><a href="register/'.$users->id.'">Edit</a></li>'; 
-
                     //if user has the delete permission, initialise the delete variable with delete row 
                     $delete = '<li><a href="#" class="delete" data-id="'.$users->id.'">Delete</a></li>';
                 }
@@ -93,10 +83,8 @@ class UserController extends Controller
                     {
                         $edit = '<li><a href="register/'.$users->id.'">Edit</a></li>'; 
                     }
-
                 if($edit != '' || $delete != '' || in_array("view", $permission))
                 {
-
                    $result = '
                     <div class="btn-group">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Action<span class="caret"></span></button>
@@ -108,17 +96,14 @@ class UserController extends Controller
                        </ul>
                     </div>';
                 }
-
                 return $result;
             })
             ->addColumn('status', function($users) use($stat,$status){
                 
                   //assuming that deleted at column is null
                   $isDeleted = 0;
-
                   //account deactivating button
                   $status_button = '';
-
                   //only admin is allowed
                   if(Auth::user()->role_id == 1)
                   {
@@ -128,7 +113,6 @@ class UserController extends Controller
                       {
                           $isDeleted = 1;
                       }
-
                       $status_button = '<button onclick="changeActivationStatus(this)" type="button" data-activate="' . $isDeleted .'" data-id="' . $users->id . '" class="btn btn-'.$stat[$isDeleted].'" btn-lg">'.$status[$isDeleted].'</button>' ;                 
                   }
                   

@@ -76,7 +76,7 @@ class Helper extends Model
     public static function email($data, $resource)
     {
         // Sending email to user
-        Mail::queue( " emails.$resource ", ['data'=> $data], function ($m) use ($user)
+        Mail::queue( " emails.$resource ", ['data'=> $data], function ($m) use ($data)
         {
             $m->to($data['email'], $data['username'])->subject($data['subject']);
         });
@@ -228,7 +228,7 @@ class Helper extends Model
             foreach ($get_user as $key => $residence)
             {
                 $office = $information_office[$key];
-                $information[$key] = $user + $office;
+                $information[$key] = $residence + $office;
             }
 
             // Condition for checking if information is present or not
