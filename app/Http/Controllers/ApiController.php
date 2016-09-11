@@ -171,13 +171,13 @@ class ApiController extends Controller
     */
     private function postUpdate(Request $request)
     {
-        $name = $request->name;
+        $id = $request->id;
 
-        //update user by first_name
+        //update user by id
         $update_name = $request->update_name;
 
         $find_user = User::withTrashed()
-            ->where('first_name', $name)->get();
+            ->find($id)->get();
 
         if($find_user->isEmpty())
         {
@@ -190,7 +190,7 @@ class ApiController extends Controller
             $info = 'Failed to update....try again later.';
 
             $update_user = User::withTrashed()
-            ->where('first_name', $name)
+            ->where('id', $id)
             ->update(['first_name' => $update_name]);
         
             if($update_user > 0)
