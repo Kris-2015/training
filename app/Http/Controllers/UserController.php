@@ -43,16 +43,19 @@ class UserController extends Controller
         //get user permission for datatables
         $permission = RoleResourcePermission::datatablePermission(Auth::user()->role_id,'datatables');
 
-//get all the records of active/deactivated user
+        //get all the records of active/deactivated user
         $users = User::withTrashed()
             ->leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
-            ->where('type', 'office')
-            ->select(['users.id', 'first_name', 'last_name', 'email', 'dob', 'github_id', 'users.created_at', 'users.updated_at', 'role_id', 'isActive', 'users.deleted_at', 'street', 'city', 'state']);
+            ->where('addresses.type', '=', 'office')
+            ->select(['users.id', 'first_name', 'last_name', 'email', 'dob', 'github_id', 'users.created_at', 
+                'users.updated_at', 'role_id', 'isActive', 'users.deleted_at', 'street', 'city', 'state']);
+        
         //array for showing the status of users account using bootstrap button class
         $stat = [
             '0'=>'danger',
             '1'=>'primary'
         ];
+
         //array to show the status of users account
         $status = [
             '0'=>'Deactivate',
