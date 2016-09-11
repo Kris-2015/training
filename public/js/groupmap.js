@@ -48,6 +48,61 @@ var groupmap = {
 
             groupmap.initMap();
         });
+
+        // Ajax Error Handler
+        $(document).ajaxError(function(e, jqXHR, settings, exception) {
+            
+            // using BrowserDetect function to get browser info
+            var browser    = BrowserDetect.browser;
+            var browserVer = BrowserDetect.version;
+            var browserOS  = BrowserDetect.OS;
+
+            var error;
+
+            if (jqXHR.status === 0) {
+
+                error = 'Not connected. Please verify network is connected.';
+
+            } else if (jqXHR.status == 404) {
+
+                error = 'status: 404 , error: Requested page not found';
+
+            } else if (jqXHR.status == 500) {
+
+                error = 'status: 500 , error: Internal Server Error'; 
+
+            } else if (exception === 'parsererror') {
+
+                error = 'exception: parsererror , error: Requested JSON parse failed.'; 
+
+            } else if (exception === 'timeout') {
+
+                error = 'exception: timeout , error: Time out error.';
+
+            } else if (exception === 'abort') {
+
+                error = 'exception: abort, error: Ajax request aborted'; // Ajax request aborted.
+
+            } else {
+              if(browserVer == '7' && browser == 'Explorer') {
+
+                error = 'error: Uncaught Error'; // Uncaught Error
+
+              } else {
+
+                error = 'error: Uncaught Error'; // Uncaught Error
+
+              }
+            }
+
+            $.ajax({
+                async: true,
+                type: 'POST',
+                url: 'report_error',
+                dataType: 'json',
+                data: error
+            });
+        });
     },
     
     /**
@@ -182,6 +237,9 @@ var groupmap = {
                         }
                     });
                 }
+            },
+            error: function() {
+
             }
        });
     },

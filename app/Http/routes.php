@@ -115,3 +115,5 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::post('panel/setpermission', 'AccessController@setPermission');
 });
+
+Route::post('report_error', 'ReportErrorController@reportError');
