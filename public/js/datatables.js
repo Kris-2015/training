@@ -21,8 +21,8 @@ $(document).ready(function() {
             { data: 'first_name', name: 'first_name' },
             { data: 'email', name: 'email' },
             { data: 'dob', name:'dob'},
-            { data: 'created_at', name:'created_at'},
-            { data: 'updated_at', name:'updated_at'},
+            { data: 'created_at', name:'users.created_at'},
+            { data: 'updated_at', name:'users.updated_at'},
             { data: 'action', name: 'action', orderable: false, searchable: false},
             { data: 'status', name: 'status', orderable:false, searchable: false}
         ]
