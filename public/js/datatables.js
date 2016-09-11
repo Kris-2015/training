@@ -16,6 +16,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         lengthMenu:[2,5,10],
+        stateSave: true,
         ajax: url,
         columns: [
             { data: 'first_name', name: 'first_name' },
@@ -25,10 +26,18 @@ $(document).ready(function() {
             { data: 'updated_at', name:'users.updated_at'},
             { data: 'action', name: 'action', orderable: false, searchable: false},
             { data: 'status', name: 'status', orderable:false, searchable: false}
-        ]
+        ],
+        stateSaveCallback: function(settings, data) {
+            localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) );
+        },
+        stateLoadCallback: function(settings) {
+            return JSON.parse( localStorage.getItem( 'Datatables_' + settings.sInstance) );
+        }
     });
 
     var user = table.on( 'xhr', function() { 
         json_data = table.ajax.json();
+
     });
+
 });
