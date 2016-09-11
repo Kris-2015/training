@@ -13,10 +13,10 @@
     {{ csrf_field() }}
 
     <input type="hidden" id="url" value="{!! url('datatables/data') !!}">
-    
+
     <table class="table table-bordered" id="users-table">
-       <thead>
-           <tr>
+        <thead>
+            <tr>
                 <th>Name</th>
                 <th>Email</th>
                 <th>DOB</th>
@@ -24,13 +24,14 @@
                 <th>Updated_at</th>
                 <th>Action</th>
                 <th>Status</th>
-           </tr>      
-       </thead>
+            </tr>    
+        </thead>
     </table>
 @endsection
 
 @section('modal')
 <!-- Profile Modal -->
+
 <!-- making the map url in hidden input field -->
 <input type="hidden" class="path" value="{{ url('map') }}">
 
