@@ -8,7 +8,7 @@
 
 var json_data, url;
 
-$(document).ready(function(){
+$(document).ready(function() {
 
     url = $('#url').val();
 
@@ -30,6 +30,5 @@ $(document).ready(function(){
 
     var user = table.on( 'xhr', function() { 
         json_data = table.ajax.json();
-        // groupmap.modal();
     });
 });

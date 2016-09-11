@@ -13,6 +13,12 @@ var map, geocoder, latlng;
 
 var groupmap = {
 
+    /*
+     * Function which contains all DOM event function
+     *
+     * @param: void
+     * @return: void
+    */
     global : function() {
         $(document).on("change", "#pac-input", function() {
 
@@ -164,7 +170,6 @@ var groupmap = {
                             // Bind event for on clicking the marker to show user details
                             google.maps.event.addListener( marker, 'click',( function(marker, k, currentMarkerRef, contentList) {
                                 return function() {
-                                    console.log(contentList[currentMarkerRef]);
                                     infowindow.setContent(contentList[currentMarkerRef]);
                                     infowindow.open(map, marker);
                                 }
@@ -251,5 +256,4 @@ var groupmap = {
     }
 };
 
-// groupmap.modal();
 groupmap.global();

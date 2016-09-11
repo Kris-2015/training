@@ -33,6 +33,12 @@ function initMap() {
    geocodeAddress(geocoder, map);
 }
 
+/**
+ *Function for setting up marker and generate info message for user
+ *
+ * @param geocoder, map
+ * @return void
+*/
 function geocodeAddress(geocoder, resultsMap) {
 
    // get the employee id 
