@@ -17,7 +17,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Requests\NewUserRequest;
 use App\Http\Requests\UpdateFormRequest;
-
+use App\Http\Requests\LoginFormRequest;
 
 /**
  * Manage Login and registration request
@@ -135,18 +135,8 @@ class AuthController extends Controller
     * @param  Request  $request
     * @return mixed
    */
-    public function dologin(Request $request)
-    {
-        //validation message of login page
-        $message['email_id.required'] = 'Email id required';
-        $message['password.required'] = 'Give your password';
-
-        //validation of email_id and password
-        $this->validate($request, [
-            'email' => 'required',
-            'password' => 'required'
-        ], $message);
-        
+    public function dologin(LoginFormRequest $request)
+    {      
         //storing the email_id and password in variable
         $email = $request->email;
         $password = $request->password;
