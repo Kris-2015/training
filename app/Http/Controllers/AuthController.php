@@ -16,6 +16,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Requests\NewUserRequest;
+use App\Http\Requests\UpdateFormRequest;
 
 
 /**
@@ -95,7 +96,7 @@ class AuthController extends Controller
      * @param Request
      * @return redirect
     */
-    public function doUpdate(Request $request)
+    public function doUpdate(UpdateFormRequest $request)
     {
         // Get the required update data
         $update_data = $request->all();
