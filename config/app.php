@@ -165,6 +165,14 @@ return [
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         \InfyOm\Generator\InfyOmGeneratorServiceProvider::class,
         \InfyOm\CoreTemplates\CoreTemplatesServiceProvider::class,
+
+        /*
+         * Custom Service Provider for RestApi OAuth
+         */
+        Dingo\Api\Provider\LaravelServiceProvider::class,
+        LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
+        LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
+        App\Providers\OAuthServiceProvider::class,
     ],
 
     /*
@@ -217,6 +225,7 @@ return [
         'Curl' => Ixudra\Curl\Facades\Curl::class,
         'Instagram' => Vinkla\Instagram\Facades\Instagram::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
     ],
 
 ];
