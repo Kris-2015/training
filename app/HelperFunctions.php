@@ -26,3 +26,16 @@ function errorReporting($error)
 {
 	Log::error($error);
 }
+
+/**
+ * Function is use to generate encrypted value
+ *
+ * @param: void
+ * @return: hash
+*/
+function token()
+{
+    $token_genrator = md5(microtime());
+
+    return $token_genrator;
+}
