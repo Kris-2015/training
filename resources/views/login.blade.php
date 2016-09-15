@@ -58,7 +58,7 @@
 
                 <div class="row">
                     
-                    <div class="col-sm-4">
+                    <div class=" col-xs-4 col-sm-5">
                         <div  class="col-sm-offset-5">
                         <!-- Instagram Sign Up functionality-->
                             <a href="https://api.instagram.com/oauth/authorize/?client_id={{env('CLIENT_ID') }}&redirect_uri={{ env('REDIRECT_URI', '00') }}&response_type=code&scope=basic" target="_top" class="btn btn-danger">
@@ -68,7 +68,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-xs-4 col-sm-5">
                         <!-- Facebook Sign Up functionality-->
                         <a href="redirect" class="btn btn-primary">
                             <i class="fa fa-facebook"></i> 
