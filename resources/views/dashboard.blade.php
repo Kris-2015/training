@@ -35,13 +35,14 @@
                        <br>
                        <li><a class="btn btn-danger col-xs-4" href="{{ url('newuser') }}">Add New User</a></li>
                        <br>
-                       <li><a class="btn btn-success col-xs-4" href="{{ url('panel') }}">Admin Panel</a></li>
+                       <li><a class="btn btn-success col-xs-4" href="{{ url('panel') }}">Admin Panel</a></li><br>
                     @else
                        <li><a class="btn btn-primary col-xs-4" href="{{ url('datatables') }}">User Status</a></li>
                        <br>
                        <li><a class="btn btn-info col-xs-4" href="{{ url('list') }}">User</a></li>
                        <br>
                     @endif
+                    <li><a class="btn btn-default col-xs-4" href="{{ url('/developers') }}">Developer</a></li>
                 </ol>
             </div>
         </div>

@@ -63,6 +63,7 @@
                        <li><a href="{{ url('/list') }}"><i class="fa fa-btn fa-btn fa-smile-o "></i>Users</a></li>
                        <li><a href="{{ url('/datatables') }}"><i class="fa fa-btn fa-arrow-circle-up"></i>Users Status</a></li>
                     @endif
+                       <li><a href="{{ url('/developers') }}"><i class="fa fa-btn fa-connectdevelop "></i>Developer Account</a></li>
                        <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                     </ul>
                 </li>

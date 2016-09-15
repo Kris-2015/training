@@ -117,3 +117,10 @@ Route::group(['middleware'=>'auth'], function(){
 });
 
 Route::post('report_error', 'ReportErrorController@reportError');
+
+Route::get('developers', 'AuthController@developers');
+
+Route::post('new-client',  [
+    'as' => 'new-client', 
+    'uses' => 'AuthController@newclient'
+]);
