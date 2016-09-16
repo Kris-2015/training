@@ -16,6 +16,9 @@
         </div>
         @endif
 
+        <!-- Display Validation Errors -->
+        @include('common.errors')
+
         <!-- Developer Page infomation -->
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -31,7 +34,7 @@
 
                 <!-- Request App URL -->
                 <div class="form-group">
-                    <label for="app_uri" class="col-sm-3 control-label">Redirect URL: </label>
+                    <label for="app_uri" class="col-sm-3 control-label">Redirect URL* </label>
                     <div class="col-sm-6">
                         {{ Form::text('app_url', null, array('class'=>'form-control', 'id'=>'app_url')) }}
                     </div>
@@ -39,15 +42,15 @@
 
                 <!-- For registered User -->
                 <div class="form-group">
-                    <label for="email" class="col-sm-3 control-label">Email</label>
+                    <label for="email" class="col-sm-3 control-label">Email*</label>
                     <div class="col-sm-6">
-                        {{ Form::email('email', null, array('class'=>'form-control')) }}
+                        {{ Form::email('email', null, array('class'=>'form-control', 'id'=>'email')) }}
                     </div>
-                </div>
+                </div>                
 
                 <!-- Add Task Button -->
                 <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-6">
+                    <div class="col-sm-offset-5 col-sm-6">
                         <button type="submit" class="btn btn-primary">
                             Get Registered
                         </button>
