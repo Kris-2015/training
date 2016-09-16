@@ -33,7 +33,7 @@ class InstagramController extends Controller
         {
             //get the response code given instagram api
             $code = $request->all()['code'];
-            
+        
             // Condition to check if instagram token present or not
             if ( ! empty($code) )
             {
