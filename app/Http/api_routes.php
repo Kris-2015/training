@@ -8,11 +8,7 @@
 | Here is where all API routes are defined.
 |
 */
-
-
-/*
- * Route for RestApi OAuth
-*/  
+  
 Route::group(['prefix' => 'oauth'], function(){
     Route::post('access_token','OAuthController@accessToken');
 });
