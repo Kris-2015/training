@@ -36,7 +36,7 @@ class OAuthController extends Controller
         $user_token = $this->authenticateToken($result['token']);
         
         // Default data
-        $data = response()->json(array('error' => '404', 'message' => 'Required result not found'), 404);
+        $data = response()->json(array('error' => '404', 'message' => 'Insufficient Parameter'), 404);
 
         // If token is authenticated, then return required data
         if ( $user_token )
@@ -121,6 +121,7 @@ class OAuthController extends Controller
                 'token_life' => $access_token_ttl,
                 'expire_time' => $expire_time
             );
+
 
             // Update the token details with its life span and expiration time
             $token_details = OAuthRefreshToken::insertDetails($lifespan);
