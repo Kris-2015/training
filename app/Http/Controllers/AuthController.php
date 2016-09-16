@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserActivation;
 use App\Models\Role;
 use App\Models\Helper;
+use App\Models\OAuthClient;
 use Session;
 use Auth;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -16,6 +17,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Requests\NewUserRequest;
+use App\Http\Requests\ClientRequest;
 
 
 /**
@@ -262,7 +264,7 @@ class AuthController extends Controller
                   'subject' => 'Reset Mail'
                 );
 
-            Helper::email($data, 'reset');
+            Helper::email($mail_data, 'reset');
 
             return redirect('/login')->with('status', 'We sent you an reset password link. Check your email.');
         }
@@ -374,5 +376,76 @@ class AuthController extends Controller
         }
         
         return redirect('/login')->with('message', 'Error occured, Try again later');
-    }    
-}
+    }  
+
+    /**
+     * Function for showing developers page
+     *
+     * @param: Request
+     * @return: view
+    */  
+    public function developers(Request $request)
+    {
+        if(Auth::check())
+        {
+            return view('developers');
+        }
+
+        return redirect('login')->with('warning', 'Please log in');
+    }
+
+    /**
+     * Function for new client with redirect uri
+     *
+     * @param: Request
+     * @return: view
+    */  
+    public function newClient(ClientRequest $request)
+    {
+        // Get the developer email id and callback url
+        $dev_id = $request['email'];
+
+        // Verifying the email id
+        $verify_email = User::where('email', $dev_id)
+            ->get();
+
+        // If email id is valid, then create the client id 
+        // and secret of the devloper
+        if( ! empty( $verify_email ))
+        {
+            // Get the result 
+            $data = OAuthClient::createClient($request);
+
+            // Condition to check the status
+            if ( ! empty($data) )
+            {
+                // Pass the devloper data to developer page
+                return $this->devPage($data);
+            }
+            else
+            {
+                // Redirect to developers page with message
+                return redirect('developers')->with('message', 'Invalid email id');   
+            }
+        }
+        else
+        {
+            // Redirect to developers page with message
+            return redirect('developers')->with('message', 'Error occured while processing');   
+        } 
+               
+    }
+
+    /**
+     * Function to show developers required information
+     *
+     * @param: data
+     * @return: view
+    */
+    public function devPage($data)
+    {   
+        
+        // Pass the developer data and print it on screen
+        return view('devpage', ['data' => $data]);
+    }   
+}   
