@@ -13,6 +13,8 @@
     {{ csrf_field() }}
 
     <input type="hidden" id="url" value="{!! url('datatables/data') !!}">
+    <input type="hidden" id="userId" value="{{ Auth::user()->id }}">
+    <input type="hidden" id="track_id" value="{{ env('TRACKING_ID') }}">
 
     <table class="table table-bordered" id="users-table">
         <thead>
@@ -134,4 +136,6 @@
 <script src="{{ asset_timed('js/datatables.js') }}"></script>
 <script src="{{ asset_timed('js/groupmap.js') }} " ></script>
 <script src="{{ asset_timed('js/profile.js') }}"></script>
+<script src="{{ asset_timed('js/analytics.js') }}"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 @endsection

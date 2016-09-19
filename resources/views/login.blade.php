@@ -82,3 +82,8 @@
     </div>
 </div>
 @endsection 
+
+@section('js-css')
+<script src="{{ asset_timed('js/analytics.js') }}"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+@endsection
