@@ -89,10 +89,9 @@ class OAuthController extends Controller
 
         // Checking if client has been issued token before
         $check_client = OAuthAccessToken::where('oauth_client_id', $client_request[0]['id'])
-            ->get();
-        
+            ->get();        
         // Create token for new user
-        if ( sizeof($check_client) == 0 )
+        if ( $check_client->isEmpty() )
         {   
             // Get the auto genrated token
             $token = token();
@@ -140,7 +139,7 @@ class OAuthController extends Controller
         }
 
         // If the client is already registered 
-        else if ( sizeof($check_client) > 0 )
+        else if ( $check_client->isEmpty() )
         {
             // return the assigned token
             return array('token' => $check_client[0]['token']);
