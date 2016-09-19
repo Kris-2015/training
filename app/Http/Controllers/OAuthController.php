@@ -18,18 +18,16 @@ use App\Http\Requests\ClientRequest;
  * @category void
  * @author mfsi-krishnadev
  * @link void
-*/
+ */
 
 class OAuthController extends Controller
 {
-
-    
-	/**
-	 * Function to get all user
-	 *
-	 * @param: Request
-	 * @return: json
-	*/
+   /**
+    * Function to get all user
+    *
+    * @param: Request
+    * @return: json
+    */
     public function index(Request $result)
     {
         // Validating the token
@@ -53,11 +51,11 @@ class OAuthController extends Controller
         return $data;
     }
 
-    /**
-	 * Function to search user by id
-	 *
-	 * @param: user id
-	 * @return: json
+   /**
+    * Function to search user by id
+    *
+    * @param: user id
+    * @return: json
     */
     public function show($id) 
     {   
@@ -69,11 +67,17 @@ class OAuthController extends Controller
             return response()->json(array('error' => '404', 'message' => 'Not Found'), 404);
         }
 
-    	return $userby_id;
+        return $userby_id;
     }
 
-    /*
-     * Generate access token
+   /**
+    * Generate access token
+    * 
+    * @param: client id
+    * @param: client secret id
+    * @param: redirect url
+    *
+    * @return: token 
     */
     public function accessToken(Request $request)
     {   
@@ -146,14 +150,14 @@ class OAuthController extends Controller
         }   
     }
 
-    /**
-     * Function to Authenticate Client
-     *
-     * @param: client id
-     * @param: client secret
-     * @param: redirect
-     *
-     * @return: array
+   /**
+    * Function to Authenticate Client
+    *
+    * @param: client id
+    * @param: client secret
+    * @param: redirect
+    *
+    * @return: array
     */
     public function authenticateClient($client)
     {
@@ -170,18 +174,18 @@ class OAuthController extends Controller
         return $valid;
     }
 
-    /**
-     * Function to authenticate token
-     * 
-     * @param: token
-     * @return: integer 
+   /**
+    * Function to authenticate token
+    * 
+    * @param: token
+    * @return: integer 
     */
     public function authenticateToken($token)
     {
         // Validate with the user's token
         $validate_token = OAuthAccessToken::where('token', $token)
             ->get();
-        
+
         // Condition to check users token has matched with server token
         if ( $validate_token->isEmpty() )
         {
