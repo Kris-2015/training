@@ -124,3 +124,8 @@ Route::post('new-client',  [
     'as' => 'new-client', 
     'uses' => 'AuthController@newclient'
 ]);
+
+Route::get('blog', [
+    'as'=>'blog' ,
+    'uses' => 'BlogController@index'
+]);
