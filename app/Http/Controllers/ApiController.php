@@ -80,7 +80,7 @@ class ApiController extends Controller
 
         if ($id == 0 && is_numeric($limit) )
         {
-            //checking user on the basic of required and available search parameter
+            //checking user on the basis of required and available search parameter
             $users = User::leftJoin('addresses', 'users.id', '=', 'addresses.user_id')
             ->where(function($query) use ($request, $filter)
             {
@@ -88,6 +88,7 @@ class ApiController extends Controller
                 {
                     $value = array_get($request, $key);
 
+                    // Include the query if the request if for search
                     if ( ! is_null($value)) $query->where($column, 'like', '%'.$value.'%');
                 }
             })
@@ -121,7 +122,7 @@ class ApiController extends Controller
         $employment = $request->employment;
         $employer = $request->employer;
         $email = $request->email_id;
-        $password = 'mindfire';
+        $password = env('SECRET_KEY');
         $homecity = $request->homecity;
         $homestate = $request->homestate;
 
