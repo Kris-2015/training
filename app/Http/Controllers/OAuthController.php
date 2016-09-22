@@ -91,6 +91,9 @@ class OAuthController extends Controller
             return response()->json(array('error' => '404', 'message' => 'Requested client does not exist'), 404); 
         }
 
+        // Return the response if all the condition is been failed
+        $response_data = response()->json(array('error' => '400', 'message' => 'Bad Request'), 404);
+
         // Checking if client has been issued token before
         $check_client = OAuthAccessToken::where('oauth_client_id', $client_request[0]['id'])
             ->get();   
@@ -136,17 +139,17 @@ class OAuthController extends Controller
                     'token' => $token 
                 );
 
-                return response()->json($arr);    
+                $response_data = response()->json($arr);    
             }
-            
-            return response()->json(array('error' => '400', 'message' => 'Bad Request'), 404);
         }
 
-        // If the client is already registered 
-        else if ( $check_client->isEmpty() )
+        // return the assigned token to client
+        else
         {
             // return the assigned token
-            return array('token' => $check_client[0]['token']);
-        }   
+            $response_data = array('token' => $check_client[0]['token']);
+        } 
+        
+        return $response_data;  
     }
 }

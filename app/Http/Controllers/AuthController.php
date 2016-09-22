@@ -210,7 +210,7 @@ class AuthController extends Controller
         $user_id = $request['id'];
 
         //changing the status of user account
-        $active = User::changeStatus($user_id);
+        User::changeStatus($user_id);
 
         //returning the activate message to show 'activate' account
         return response()->json('activate');

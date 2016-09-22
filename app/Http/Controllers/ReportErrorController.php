@@ -10,9 +10,9 @@ class ReportErrorController extends Controller
 {
     public function reportError(Request $request)
     {
-    	// Logging error of failed ajax calls
-    	$error = $request->all();
-    	
-    	errorReporting($error);
+        // Logging error of failed ajax calls
+        $error = $request->all();
+        
+        errorReporting($error);
     }
 }
