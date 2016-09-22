@@ -16,7 +16,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         lengthMenu:[2,5,10],
-        stateSave: true,
+        bStateSave: true,
         ajax: url,
         columns: [
             { data: 'first_name', name: 'first_name' },
@@ -27,11 +27,11 @@ $(document).ready(function() {
             { data: 'action', name: 'action', orderable: false, searchable: false},
             { data: 'status', name: 'status', orderable:false, searchable: false}
         ],
-        stateSaveCallback: function(settings, data) {
-            localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) );
+        fnStateSave: function(settings, data) {
+            localStorage.setItem( 'DataTables' + JSON.stringify(data) );
         },
-        stateLoadCallback: function(settings) {
-            return JSON.parse( localStorage.getItem( 'Datatables_' + settings.sInstance) );
+        fnStateLoad: function(settings) {
+            return JSON.parse( localStorage.getItem( 'Datatables') );
         }
     });
 
@@ -39,7 +39,4 @@ $(document).ready(function() {
         json_data = table.ajax.json();
 
     });
-
-    table.ajax.reload(false);
-
 });

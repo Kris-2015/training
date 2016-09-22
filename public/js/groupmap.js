@@ -113,14 +113,18 @@ var groupmap = {
      */
     initMap : function() {
 
+        // Instantiate if geocoder is not defined
         if (typeof geocoder == 'undefined') {
+            
             //instantiate the Geocoder class
             geocoder = new google.maps.Geocoder();    
         }
         
 
-        //defining the co-ordinate of India
+        //  Instantiate of if map coordinated are not defined
         if (typeof latlng == 'undefined') {
+
+            //defining the co-ordinate of India
             latlng = new google.maps.LatLng(28.49957, 77.11718);
         }
         
@@ -130,23 +134,26 @@ var groupmap = {
             center: latlng
         }
 
-        //Requesting google map api with map option,then printing the map in div 
+        // Instantiate if map is defined
         if (typeof map == 'undefined') {
+
+            //Requesting google map api with map option,then printing the map in div 
             map = new google.maps.Map(document.getElementById('map_canvas'), mapOption);
         }
 
+        // SetTilt Adjust with screen size of map
         map.setTilt(60);
 
-        //calling the geocodeAddress function with map for printing the marker
+        // Calling the geocodeAddress function with map for printing the marker
         groupmap.geocodeAddress(geocoder, map);
     },
 
-    /**
-     *Function for setting up marker and generate info message for user
-     *
-     * @param geocoder, map
-     * @return void
-     */
+   /**
+    *Function for setting up marker and generate info message for user
+    *
+    * @param geocoder, map
+    * @return void
+    */
     geocodeAddress : function(geocoder, resultsMap) {
 
         //json data of page
@@ -223,12 +230,12 @@ var groupmap = {
                             });
 
                             // Bind event for on clicking the marker to show user details
-                            google.maps.event.addListener( marker, 'click',( function(marker, k, currentMarkerRef, contentList) {
+                            google.maps.event.addListener( marker, 'click',( function(marker, currentMarkerRef, contentList) {
                                 return function() {
                                     infowindow.setContent(contentList[currentMarkerRef]);
                                     infowindow.open(map, marker);
                                 }
-                            }) (marker, k, currentMarkerRef, contentList));
+                            }) (marker, currentMarkerRef, contentList));
 
                             // Increment the index of next user details
                             currentMarkerRef++;
