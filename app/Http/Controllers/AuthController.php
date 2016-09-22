@@ -444,7 +444,6 @@ class AuthController extends Controller
     */
     public function devPage($data)
     {   
-        
         // Pass the developer data and print it on screen
         return view('devpage', ['data' => $data]);
     }   
