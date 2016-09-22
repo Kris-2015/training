@@ -13,12 +13,12 @@ $(document).ready(function() {
     url = $('#url').val();
 
     var table = $('#users-table').DataTable({
-        "processing": true,
-        "serverSide": true,
-        "lengthMenu":[2,5,10],
-        "bStateSave": true,
-        "ajax": url,
-        "columns": [
+        processing: true,
+        serverSide: true,
+        lengthMenu:[2,5,10],
+        bStateSave: true,
+        ajax: url,
+        columns: [
             { data: 'first_name', name: 'first_name' },
             { data: 'email', name: 'email' },
             { data: 'dob', name:'dob'},
@@ -30,12 +30,12 @@ $(document).ready(function() {
         fnStateSave: function(settings, data) {
             localStorage.setItem( 'DataTables' + JSON.stringify(data) );
         },
-        fnStateLoad: function(settings, data) {
+        fnStateLoad: function() {
             return JSON.parse( localStorage.getItem( 'Datatables') );
         }
     });
 
-    var user = table.on( 'xhr', function() { 
+    table.on( 'xhr', function() { 
         json_data = table.ajax.json();
 
     });
