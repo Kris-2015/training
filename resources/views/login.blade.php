@@ -6,6 +6,10 @@
 <a href="{{ url('/register') }}"><span class="glyphicon glyphicon-user"></span>Registration</a>
 @endsection
 
+@section('css')
+<link rel="stylesheet" type="text/css" href="{{ url('css/map.css') }}">
+@endsection
+
 @section('content')
 <div class="container">
     <div class="col-sm-offset-2 col-sm-8">
@@ -14,6 +18,9 @@
                 Login
             </div>
             <div class="panel-body">
+
+                <input type="hidden" id="track_id" value="{{ env('TRACKING_ID') }}">
+
                 <!-- Display Validation Errors -->
                 @include('common.errors')
                 @if(session('status'))
@@ -46,7 +53,7 @@
                 <!-- Add Task Button -->
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary login">
                         Login
                         </button>
                         <a class="btn btn-link" href="{{ url('/resetPassword') }}">Forgot Your Password?</a>
@@ -61,7 +68,7 @@
                     <div class=" col-xs-4 col-sm-5">
                         <div  class="col-sm-offset-5">
                         <!-- Instagram Sign Up functionality-->
-                            <a href="https://api.instagram.com/oauth/authorize/?client_id={{env('CLIENT_ID') }}&redirect_uri={{ env('REDIRECT_URI', '00') }}&response_type=code&scope=basic" target="_top" class="btn btn-danger">
+                            <a href="https://api.instagram.com/oauth/authorize/?client_id={{env('CLIENT_ID') }}&redirect_uri={{ env('REDIRECT_URI', '00') }}&response_type=code&scope=basic" target="_top" data-hit="social" class="btn btn-danger instagram">
                                 <i class="fa fa-instagram"></i> 
                                 Instagram
                             </a>
@@ -70,7 +77,7 @@
 
                     <div class="col-xs-4 col-sm-5">
                         <!-- Facebook Sign Up functionality-->
-                        <a href="redirect" class="btn btn-primary">
+                        <a href="redirect" class="btn btn-primary facebook" data-hit="social" >
                             <i class="fa fa-facebook"></i> 
                             Facebook
                         </a>
