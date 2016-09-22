@@ -34,7 +34,7 @@ class OAuthController extends Controller
         $user_token = OAuthAccessToken::authenticateToken($result['token']);
         
         // Return data if parameters are insufficent
-        $data = response()->json(array('error' => '404', 'message' => 'Insufficient Parameter'), 404);
+        $data = response()->json(array('error' => '404', 'message' => 'Session Expired'), 404);
 
         // If token is authenticated, then return required data
         if ( $user_token )
