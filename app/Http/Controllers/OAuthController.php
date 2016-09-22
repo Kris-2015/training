@@ -30,10 +30,10 @@ class OAuthController extends Controller
     */
     public function index(Request $result)
     {
-        // Validating the token
-        $user_token = $this->authenticateToken($result['token']);
+        // Validate the token provided by user
+        $user_token = OAuthAccessToken::authenticateToken($result['token']);
         
-        // Default data
+        // Return data if parameters are insufficent
         $data = response()->json(array('error' => '404', 'message' => 'Insufficient Parameter'), 404);
 
         // If token is authenticated, then return required data
@@ -72,18 +72,18 @@ class OAuthController extends Controller
 
    /**
     * Generate access token
-    * 
+    *
     * @param: client id
     * @param: client secret id
-    * @param: redirect url
-    *
-    * @return: token 
+    * @param: redirect
+    * 
+    * @return: token
     */
     public function accessToken(Request $request)
     {   
         
-        // Calling function to authenticate the client request
-        $client_request = $this->authenticateClient($request->all());
+        // Authenticate the client request
+        $client_request = OAuthClient::authenticateClient($request->all());
         
         // Condition for invalid user.
         if ( $client_request->isEmpty() )
@@ -93,7 +93,8 @@ class OAuthController extends Controller
 
         // Checking if client has been issued token before
         $check_client = OAuthAccessToken::where('oauth_client_id', $client_request[0]['id'])
-            ->get();        
+            ->get();   
+
         // Create token for new user
         if ( $check_client->isEmpty() )
         {   
@@ -125,7 +126,6 @@ class OAuthController extends Controller
                 'expire_time' => $expire_time
             );
 
-
             // Update the token details with its life span and expiration time
             $token_details = OAuthRefreshToken::insertDetails($lifespan);
 
@@ -133,12 +133,12 @@ class OAuthController extends Controller
             if ( $token_details )
             {
                 $arr = array(
-                'token' => $token 
+                    'token' => $token 
                 );
 
                 return response()->json($arr);    
             }
-
+            
             return response()->json(array('error' => '400', 'message' => 'Bad Request'), 404);
         }
 
@@ -148,50 +148,5 @@ class OAuthController extends Controller
             // return the assigned token
             return array('token' => $check_client[0]['token']);
         }   
-    }
-
-   /**
-    * Function to Authenticate Client
-    *
-    * @param: client id
-    * @param: client secret
-    * @param: redirect
-    *
-    * @return: array
-    */
-    public function authenticateClient($client)
-    {
-        $client_id = isset($client['client_id']) ? $client['client_id'] : '';
-        $client_secret = isset($client['client_secret']) ? $client['client_secret'] : '';
-        $redirect = isset($client['redirect']) ? $client['redirect'] : '';
-
-        // Validating the client id , client secret id and redirect url
-        $valid = OAuthClient::where('client_id', $client_id)
-            ->where('secret', $client_secret)
-            ->where('callback', $redirect)
-            ->get();
-
-        return $valid;
-    }
-
-   /**
-    * Function to authenticate token
-    * 
-    * @param: token
-    * @return: integer 
-    */
-    public function authenticateToken($token)
-    {
-        // Validate with the user's token
-        $validate_token = OAuthAccessToken::where('token', $token)
-            ->get();
-
-        // Condition to check users token has matched with server token
-        if ( $validate_token->isEmpty() )
-        {
-            return 0;
-        }
-
-        return 1;
     }
 }

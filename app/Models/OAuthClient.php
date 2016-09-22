@@ -63,4 +63,26 @@ class OAuthClient extends Model
             return 0;
         }
     }
+    
+   /**
+    * Function to Authenticate Client
+    *
+    * @param: client id
+    * @param: client secret
+    * @param: redirect
+    *
+    * @return: array
+    */
+    public static function authenticateClient($client)
+    {
+        $client_id = isset($client['client_id']) ? $client['client_id'] : '';
+        $client_secret = isset($client['client_secret']) ? $client['client_secret'] : '';
+        $redirect = isset($client['redirect']) ? $client['redirect'] : '';
+        // Validating the client id , client secret id and redirect url
+        $valid = OAuthClient::where('client_id', $client_id)
+            ->where('secret', $client_secret)
+            ->where('callback', $redirect)
+            ->get();
+        return $valid;
+    }
 }

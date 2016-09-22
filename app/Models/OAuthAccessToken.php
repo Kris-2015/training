@@ -9,6 +9,14 @@ class OAuthAccessToken extends Model
 {
     protected $table = 'oauth_access_tokens';
 
+   /**
+    * Function to insert token
+    *
+    * @param: client id
+    * @param: token
+    *
+    * @return: token id
+    */
     public static function insertToken($data)
     {   
         try   
@@ -35,5 +43,25 @@ class OAuthAccessToken extends Model
             errorReporting($e);
             return 0;
         }
+    }
+
+   /**
+    * Function to authenticate token
+    * 
+    * @param: token
+    * @return: integer 
+    */
+    public static function authenticateToken($token)
+    {
+        // Validate with the user's token
+        $validate_token = OAuthAccessToken::where('token', $token)
+            ->get();
+        
+        // Condition to check users token has matched with server token
+        if ( $validate_token->isEmpty() )
+        {
+            return 0;
+        }
+        return 1;
     }
 }
