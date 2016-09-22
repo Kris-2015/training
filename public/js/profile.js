@@ -24,6 +24,7 @@ profile = {
                     //map url from hidden input field with id path
                     var url = $('.path').val();
                     
+                    // Print the profile information in html
                     $("#profile_name").html("<strong>Name:</strong> "+ response[0].first_name+ ' ' +
                     response[0].last_name);
                     $("#profile_dob").html("<strong>DOB:</strong> "+ response[0].dob);
@@ -43,10 +44,13 @@ profile = {
             }, 'show');
        });
 
+       // Function is used to display Github Information
        $(document).on('click', '.git', function(){
 
+            // Get github id of user
             var github_name = $(this).data("github");
 
+            // Removing previously defined css loader
             $(".loader-container").removeClass('hidden');
             $(".github-container").addClass('hidden');
             $(".git_name").html('Loading Github Profile ');
@@ -60,9 +64,11 @@ profile = {
                 },
                 success:function(response)
                 {
+                    // Add a css loader to display loading as a sign of wait
                     $(".loader-container").addClass('hidden');
                     $(".github-container").removeClass('hidden');
 
+                    // Loading the github information of user
                     $(".git_name").html('Github Profile of <strong>' + response.name + '</strong>');
                     $(".image").html('<img src="' + response.avatar_url + '"id="image" height="150px" width="150px"/>');
                     $("#git_login").html('<strong id="log">Login Id: </strong>' + '<a href="' + response.html_url +
