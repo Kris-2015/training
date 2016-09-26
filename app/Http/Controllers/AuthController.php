@@ -17,9 +17,8 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Requests\NewUserRequest;
-use App\Http\Requests\ClientRequest;
-
-
+use App\Http\Requests\UpdateFormRequest;
+use App\Http\Requests\LoginFormRequest;
 /**
  * Manage Login and registration request
  * @access public
@@ -97,7 +96,7 @@ class AuthController extends Controller
      * @param Request
      * @return redirect
     */
-    public function doUpdate(Request $request)
+    public function doUpdate(UpdateFormRequest $request)
     {
         // Get the required update data
         $update_data = $request->all();
@@ -136,22 +135,12 @@ class AuthController extends Controller
     * @param  Request  $request
     * @return mixed
    */
-    public function dologin(Request $request)
+    public function dologin(LoginFormRequest $request)
     {
-        //validation message of login page
-        $message['email_id.required'] = 'Email id required';
-        $message['password.required'] = 'Give your password';
-
-        //validation of email_id and password
-        $this->validate($request, [
-            'email' => 'required',
-            'password' => 'required'
-        ], $message);
-        
         //storing the email_id and password in variable
         $email = $request->email;
         $password = $request->password;
-
+        
         //Authenticating the requested credential is valid or not
         if (Auth::attempt(['email' => $email, 'password' => $password, 'activated'=>'1'])) 
         {
