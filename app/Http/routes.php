@@ -91,10 +91,7 @@ Route::get('map', 'MapController@map');
 */
 Route::group(['middleware'=>'auth'], function(){
 
-    Route::get('list', [
-        'middleware'=>'auth',
-        'uses'=> 'HomeController@getlist'
-    ]);
+    Route::get('list', 'HomeController@getlist');
 
     Route::controller('datatables', 'UserController');
 
